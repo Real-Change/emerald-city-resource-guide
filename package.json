@@ -1,0 +1,27 @@
+{
+  "name": "emerald-city-resource-guide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eckermania/emerald-city-resource-guide.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eckermania/emerald-city-resource-guide/issues"
+  },
+  "homepage": "https://github.com/eckermania/emerald-city-resource-guide#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "pg": "^7.6.1"
+  }
+}
