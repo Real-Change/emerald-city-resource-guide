@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS organization (
   org_description VARCHAR(1024),
   schedule VARCHAR(1024),
   gender VARCHAR(64),
-  kids VARCHAR(64),
-  account_id INT
+  kids VARCHAR(64)
 );
 
 CREATE TABLE IF NOT EXISTS organization_x_category (
