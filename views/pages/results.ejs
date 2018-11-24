@@ -1,21 +1,10 @@
 <%- include('../layout/head') %>
 <body>
     <%- include('../layout/header') %>
-       <div class = "b"><h4>H4</h4></div> 
-           <div class = "results">
-            <p><%= results.length %></p>
-            <ul>
-                <% results.forEach(item => { %>
-                    <img src="<%= item.image_url %>"/>
-                    <li><%= item.title %></li>
-                    <li><%= item.author %></li>
-                    <li><%= item.book_description %></li>
-                    <li><%= item.isbn %></li>
-                    <li><%= item.bookshelf %></li>
-                    <button type="submit"><a href="/books/<%= item.id %>">View Details</a></button>
-                <% }) %>
-            </ul>
-        </div>
+    <div class = "b"><h2>Your Results</h2></div> 
+    <main>
+        <%- include('./detail', {organizations: results}) %>
+    </main>
     </div>
     <%- include('../layout/footer') %>
     </div>

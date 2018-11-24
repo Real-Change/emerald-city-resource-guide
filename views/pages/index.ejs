@@ -2,18 +2,20 @@
 <body>
     <%- include('../layout/header') %>
        <div class = "b"><h4>H4</h4></div> 
-           <form action ="results.ejs" method="POST">
+           <form action ="/results" method="POST">
             
                 <label for="gender">Your gender identity</label>    
                     <select name="gender" id="gender" required>
+                        <option disabled selected value>-- select one --</option>
                         <option value="rna">Rather not say</option>
-                        <option value="saab">Female</option>
-                        <option value="fiat">Male</option>
-                        <option value="audi">Other</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="other">Other</option>
                     </select>
 
                 <label for="kids">Do you have children with you?</label>
                     <select name="kids" id="kids" required>
+                        <option disabled selected value>-- select one --</option>
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
                     </select>
@@ -28,6 +30,7 @@
                     <input type="checkbox" name="pop6" value="immigrant">Immigrants or Refugees<br>
                     <input type="checkbox" name="pop7" value="survivor">Survivors of Violence<br>
                 </div>
+                
                 <div id="services">
                     <h3>Select all services in which you are interested:</h3>
                     <section id="basic-needs">
@@ -62,8 +65,10 @@
                         <input type="checkbox" name="financial8" value="transportation">Transportation Services<br>
                     </section>
                 </div>
-                <button type="submit">Find Resources</button>
-           </form>
+                
+                <button type="submit" id="submit-button">Find Resources</button>
+           
+            </form>
            
         </div>
     </div>

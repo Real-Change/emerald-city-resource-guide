@@ -18,24 +18,38 @@ client.on('error', err => console.log(err));
 
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
+app.post('/results', getOrgs);
 
-// Routing Options
-// GET method route
+
+
+// GET method route to render form page
 app.get('/', function (req, res) {
   res.render('./pages/index.ejs');
 })
 
-// POST method route
+// POST method route to render form page
 app.post('/', function (req, res) {
   res.render('./pages/index.ejs');
 })
 
+//Catches
+
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-//Error Handling
-function handleError (error, response) {
-  console.error(error);
-  if (response) response.status(500).send('Sorry something went wrong');
+
+// Method to render results
+function getOrgs (request, response) {
+  let SQL = 'SELECT * FROM organization;';
+
+  return client.query(SQL)
+    .then(results => response.render('./pages/results.ejs', { results: results.rows }))
+    .catch(handleError);
+}
+
+//Error handling
+function handleError(err, res) {
+  console.error(err);
+  if (res) res.status(500).send('Sorry, something went wrong');
 }
 
 
