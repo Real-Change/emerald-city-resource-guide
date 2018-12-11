@@ -1,19 +1,27 @@
 <section class="organization-container">
-        <% organizations.forEach(organization => { %>
-            <li class="organization-item">
-              <h3><%= organization.organization_name %></h3>
-              <% if (organization.website != "") { %> 
-                  <p>website: <%= organization.website %></p>
-              <% } %>
-              <p><%= organization.phone_number %></p>
-              <p><%= organization.org_address %></p>
-              <p>Hours: <%= organization.schedule %></p>
-              <p class="desc">Description: <%= organization.org_description %></p>
-              <ul>
-                  <li>Icon 1</li>
-                  <li>Icon 2</li>
-              </ul>
-            </li>
-          <% })%>
+    <ul>
+            <% organizations.forEach(organization => { %>
+                <li class="organization-item">
+                <h3><%= organization.organization_name %></h3>
+                <% if(organization.website != ""){ %>
+                    <p><%= organization.website %></p>
+                  <% } %>
+                <p>Phone:
+                    <%= organization.phone_number %>
+                </p>
+                <p><%= organization.org_address %></p>
+                <p>Hours: 
+                    <%= organization.schedule %>
+                    </p>
+                <p class="desc">Description:
+                    <%= organization.org_description %>
+                </p>
+                <ul>
+                    <li>Icon 1</li>
+                    <li>Icon 2</li>
+                </ul>
+                </li>
+            <% })%>
+    </ul>
 </section>
 

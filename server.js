@@ -28,9 +28,14 @@ app.get('/', function (req, res) {
 })
 
 // POST method route to render form page
+let formContents= [];
+
 app.post('/', function (req, res) {
   res.render('./pages/index.ejs');
+  formContents = req;
+  console.log(formContents);
 })
+
 
 //Catches
 
@@ -39,9 +44,36 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 // Method to render results
 function getOrgs (request, response) {
-  let SQL = 'SELECT * FROM organization;';
 
-  return client.query(SQL)
+  let {gender, kids} = request.body;
+
+  //return all orgs that fit gender selection
+  let SQL = 'SELECT * FROM organization WHERE kids=$1';
+  let genderQuery = '';
+  let values = [kids];
+
+  switch(gender){
+  case 'female':
+    genderQuery = "gender='women only' OR gender='no restrictions'";
+    break;
+  case 'male':
+    genderQuery = "gender='men only' OR gender='no restrictions'";
+    break;
+  default:
+    genderQuery = "gender='no restrictions'";
+  }
+
+  SQL = SQL + ' AND ' + genderQuery + ';';
+
+  //return all orgs in selected categories
+  // let SQL = 'SELECT organization_id, organization_name, website, phone_number, org_address, org_description, schedule, gender, kids FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE organization_x_category.category_id == ;';
+
+  //Return all orgs
+  // let SQL = 'SELECT * FROM organization;';
+  debugger;
+
+
+  return client.query(SQL, values)
     .then(results => response.render('./pages/results.ejs', { results: results.rows }))
     .catch(handleError);
 }
@@ -51,6 +83,7 @@ function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry, something went wrong');
 }
+
 
 
 
