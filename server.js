@@ -37,48 +37,65 @@ app.post('/', function (req, res) {
 })
 
 
-//Catches
+// catches
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
-// Method to render results
+// method to render results
 function getOrgs (request, response) {
 
-  let {gender, kids} = request.body;
+  let {gender, kids, category} = request.body;
 
-  //return all orgs that fit gender selection
-  let SQL = 'SELECT * FROM organization WHERE kids=$1';
+  let SQL = 'SELECT * FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE ';
   let genderQuery = '';
-  let values = [kids];
+  let kidsQuery = '';
+  let categoryQuery = '';
 
+  // add gender selection to SQL query
   switch(gender){
   case 'female':
-    genderQuery = "gender='women only' OR gender='no restrictions'";
+    genderQuery = '(gender=\'women only\' OR gender=\'no restrictions\')';
     break;
   case 'male':
-    genderQuery = "gender='men only' OR gender='no restrictions'";
+    genderQuery = '(gender=\'men only\' OR gender=\'no restrictions\')';
     break;
   default:
-    genderQuery = "gender='no restrictions'";
+    genderQuery = 'gender=\'no restrictions\'';
   }
 
-  SQL = SQL + ' AND ' + genderQuery + ';';
+  // add child selection to SQL query
+  switch(kids) {
+  case 'yes':
+    kidsQuery = 'kids=\'allowed\'';
+    break;
+  default:
+    kidsQuery = 'kids=\'not allowed\'';
+  }
 
-  //return all orgs in selected categories
-  // let SQL = 'SELECT organization_id, organization_name, website, phone_number, org_address, org_description, schedule, gender, kids FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE organization_x_category.category_id == ;';
 
-  //Return all orgs
-  // let SQL = 'SELECT * FROM organization;';
-  debugger;
+  // add category selection to SQL query and terminate the query with the last category in the array
+  category.forEach(el => {
+    let i = category.length - 1;
+    if(el[i]){
+      categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el;
+    } else {
+      categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el + ' OR ';
+    }
+  });
 
+  // add all the query components  into a single SQL query
+  SQL = SQL + genderQuery + ' AND ' + kidsQuery + ' AND (' + categoryQuery + ') ORDER by organization_name;';
 
-  return client.query(SQL, values)
+  console.log(SQL);
+
+  // pass SQL query and values from request to render results
+  return client.query(SQL)
     .then(results => response.render('./pages/results.ejs', { results: results.rows }))
     .catch(handleError);
 }
 
-//Error handling
+// error handling
 function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry, something went wrong');
