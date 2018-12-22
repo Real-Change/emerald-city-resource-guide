@@ -1,14 +1,14 @@
 'use strict';
 
-// Application Dependencies
+// application dependencies
 const express = require('express');
 const pg = require('pg');
 
-// Application Setup
+// application setup
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Application Middleware
+// application middleware
 app.use(express.static('./public'));
 app.use(express.urlencoded({extended: true}));
 
@@ -16,11 +16,9 @@ const client = new pg.Client('postgres://localhost:5432/emerald');
 client.connect();
 client.on('error', err => console.log(err));
 
-// Set the view engine for server-side templating
+// set the view engine for server-side templating
 app.set('view engine', 'ejs');
 app.post('/results', getOrgs);
-
-
 
 // GET method route to render form page
 app.get('/', function (req, res) {
@@ -36,11 +34,8 @@ app.post('/', function (req, res) {
   console.log(formContents);
 })
 
-
 // catches
-
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
-
 
 // method to render results
 function getOrgs (request, response) {
@@ -70,14 +65,13 @@ function getOrgs (request, response) {
     kidsQuery = 'kids=\'allowed\'';
     break;
   default:
-    kidsQuery = 'kids=\'not allowed\'';
+    kidsQuery = 'kids=\'not allowed\' OR kids=\'allowed\'';
   }
 
-
   // add category selection to SQL query and terminate the query with the last category in the array
-  category.forEach(el => {
+  category.forEach(el => { 
     let i = category.length - 1;
-    if(el[i]){
+    if(el === category[i]){
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el;
     } else {
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el + ' OR ';
@@ -100,9 +94,4 @@ function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry, something went wrong');
 }
-
-
-
-
-
 
