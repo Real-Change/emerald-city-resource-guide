@@ -1,7 +1,102 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 6vw;
+	line-height: 9vw;
+}
+
+.hidden {
+	display: none;
+}
+
+i {
+	display: block;
+	margin: 6vw;
+	font-size: 8vw;
 }
 
 h1, h2, h3 {
-    font-family: 'franklin-gothic-urw-cond','Helvetica','Arial',sans-serif;
+		font-family: 'franklin-gothic-urw-cond','Helvetica','Arial',sans-serif;
+}
+
+h1 {
+		font-size: 7vw;
+		line-height: 10vw;
+		text-align: left;
+		margin: 4vw 2vw;
+		text-transform: uppercase;
+		color: 
+		#006085;
+		width: 60%;
+}
+
+label, select {
+	display: inline-block;
+	margin: 2vw;
+}
+
+input {
+	margin: 0 2vw 0 5vw;
+}
+
+h3 {
+	font-size: 6vw;
+	text-align: center;
+	margin: 2vw;
+	color:  #df972d;
+}
+
+h4 {
+	margin: 1.5vw 2vw;
+	font-style: oblique;
+	font-weight: bold;
+	color: #006085;
+}
+
+#about-you, #services {
+	background-color: #f1f1f2;
+	border-radius: 5px;
+	padding: 1vw 1vw 3vw 1vw;
+	margin: 2vw;
+}
+
+#services label, #population label {
+	background-color:lightgrey;
+	border-radius: 5px;
+	width: 95%;
+}
+
+form p {
+	margin: 1.5vw 2vw;
+}
+
+button {
+	display: block;
+	background-color: #006db6;
+	color: white;
+	font-size: 4vw;
+	border-radius: 5px;
+	text-transform: uppercase;
+	padding: 1vw 3vw;
+	margin: 4vw auto;
+}
+
+.a {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.a img {
+	width: 20%;
+	height: 20%;
+	border-radius: 5px;
+	background-color: #df972d;
+	margin: 4vw 1vw 4vw 10vw;
+}
+
+
+.d {
+	background-image: url(../images/skyline.png);
+	height: 173px;
+	background-repeat: repeat-x;
+	background-color: white;
 }

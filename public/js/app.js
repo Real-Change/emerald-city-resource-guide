@@ -12,7 +12,7 @@ $(document).ready(function () {
 
   // dynamically generate list of results
   let n = $('li').length;
-  $('#count').text(n + ' organizations match your search');
+  $('#count').text(n + ' results');
 });
 
 

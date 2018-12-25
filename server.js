@@ -81,8 +81,6 @@ function getOrgs (request, response) {
   // add all the query components  into a single SQL query
   SQL = SQL + genderQuery + ' AND ' + kidsQuery + ' AND (' + categoryQuery + ') ORDER by organization_name;';
 
-  console.log(SQL);
-
   // pass SQL query and values from request to render results
   return client.query(SQL)
     .then(results => response.render('./pages/results.ejs', { results: results.rows }))
