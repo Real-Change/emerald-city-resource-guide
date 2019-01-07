@@ -2,10 +2,22 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 6vw;
 	line-height: 9vw;
+	overflow-x: hidden;
 }
 
-.hidden {
+i.hidden, .hidden {
 	display: none;
+}
+
+#mobile-nav {
+	text-align: center;
+	width: 100%;
+	color: white;
+	background-color: #006085;
+}
+
+#mobile-nav li {
+	border: 2px solid white;
 }
 
 i {
@@ -14,24 +26,35 @@ i {
 	font-size: 8vw;
 }
 
-h1, h2, h3 {
+h1, h2, h3, #instructions {
 		font-family: 'franklin-gothic-urw-cond','Helvetica','Arial',sans-serif;
 }
 
 h1 {
 		font-size: 7vw;
+		font-weight: bold;
 		line-height: 10vw;
 		text-align: left;
 		margin: 4vw 2vw;
 		text-transform: uppercase;
-		color: 
-		#006085;
+		color: #006085;
 		width: 60%;
+}
+
+#instructions {
+	font-style: oblique;
+	margin: 3vw;
+	text-align: center;
 }
 
 label, select {
 	display: inline-block;
-	margin: 2vw;
+	margin: 1vw auto;
+}
+
+select {
+	margin: 0 auto 1vw auto;
+	font-size: 6vw;
 }
 
 input {
@@ -40,8 +63,9 @@ input {
 
 h3 {
 	font-size: 6vw;
-	text-align: center;
-	margin: 2vw;
+	text-align: left;
+	font-weight: bold;
+	margin: 1vw;
 	color:  #df972d;
 }
 
@@ -73,7 +97,7 @@ button {
 	display: block;
 	background-color: #006db6;
 	color: white;
-	font-size: 4vw;
+	font-size: 6vw;
 	border-radius: 5px;
 	text-transform: uppercase;
 	padding: 1vw 3vw;
@@ -93,10 +117,43 @@ button {
 	margin: 4vw 1vw 4vw 10vw;
 }
 
-
 .d {
 	background-image: url(../images/skyline.png);
 	height: 173px;
 	background-repeat: repeat-x;
 	background-color: white;
+}
+
+label:hover {
+	cursor: pointer;
+}
+
+.desc-button {
+	margin: 1vw 1vw 1vw 2vw;
+	text-align: center;
+}
+
+.desc {
+	font-style: italic;
+	margin: 1vw 1vw 2vw 2vw;
+	font-size: 4vw;
+}
+
+p, a {
+	font-size: 5vw;
+}
+
+#count {
+	text-align: center;
+	font-weight: bold;
+}
+
+.organization-item {
+	word-wrap: break-word;
+	margin:2vw 2vw 3vw 2vw;
+	border-bottom: 2px solid black;
+}
+
+.organization-container {
+	margin-bottom: 8vw;
 }

@@ -6,6 +6,30 @@
 		line-height: 2.5vw;
 	}
 	
+	#mobile-nav, i.menu {
+		display: none;
+	}
+
+	#desktop-nav, #desktop-nav ul {
+		display: flex;
+		width: 100%;
+		align-content: space-between;
+		background-color: #006085;
+		color: white;
+	}
+
+	#desktop-nav a {
+		width: 33.33%;
+		text-align: center;
+		text-decoration: none;
+		color: white;
+		padding: 1vw;
+	}
+
+	#desktop-nav a:hover {
+		background-color: grey;
+	}
+
 	h1 {
 		font-size: 6vw;
     margin: 2vw;
@@ -32,7 +56,7 @@
 	}
 
 	#services, #about-you {
-		width: 45vw;
+		width: 43vw;
 	}
 
 	button {
@@ -43,4 +67,5 @@
 		margin: 4vw auto;
 	}
 
+	
 }

@@ -10,9 +10,22 @@ $(document).ready(function () {
     }
   });
 
-  // dynamically generate list of results
+  // dynamically generate number of results
   let n = $('li').length;
   $('#count').text(n + ' results');
+
+  // hamburger menu management
+  $('header i').on('click', function(){
+    $('.menu').toggleClass('hidden');
+    $('#mobile-nav').toggleClass('hidden');
+  });
+
+  // show and hide descriptions on results page
+  $('.desc-button').on('click', function(){
+    $(this).toggleClass('fa fa-plus fas fa-times');
+    $(this).next('p').toggleClass('hidden');
+  });
+
 });
 
 

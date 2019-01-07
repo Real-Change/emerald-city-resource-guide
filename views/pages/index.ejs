@@ -1,11 +1,13 @@
 <%- include('../layout/head') %>
 <body>
     <%- include('../layout/header') %>
-					 <form action ="/results" method="POST">
+		<div>
+			<p id="instructions">Fill out the form below to receive a custom list of resources in the Seattle area. You must select at least one of the checkboxes below and the questions denoted with "*" are required.</p>
+		</div>			 
+		<form action ="/results" method="POST">
 						<div id="about-you">
-							<h3>Tell us about yourself so we can customize your search results:</h3>
 						  <div class="dropdown">
-                <label for="gender">Your gender identity</label>    
+                <label for="gender"><h3>What is your gender identity?*</h3></label>    
                     <select name="gender" id="gender" required>
                         <option disabled selected value>-- select one --</option>
                         <option value="no-restrictions">Rather not say</option>
@@ -15,7 +17,7 @@
                     </select>
 							</div>
 							<div class="dropdown">
-                <label for="kids">Do you have children with you?</label>
+                <label for="kids"><h3>Do you have children in your custody?*</h3></label>
                     <select name="kids" id="kids" required>
                         <option disabled selected value>-- select one --</option>
                         <option value="yes">Yes</option>
@@ -23,7 +25,7 @@
                     </select>
 							</div>
                 <div id="population">
-                    <p>Select all of the groups to which you belong:</p>
+                    <h3>What groups do you belong to? </h3>
                     <label><input type="checkbox" name="category[0]" value="14">People of Color</label> <br>
                     <label><input type="checkbox" name="category[1]" value="13">Native People</label> <br>
                     <label><input type="checkbox" name="category[2]" value="21">LGBTQIA</label> <br>
@@ -34,7 +36,7 @@
                 </div>
 						</div>  
                 <div id="services">
-                    <h3>What types of services are you interested in?</h3>
+                    <h3>What kinds of resources are you looking for?</h3>
                     <section id="basic-needs">
                         <h4>Basic Needs</h4>
                         <label><input type="checkbox" name="category[7]" value="1">Emergency and Crisis Lines</label> <br>
