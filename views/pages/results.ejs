@@ -1,39 +1,37 @@
 <%- include('../layout/head') %>
 <body>
     <%- include('../layout/header') %>
-		<div id="count"></div>
-		<!-- <div id="key">
-			<p>Each organization shows icons to identify any services offered or restrictions:</p>
-			<ul id="services-offered">
-				<li><i class="fas fa-exclamation"></i>Emergency or Crisis Line</li>
-				<li><i class="fas fa-shower"></i>Hygiene Services</li>
-				<li><i class="fas fa-campground"></i>Encampment</li>
-				<li><i class="fas fa-sun"></i>Day Center</li>
-				<li><i class="fas fa-utensils"></i>Food Assistance</li>
-				<li><i class="fas fa-building"></i>Housing Services</li>
-				<li><i class="fas fa-home"></i>Shelter</li>
-				<li><i class="fas fa-tshirt"></i>Clothing Services</li>
-				<li><i class="fas fa-tooth"></i>Dental and Vision Services</li>
-				<li><i class="fas fa-syringe"></i>Drug and/or Alcohol Services</li>
-				<li><i class="fas fa-baby"></i>Family and Maternity Services</li>
-				<li><i class="fas fa-briefcase-medical"></i>General Health Services</li>
-				<li><i class="fas fa-ribbon"></i>HIV/AIDS Services</li>
-				<li><i class="fas fa-brain"></i>Mental Health Services</li>
-				<li><i class="fas fa-id-card"></i>Identification Services</li>
-				<li><i class="fas fa-wrench"></i>Employment and Training Services</li>
-				<li><i class="fas fa-hand-holding-usd"></i>Financial Assistance</li>
-				<li><i class="fas fa-balance-scale"></i>Legal Services</li>
-				<li><i class="fas fa-envelope"></i>Mail Services</li>
-				<li><i class="fas fa-archive"></i>Storage Services</li>
-				<li><i class="fas fa-hands-helping"></i>Storage Services</li>
-				<li><i class="fas fa-bus-alt"></i>Transportation Services</li>
+		<div id="key">
+			<p id="results-intro">Click on the "+" button below each organization to reveal its description.  <br> Each organization also has icons beneath it to identify any services offered or restrictions - click on any icon to show its meaning.</p>
+			<ul id="icons">
+				<li><i class="fas fa-venus restrictions fa-sm" title="Women Only"></i></li>
+				<li><i class="fas fa-mars restrictions fa-sm" title="Men Only"></i></li>
+				<li><i class="fas fa-child restrictions fa-sm" title="Children Not Allowed"></i></li>
+				<li><i class="fas fa-exclamation fa-sm" title="Emergency or Crisis Line"></i></li>
+				<li><i class="fas fa-shower fa-sm" title="Hygiene Services"></i></li>
+				<li><i class="fas fa-campground fa-sm" title="Encampment"></i></li>
+				<li><i class="fas fa-sun fa-sm" title="Day Center"></i></li>
+				<li><i class="fas fa-utensils fa-sm" title="Food Assistance"></i></li>
+				<li><i class="fas fa-building fa-sm" title="Housing Services"></i></li>
+				<li><i class="fas fa-home fa-sm" title="Shelter"></i></li>
+				<li><i class="fas fa-tshirt fa-sm" title="Clothing Services"></i></li>
+				<li><i class="fas fa-tooth fa-sm" title="Dental and Vision Services"></i></li>
+				<li><i class="fas fa-syringe fa-sm" title="Drug and/or Alcohol Services"></i></li>
+				<li><i class="fas fa-baby fa-sm" title="Family and Maternity Services"></i></li>
+				<li><i class="fas fa-briefcase-medical fa-sm" title="General Health Services"></i></li>
+				<li><i class="fas fa-ribbon fa-sm" title="HIV/AIDS Services"></i></li>
+				<li><i class="fas fa-brain fa-sm" title="Mental Health Services"></i></li>
+				<li><i class="fas fa-id-card fa-sm" title="Identification Services"></i></li>
+				<li><i class="fas fa-wrench fa-sm" title="Employment and Training Services"></i></li>
+				<li><i class="fas fa-hand-holding-usd fa-sm" title="Financial Assistance"></i></li>
+				<li><i class="fas fa-balance-scale fa-sm" title="Legal Services"></i></li>
+				<li><i class="fas fa-envelope fa-sm" title="Mail Services"></i></li>
+				<li><i class="fas fa-archive fa-sm" title="Storage Services"></i></li>
+				<li><i class="fas fa-hands-helping fa-sm" title="Re-entry Assistance"></i></li>
+				<li><i class="fas fa-bus-alt fa-sm" title="Transportation Services"></i></li>
 			</ul>
-			<ul id="restrictions">
-				<li><i class="fas fa-venus"></i>Women Only</li>
-				<li><i class="fas fa-child"></i>Children Not Allowed</li>
-				<li><i class="fas fa-mars"></i>Men Only</li>
-			</ul> -->
 		</div>
+		<div id="count"></div>
     <main>
         <%- include('./detail', {organizations: results}) %>
     </main>

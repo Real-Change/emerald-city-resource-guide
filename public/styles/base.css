@@ -45,6 +45,8 @@ h1 {
 	font-style: oblique;
 	margin: 3vw;
 	text-align: center;
+	font-size: 4vw;
+	line-height: 5vw;
 }
 
 label, select {
@@ -129,8 +131,7 @@ label:hover {
 }
 
 .desc-button {
-	margin: 1vw 1vw 1vw 2vw;
-	text-align: center;
+	margin: 1vw 45vw 3vw;;
 }
 
 .desc {
@@ -146,6 +147,7 @@ p, a {
 #count {
 	text-align: center;
 	font-weight: bold;
+	border-bottom: 2px solid black;
 }
 
 .organization-item {
@@ -154,6 +156,46 @@ p, a {
 	border-bottom: 2px solid black;
 }
 
+.organization-item p {
+	font-size: 4vw;
+}
+
 .organization-container {
 	margin-bottom: 8vw;
+}
+
+#key {
+	font-size: 4vw;
+}
+
+#icons {
+	color:green;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.restrictions {
+	color: red;
+}
+
+.label {
+	color:#006085;
+}
+
+.tooltip {
+	background: lightgrey;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 2vw;
+	line-height: 3vw;
+	color: black;
+	padding: 0 .5vw;
+	text-align: center;
+	border-radius: 5px;
+	position: absolute;
+}
+
+#results-intro {
+	font-style: italic;
+	padding: 0 1vw;
+	text-align: center;
 }

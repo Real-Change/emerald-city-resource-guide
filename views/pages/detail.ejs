@@ -9,16 +9,16 @@
 										</a>
                 <% } %>
 								<% if(organization.phone_number != ""){ %>
-									<p>
+									<p> <span class="label">Phone |</span>
                     <%= organization.phone_number %>
 									</p>
 								<% } %>
 								<% if(organization.org_address != ""){ %>
-                	<p>
+                	<p> <span class="label">Address |</span>
 										<%= organization.org_address %>
 									</p>
 								<% } %>
-                <p><span class = "label">Hours: </span>
+                <p><span class = "label">Hours |</span>
                     <%= organization.schedule %>
 								</p>
 								<div id="icon-container">

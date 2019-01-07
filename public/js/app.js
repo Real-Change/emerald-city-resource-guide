@@ -26,6 +26,15 @@ $(document).ready(function () {
     $(this).next('p').toggleClass('hidden');
   });
 
+  // icon tooltip display on mobile
+  $('#icons i').one('tap', function(){
+    let title = $(this).attr('title')
+    $(this).append(`<p class="tooltip">` + title + `</p>`);
+  });
+
+	$(body).on('touchstart', function(){
+		$('.tooltip').hide();
+	})
 });
 
 
