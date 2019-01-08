@@ -22,7 +22,7 @@ $(document).ready(function () {
 
   // show and hide descriptions on results page
   $('.desc-button').on('click', function(){
-    $(this).toggleClass('fa fa-plus fas fa-times');
+    $(this).toggleClass('fa-chevron-circle-down fa-chevron-circle-up');
     $(this).next('p').toggleClass('hidden');
   });
 
@@ -32,9 +32,9 @@ $(document).ready(function () {
     $(this).append(`<p class="tooltip">` + title + `</p>`);
   });
 
-	$(body).on('touchstart', function(){
-		$('.tooltip').hide();
-	})
+  $('body').on('touchstart', function(){
+    $('.tooltip').hide();
+  })
 });
 
 

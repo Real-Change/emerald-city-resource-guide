@@ -4,29 +4,36 @@
                 <li class="organization-item">
                 <h3><%= organization.organization_name %></h3>
 								<% if(organization.website != ""){ %>
+										<div class="label">Website |</div>
 										<a href=<%= organization.website %>
-										<p><%= organization.website %></p>
+										<div class="content"><%= organization.website %></div>
 										</a>
                 <% } %>
 								<% if(organization.phone_number != ""){ %>
-									<p> <span class="label">Phone |</span>
+									<div class="label">Phone |</div>
+									<div class="content">
                     <%= organization.phone_number %>
-									</p>
+									</div>
 								<% } %>
 								<% if(organization.org_address != ""){ %>
-                	<p> <span class="label">Address |</span>
+									<div class="label">Address |</div>
+                	<div class="content">
 										<%= organization.org_address %>
-									</p>
+									</div>
 								<% } %>
-                <p><span class = "label">Hours |</span>
+								<div class="label">Hours |</div>
+								<div class="content">
                     <%= organization.schedule %>
-								</p>
+								</div>
 								<div id="icon-container">
 								</div>
-								<i class="fa fa-plus desc-button desc-button-on" aria-hidden="true" title="Show description"></i>
-								<p class="desc hidden">
-                    <%= organization.org_description %>
-                </p>
+								<div class="label">Description |</div>
+								<div class="content" id="last-content">
+									<i class="fas fa-chevron-circle-down desc-button desc-button-on fa-lg" aria-hidden="true" title="Show description"></i>
+									<p class="desc hidden">
+											<%= organization.org_description %>
+									</p>
+								</div>
                 </li>
             <% })%>
     </ul>
