@@ -1,4 +1,4 @@
-id,category_name
+category_id,category_name
 1,Emergency and Crisis Lines
 2,Identification Services
 3,Hygiene Services
@@ -16,16 +16,15 @@ id,category_name
 15,Health Services
 16,HIV/AIDS Services
 17,Housing Services
-18,Hygiene Services
-19,Immigrant and Refugee Services
-20,Legal Services
-21,LGBTQIA Services
-22,Mail Services
-23,Mental Health Services
-24,Re-entry Assistance
-25,Senior Services
-26,Shelters
-27,Storage Services
-28,Survivor Support Services
-29,Transportation Assistance
-30,Veteran Services
+18,Immigrant and Refugee Services
+19,Legal Services
+20,LGBTQIA Services
+21,Mail Services
+22,Mental Health Services
+23,Re-entry Assistance
+24,Senior Services
+25,Shelters
+26,Storage Services
+27,Survivor Support Services
+28,Transportation Assistance
+29,Veteran Services

@@ -42,7 +42,7 @@ function getOrgs (request, response) {
 
   let {gender, kids, category} = request.body;
 
-  let SQL = 'SELECT * FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE ';
+  let SQL = 'SELECT DISTINCT orgs.* FROM organization as orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id WHERE ';
   let genderQuery = '';
   let kidsQuery = '';
   let categoryQuery = '';

@@ -141,9 +141,9 @@ button {
 	background-color: white;
 }
 
-label:hover {
+/* label:hover {
 	cursor: pointer;
-}
+} */
 
 .desc-button {
 	margin: 1vw 0 2vw;

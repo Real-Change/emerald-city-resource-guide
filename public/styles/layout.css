@@ -32,11 +32,13 @@
 		font-size: 6vw;
     margin: 2vw;
     line-height: 5vw;
-    padding-top: 10vw;
+    padding-top: 4vw;
 	}
 
 	h3 {
 		font-size: 2vw;
+		line-height: 3vw;
+		margin-left: 0;
 	}
 
 	form {
@@ -45,11 +47,13 @@
 	}
 	
 	h4 {
-		margin: 1.5vw 4vw;
+		margin: 2vw 2vw 2vw .5vw;
+		font-size: 2vw;
+		line-height: 3vw;
 	}
 
 	input {
-		margin-left: 6vw;
+		margin-left: 1vw;
 		margin-right: 1vw;
 	}
 
@@ -58,12 +62,72 @@
 	}
 
 	button {
-		font-size: 2vw;
+		font-size: 3vw;
 		border-radius: 5px;
 		text-transform: uppercase;
 		padding: 1vw 3vw;
-		margin: 4vw auto;
+		margin: 2vw auto;
 	}
 
+	button:hover {
+		cursor: pointer;
+	}
+
+	select {
+		font-size: 2vw;
+		margin-bottom: 2vw;
+	}
+
+	select:hover {
+		cursor: pointer;
+	}
 	
+  #services label, #population label {
+		font-size: 2vw;
+		margin: .5vw;
+	}
+
+  #services label:hover, #population label:hover {
+		cursor: pointer;
+	}
+
+	#instructions {
+		font-size: 2vw;
+	}
+
+	#population {
+		margin-top: 4vw;
+	}
+
+	.a img {
+		width: 10%;
+		height: 10%;
+		margin: 4vw 1vw 4vw 15vw;
+	}
+
+	#about-you, #services {
+		padding-bottom: 0;
+	}
+
+	#count {
+		padding: 1vw;
+	}
+	
+	.label, .content, .desc {
+		font-size: 2vw;
+	}
+
+	.label {
+		width: 15vw;
+	}
+
+	.content {
+		padding: 0 0 0 1vw;
+		width: 80vw
+	}
+  
+  i:hover {
+		cursor: pointer;
+	}
+
 }

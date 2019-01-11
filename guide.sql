@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS organization (
   website VARCHAR(255),
   phone_number VARCHAR(1024),
   org_address VARCHAR(1024),
-  org_description VARCHAR(1024),
+  org_description VARCHAR(2000),
   schedule VARCHAR(1024),
   gender VARCHAR(64),
   kids VARCHAR(64)
