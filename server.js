@@ -15,6 +15,7 @@ app.use(express.urlencoded({extended: true}));
 const client = new pg.Client('postgres://localhost:5432/emerald');
 client.connect();
 client.on('error', err => console.log(err));
+client.end();
 
 // set the view engine for server-side templating
 app.set('view engine', 'ejs');
