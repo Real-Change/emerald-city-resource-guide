@@ -31,8 +31,8 @@
 	h1 {
 		font-size: 6vw;
     margin: 2vw;
-    line-height: 5vw;
-    padding-top: 4vw;
+    line-height: 7vw;
+    padding-top: 2vw;
 	}
 
 	h3 {
@@ -47,14 +47,13 @@
 	}
 	
 	h4 {
-		margin: 2vw 2vw 2vw .5vw;
-		font-size: 2vw;
-		line-height: 3vw;
+		margin: .5vw;
+		font-size: 1.5vw;
+		line-height: 2vw;
 	}
 
 	input {
-		margin-left: 1vw;
-		margin-right: 1vw;
+		margin: 0 1vw;
 	}
 
 	#services, #about-you {
@@ -74,8 +73,7 @@
 	}
 
 	select {
-		font-size: 2vw;
-		margin-bottom: 2vw;
+		font-size: 1.5vw;
 	}
 
 	select:hover {
@@ -83,16 +81,18 @@
 	}
 	
   #services label, #population label {
-		font-size: 2vw;
-		margin: .5vw;
+		font-size: 1.5vw;
+    margin: .2vw;
+    line-height: 2.5vw;
 	}
 
   #services label:hover, #population label:hover {
 		cursor: pointer;
 	}
 
-	#instructions {
+	#instructions, #sponsorask {
 		font-size: 2vw;
+		margin: 1vw;
 	}
 
 	#population {
@@ -128,6 +128,43 @@
   
   i:hover {
 		cursor: pointer;
+	}
+
+	#sponsors h2 {
+		font-weight: bold;
+	}
+
+	#sponsors h3 {
+		border-top: .25vw dotted #df972d;
+    padding-top: 1vw;
+	}
+
+	#presenting img, #sponsors h2, #sponsors h3{
+		padding-bottom: 0;
+	}
+
+	#presenting img {
+		width: 50vw;
+		margin: 0 25vw;
+	}
+	
+	#changemaker img {
+		height: 8vw;
+    margin: 1vw;
+	}
+	
+	#visionary img, #catalyst img {
+		width: 25vw;
+    margin: 1vw 5vw;
+	}
+	
+	#grassroots img {
+		width: 20vw;
+    margin: 1vw;
+	}
+	
+	#sponsorheader {
+		padding: 1vw 0 0 0;
 	}
 
 }

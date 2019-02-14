@@ -39,14 +39,14 @@ h1 {
 		line-height: 10vw;
 		text-align: left;
 		margin: 4vw 2vw;
-		text-transform: uppercase;
 		color: #006085;
 		width: 60%;
 }
 
-#instructions {
+#instructions, #sponsorask {
 	font-style: oblique;
-	margin: 3vw;
+	margin: 2vw;
+	width: 96vw;
 	text-align: center;
 	font-size: 4vw;
 	line-height: 5vw;
@@ -54,7 +54,7 @@ h1 {
 
 label, select {
 	display: inline-block;
-	margin: 1vw auto;
+	/* margin: 1vw auto; */
 }
 
 select {
@@ -100,9 +100,8 @@ h4 {
 }
 
 form {
-	background-color: #f1f1f2;
 	border-radius: 5px;
-	margin-bottom: 2vw;
+	margin-bottom: 4vw;
 	padding-bottom: 2vw;
 }
 
@@ -141,9 +140,6 @@ button {
 	background-color: white;
 }
 
-/* label:hover {
-	cursor: pointer;
-} */
 
 .desc-button {
 	margin: 1vw 0 2vw;
@@ -243,4 +239,50 @@ p {
 
 select::-ms-expand {
 	display: block;
+}
+
+#sponsors {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 4vw;
+}
+
+#sponsors a {
+	height: 0;
+}
+
+#presenting img, #sponsors h2, #sponsors h3{
+	width: 100vw;
+	text-align: center;
+	padding-bottom: 3vw;
+}
+
+#changemaker img {
+	height: 15vw;
+	width: auto;
+	margin: 2vw 12vw;
+}
+
+#visionary ul, #changemaker ul, #catalyst ul, #grassroots ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+#visionary img, #catalyst img {
+	width: 46vw;
+	margin: 0 1vw;
+}
+
+#grassroots img {
+	width: 32vw;
+}
+
+#evergreen, #jfs {
+	padding-top: 2vw;
+}
+
+#sponsorheader {
+	background-color: #df972d;
+	padding: 2vw 0;
 }
