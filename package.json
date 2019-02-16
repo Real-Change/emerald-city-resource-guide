@@ -20,12 +20,12 @@
   "homepage": "https://github.com/eckermania/emerald-city-resource-guide#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "grunt": "^1.0.3",
     "nodemailer": "^5.1.1",
-    "nodemon": "^1.18.9",
-    "pg": "^7.6.1"
+    "nodemon": "^1.18.10",
+    "pg": "^7.8.0"
   }
 }

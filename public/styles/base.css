@@ -134,8 +134,8 @@ button {
 }
 
 .d {
-	background-image: url(../images/skyline.png);
-	height: 173px;
+	background-image: url('../images/skyline.png');
+	height: 20vw;
 	background-repeat: repeat-x;
 	background-color: white;
 }

@@ -35,6 +35,11 @@ $(document).ready(function () {
   $('body').on('touchstart', function(){
     $('.tooltip').hide();
   })
+
+  // copy contact email address on click NOT TESTED YET
+  $('textarea').on('click', function() {
+    document.execCommand('copy');
+  })
 });
 
 
