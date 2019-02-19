@@ -1,6 +1,7 @@
 'use strict';
 
 // application dependencies
+require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 
@@ -13,7 +14,8 @@ app.use(express.static('./public'));
 app.use(express.urlencoded({extended: true}));
 
 const client = new pg.Client(process.env.DATABASE_URL);
-client.connect();
+client.connect()
+  .catch(e => console.error('connection error', e.stack));
 client.on('error', err => console.log(err));
 
 // set the view engine for server-side templating
@@ -32,6 +34,16 @@ app.post('/', function (req, res) {
   res.render('./pages/index.ejs');
   formContents = req;
   console.log(formContents);
+})
+
+// GET method route to render contact page
+app.get('/contact', function (req, res){
+  res.render('./pages/contact.ejs');
+})
+
+// POST method route to render contact page
+app.post('/contact', function(req, res){
+  res.render('./pages/contact.ejs');
 })
 
 // catches
@@ -69,7 +81,7 @@ function getOrgs (request, response) {
   }
 
   // add category selection to SQL query and terminate the query with the last category in the array
-  category.forEach(el => { 
+  category.forEach(el => {
     let i = category.length - 1;
     if(el === category[i]){
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el;
