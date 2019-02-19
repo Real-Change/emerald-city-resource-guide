@@ -3,7 +3,28 @@
     <%- include('../layout/header') %>
     <main>
 				<p class="contact">Have questions, suggestions, or corrections regarding the Emerald City Resource Guide? <br><br>Get in touch: <span id="emaillink">contact@emeraldcityresourceguide.org </span><button id="emailcopy">Copy Email</button></p>
-				<p class="contact">If you work for a social service organization and would like to request printed copies of the guide, please fill out the form below.  Real Change will confirm receipt of your order and provide you with next steps within 5 business days.</p>
+				<section  id="copy-request">
+					<p class="contact">If you work for a social service organization and would like to request printed copies of the guide, please fill out the form below.  Real Change will confirm receipt of your order and provide you with next steps within 5 business days.</p>
+					<form action="/confirmation" method="POST">
+						<label for="organization">Name of Organization</label>
+						<input type="text" id="form-organization" name="organization">
+						
+						<label for="name">Your Name</label>
+						<input type="text" id="form-name" name="name">
+
+						<label for="email">Email Address</label>
+						<input type="email" id="form-email" name="email">
+
+						<label for="number">Number of Guides Requested</label>
+						<input type="number" id="form-number" name="number">
+
+						<label for="date">Date by Which You Would Like to Pick Up</label>
+						<input type="date" id="form-date" name="date">
+
+						<button type="submit" id="request-button">Submit</button>
+
+					</form>
+				</section>
     </main>
     </div>
     <%- include('../layout/footer') %>

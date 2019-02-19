@@ -32,6 +32,7 @@
 		font-size: 5vw;
     line-height: 6vw;
 		width: 75vw;
+		margin: 1.5vw;
 	}
 
 	h3 {
@@ -174,4 +175,10 @@
 	#emailcopy {
 		font-size: 3vw;
 	}
+
+	#confirmation {
+		padding: 2vw;
+		height: 68vw;
+	}
+
 }

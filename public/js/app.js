@@ -42,6 +42,23 @@ $(document).ready(function () {
     }
     window.getSelection().removeAllRanges();
   });
+
+  // set min for date in copy request form to today
+  let today = new Date();
+  let dd = today.getDate()+1;
+  let mm = today.getMonth()+1;
+  let yyyy = today.getFullYear();
+
+  if (dd < 0){
+    dd='0'+ dd;
+  }
+  if (mm < 10){
+    mm='0' + mm
+  }
+  today = yyyy + '-' + mm + '-' + dd;
+
+  $('#form-date').attr('min', today);
+
 });
 
 

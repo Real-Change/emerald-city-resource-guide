@@ -4,6 +4,8 @@
 require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
 
 // application setup
 const app = express();
@@ -45,6 +47,52 @@ app.get('/contact', function (req, res){
 app.post('/contact', function(req, res){
   res.render('./pages/contact.ejs');
 })
+
+// GET method route to render request confirmation page
+app.get('/confirmation', function(req, res){
+  res.render('./pages/confirmation.ejs');
+})
+
+// POST method for hardcopy request submission on contact page
+app.post('/confirmation', submitRequest);
+
+// method to submit copy requests
+function submitRequest(req, res){
+  let mailOptions = {
+    from: req.body.email,
+    to: 'erineckerman@gmail.com',
+    subject: 'Request for copies of ECRG',
+    text: `${req.body.name} (${req.body.email}) from ${req.body.organization} has requested ${req.body.number} resource guides. They would like to pick up the guides by ${req.body.date}.`
+  };
+
+  let transporter = nodemailer.createTransport({
+    host:'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    service: 'Gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
+    }
+  });
+  transporter.verify(function(err, success){
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(success);
+    }
+  })
+  transporter.sendMail(mailOptions, function (err, info){
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(info);
+    }
+  })
+
+  res.render('./pages/confirmation.ejs')
+
+}
 
 // catches
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
