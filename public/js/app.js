@@ -26,20 +26,23 @@ $(document).ready(function () {
     $(this).next('p').toggleClass('hidden');
   });
 
-  // icon tooltip display on mobile
-  $('#icons i').one('tap', function(){
-    let title = $(this).attr('title')
-    $(this).append(`<p class="tooltip">` + title + `</p>`);
+  // copy contact email address on button click
+  const emailLink = document.querySelector('#emaillink');
+
+  $('#emailcopy').on('click', function() {
+    const range = document.createRange();
+    range.selectNode(emailLink);
+    window.getSelection().addRange(range);
+    try{
+      const successful = document.execCommand('copy');
+      const msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Copy email command was ' + msg);
+    } catch(err) {
+      console.log('Oops, unable to copy');
+    }
+    window.getSelection().removeAllRanges();
   });
-
-  $('body').on('touchstart', function(){
-    $('.tooltip').hide();
-  })
-
-  // copy contact email address on click NOT TESTED YET
-  $('textarea').on('click', function() {
-    document.execCommand('copy');
-  })
 });
+
 
 

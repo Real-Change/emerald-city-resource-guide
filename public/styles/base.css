@@ -41,6 +41,7 @@ h1 {
 		margin: 4vw 2vw;
 		color: #006085;
 		width: 60%;
+		padding-top: 3vw;
 }
 
 #instructions, #sponsorask {
@@ -134,10 +135,11 @@ button {
 }
 
 .d {
-	background-image: url('../images/skyline.png');
+	background-image: url('../images/skyline.jpg');
 	height: 20vw;
 	background-repeat: repeat-x;
 	background-color: white;
+	background-size: contain;
 }
 
 
@@ -285,4 +287,19 @@ select::-ms-expand {
 #sponsorheader {
 	background-color: #df972d;
 	padding: 2vw 0;
+}
+
+p.contact {
+	text-align: center;
+	padding: 1vw;
+}
+
+#emaillink {
+	font-weight: bold;
+	color: #df972d;
+}
+
+#emailcopy {
+	text-transform: none;
+	font-size: 4vw;
 }
