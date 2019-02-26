@@ -1,0 +1,24 @@
+<div id="filter-container">
+		<div id="filter-label-container">
+	    <label for="filters">Only show:</label>
+      <select name="filters" id="filters">
+		     <option disabled selected value>Select One</option>
+		<% let catsArr = []; %>
+		<% organizations.forEach(organization => { %>
+				<% organization.array_agg.forEach(category => { %>
+					<% let newCat = organization.category_name; %>
+					<% if(catsArr.includes(category)) { %>
+					<%		return; %>
+					<% } else {%>
+						<% catsArr.push(category); %>
+					<% } %>
+				<% }) %>
+				<% }) %>
+		<% catsArr.sort() %>
+		<% catsArr.forEach(cat => { %>
+			<option value="<%= cat %>"> <%= cat %> </option>
+	  <% }) %>
+	</select>
+	<button id="clear-filter"><i class="fas fa-times"></i> &nbsp; Clear Selection</button>
+</div>
+</div>

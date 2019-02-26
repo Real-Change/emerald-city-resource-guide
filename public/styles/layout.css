@@ -3,7 +3,7 @@
 		font-size: 2vw; 
 		line-height: 2.5vw;
 	}
-	
+
 	#mobile-nav, i.menu {
 		display: none;
 	}
@@ -28,6 +28,10 @@
 		background-color: grey;
 	}
 
+  #desktop-nav li {
+		display: block;
+	}
+
 	h1 {
 		font-size: 5vw;
     line-height: 6vw;
@@ -38,7 +42,12 @@
 	h3 {
 		font-size: 2vw;
 		line-height: 3vw;
-		margin-left: 0;
+		margin: 1vw 0 0 0; 
+		width: 45vw;
+	}
+ 
+	.organization-container h3 {
+		width: 100vw;
 	}
 
 	form {
@@ -100,8 +109,8 @@
 	}
 
 	.a img {
-		width: 8%;
-    height: 8%;
+		width: 8vw;
+    height: 10vw;
     margin: 2vw 2vw 2vw 5vw;
 	}
 
@@ -115,6 +124,7 @@
 	
 	.label, .content, .desc {
 		font-size: 2vw;
+		line-height: 3vw;
 	}
 
 	.label {
@@ -178,7 +188,38 @@
 
 	#confirmation {
 		padding: 2vw;
-		height: 68vw;
 	}
 
+  form.contact {
+		width: 60vw;
+		margin: 2vw 20vw;
+		padding: 1vw;
+	}
+	
+	form.contact label, form.contact input{
+		padding: 1vw;
+		font-size: 3vw;
+	}
+	
+	form.contact input {
+		height: 4vw;
+		border-radius: 4px;
+	}
+  #filter-label-container {
+		display: flex;
+	}
+	#clear-filter {
+		margin: 0;
+    font-size: 2vw;
+    padding: .3vw 1.5vw;
+	}
+
+	#filters {
+		width: 30vw;
+    margin: 0vw 4vw 0vw 2vw;
+	}
+
+	#filter-label-container {
+		padding-left: 14vw;
+	}
 }

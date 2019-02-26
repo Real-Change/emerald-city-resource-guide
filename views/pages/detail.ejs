@@ -1,6 +1,6 @@
 <section class="organization-container">
     <ul>
-            <% organizations.forEach(organization => { %>
+						<% organizations.forEach(organization => { %>
                 <li class="organization-item">
                 <h3><%= organization.organization_name %></h3>
 								<% if(organization.website != ""){ %>
@@ -8,7 +8,7 @@
 										<a href=<%= organization.website %> target="_blank">
 										<div class="content"><%= organization.website %></div>
 										</a>
-                <% } %>
+								<% } %>
 								<% if(organization.phone_number != ""){ %>
 									<div class="label">Phone |</div>
 									<div class="content">
@@ -25,8 +25,6 @@
 								<div class="content">
                     <%= organization.schedule %>
 								</div>
-								<div id="icon-container">
-								</div>
 								<div class="label">Description |</div>
 								<div class="content" id="last-content">
 									<i class="fas fa-chevron-circle-down desc-button desc-button-on fa-lg" aria-hidden="true" title="Show description"></i>
@@ -34,8 +32,11 @@
 											<%= organization.org_description %>
 									</p>
 								</div>
-                </li>
-            <% })%>
+								<p class="cat hidden">
+		              <%= organization.array_agg %>
+								</p>
+						    <% })%>
+								</li>
     </ul>
 </section>
 

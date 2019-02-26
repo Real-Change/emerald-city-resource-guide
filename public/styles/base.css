@@ -5,8 +5,17 @@ body {
 	overflow-x: hidden;
 }
 
-i.hidden, .hidden {
+i.hidden, li.hidden, .hidden {
 	display: none;
+}
+
+#logo-link {
+	height: 0;
+}
+
+#banner {
+	display: flex;
+	padding-bottom: 2vw;
 }
 
 #mobile-nav {
@@ -18,6 +27,7 @@ i.hidden, .hidden {
 
 #mobile-nav li {
 	border: 1px solid white;
+	display: block;
 }
 
 #mobile-nav a {
@@ -73,9 +83,13 @@ h3 {
 	line-height: 7vw;
 	text-align: left;
 	font-weight: bold;
-	margin: 1vw;
+	margin: 8vw 1vw 1.5vw;
 	color:  #df972d;
 	width: 96vw;
+}
+
+.organization-item h3 {
+	margin: 1vw;
 }
 
 h4 {
@@ -117,7 +131,7 @@ button {
 	font-size: 6vw;
 	border-radius: 5px;
 	text-transform: uppercase;
-	padding: 1vw 3vw;
+	padding: 2vw 3.5vw;
 	margin: 4vw auto;
 }
 
@@ -127,8 +141,8 @@ button {
 }
 
 .a img {
-	width: 20%;
-	height: 20%;
+	width: 19vw;
+	height: 25vw;
 	border-radius: 5px;
 	background-color: #df972d;
 	margin: 4vw 1vw 4vw 10vw;
@@ -180,36 +194,10 @@ p {
 	margin-bottom: 8vw;
 }
 
-#key {
-	font-size: 4vw;
-}
-
-#icons {
-	color:green;
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.restrictions {
-	color: red;
-}
-
 .label {
 	color:#006085;
 	width: 30%;
 	text-align: right;
-}
-
-.tooltip {
-	background: lightgrey;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 2vw;
-	line-height: 3vw;
-	color: black;
-	padding: 0 .5vw;
-	text-align: center;
-	border-radius: 5px;
-	position: absolute;
 }
 
 #results-intro {
@@ -315,3 +303,39 @@ p.contact {
 	font-size: 4vw;
 	line-height: 5vw;
 }
+
+form.contact {
+	width: 96vw;
+	margin: 2vw;
+	background-color: lightgrey;
+}
+
+form.contact label, form.contact input{
+	display: block;
+	width: 89vw;
+	padding: 1vw;
+	font-size: 5vw;
+}
+
+form.contact input {
+	border: solid 2px #df972d;
+	border-radius: 2px;
+	height: 6vw;
+	padding-left: 1vw;
+}
+
+#filter-container {
+	text-align: center;
+	padding: 2vw;
+	border-bottom: 2px black solid;
+	margin: 0vw 2vw;
+}
+
+#clear-filter {
+	text-transform: none;
+}
+
+#filters {
+	width: 55vw;
+}
+

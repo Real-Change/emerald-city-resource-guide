@@ -5,7 +5,6 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
 
 // application setup
 const app = express();
@@ -30,7 +29,7 @@ app.get('/', function (req, res) {
 })
 
 // POST method route to render form page
-let formContents= [];
+let formContents = [];
 
 app.post('/', function (req, res) {
   res.render('./pages/index.ejs');
@@ -89,9 +88,7 @@ function submitRequest(req, res){
       console.log(info);
     }
   })
-
   res.render('./pages/confirmation.ejs')
-
 }
 
 // catches
@@ -101,8 +98,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 function getOrgs (request, response) {
 
   let {gender, kids, category} = request.body;
-
-  let SQL = 'SELECT DISTINCT orgs.* FROM organization as orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id WHERE ';
+  let SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
   let genderQuery = '';
   let kidsQuery = '';
   let categoryQuery = '';
@@ -125,7 +121,7 @@ function getOrgs (request, response) {
     kidsQuery = 'kids=\'allowed\'';
     break;
   default:
-    kidsQuery = 'kids=\'not allowed\' OR kids=\'allowed\'';
+    kidsQuery = '(kids=\'not allowed\' OR kids=\'allowed\')';
   }
 
   // add category selection to SQL query and terminate the query with the last category in the array
@@ -139,8 +135,7 @@ function getOrgs (request, response) {
   });
 
   // add all the query components  into a single SQL query
-  SQL = SQL + genderQuery + ' AND ' + kidsQuery + ' AND (' + categoryQuery + ') ORDER by organization_name;';
-
+  SQL = SQL + genderQuery + ' AND ' + kidsQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
   // pass SQL query and values from request to render results
   return client.query(SQL)
     .then(results => response.render('./pages/results.ejs', { results: results.rows }))

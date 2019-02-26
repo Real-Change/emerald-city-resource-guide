@@ -11,7 +11,7 @@ $(document).ready(function () {
   });
 
   // dynamically generate number of results
-  let n = $('li').length;
+  let n = $('.organization-item').length;
   $('#count').text(n + ' results');
 
   // hamburger menu management
@@ -58,6 +58,35 @@ $(document).ready(function () {
   today = yyyy + '-' + mm + '-' + dd;
 
   $('#form-date').attr('min', today);
+
+  // clear local storage on page load
+  if($('body').is('.index')) {
+    localStorage.clear();
+  }
+
+  // only show results that match dropdown selection
+  $('#filters').change( function() {
+    let selection = $('option:selected').val();
+    $('li').not(':contains(\'' + selection +'\')').addClass('hidden');
+    $('li:contains(\'' + selection +'\')').removeClass('hidden');
+  });
+
+  // clear filters
+  $('#clear-filter').on('click', function() {
+    $('li').removeClass('hidden');
+  });
+
+  // save selected populations and services to local storage -- NOT CURRENTLY IN USE
+  $('#search-form input').change(function(){
+    if ($(this).prop('checked')){
+      localStorage.setItem(this.name, this.value);
+    } else {
+      localStorage.removeItem(this.name, this.value);
+    }
+  });
+  $('#search-form select').change(function(){
+    localStorage.setItem(this.name, this.value);
+  });
 
 });
 
