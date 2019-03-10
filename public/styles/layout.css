@@ -30,20 +30,33 @@
 
   #desktop-nav li {
 		display: block;
+    font-size: 1.2vw;
+    line-height: 1.5vw;
+	}
+	
+	#banner {
+		padding-bottom: 0;
+	}
+	
+	#index-container {
+		display: flex;
+		flex-wrap: wrap;
 	}
 
+
 	h1 {
-		font-size: 5vw;
-    line-height: 6vw;
-		width: 75vw;
-		margin: 1.5vw;
+		font-size: 3vw;
+    line-height: 4vw;
+    width: 75vw;
+    margin: 1.5vw;
+    padding-top: .5vw;
 	}
 
 	h3 {
-		font-size: 2vw;
-		line-height: 3vw;
-		margin: 1vw 0 0 0; 
-		width: 45vw;
+		font-size: 1.5vw;
+    line-height: 2vw;
+    margin: 1vw 0;
+		width: 76vw;
 	}
  
 	.organization-container h3 {
@@ -52,13 +65,15 @@
 
 	form {
 		display: flex;
-		flex-wrap: wrap;
+    width: 76vw;
+    flex-wrap: wrap;
+    padding-left: 2vw;
 	}
 	
 	h4 {
 		margin: .5vw;
-		font-size: 1.5vw;
-		line-height: 2vw;
+    font-size: 1vw;
+    line-height: 2vw;
 	}
 
 	input {
@@ -66,23 +81,28 @@
 	}
 
 	#services, #about-you {
-		width: 43vw;
+		width: 100vw;
 	}
 
 	button {
-		font-size: 3vw;
-		border-radius: 5px;
-		text-transform: uppercase;
-		padding: 1vw 3vw;
-		margin: 2vw auto;
+		font-size: 1.5vw;
+    border-radius: 5px;
+    padding: 1vw 1.5vw 1vw 1.5vw;
+		margin: 1vw auto;
+		height: 4vw;
 	}
 
 	button:hover {
 		cursor: pointer;
 	}
+	
+	.selectdiv select {
+		width: 19vw;
+    margin: .5vw 0;
+	}
 
 	select {
-		font-size: 1.5vw;
+		font-size: 1vw;
 	}
 
 	select:hover {
@@ -90,9 +110,10 @@
 	}
 	
   #services label, #population label {
-		font-size: 1.5vw;
+		font-size: .9vw;
     margin: .2vw;
-    line-height: 2.5vw;
+    line-height: 2vw;
+    width: 18vw;
 	}
 
   #services label:hover, #population label:hover {
@@ -100,22 +121,28 @@
 	}
 
 	#instructions, #sponsorask {
-		font-size: 2vw;
-		margin: 1vw;
+		font-size: 1vw;
+    line-height: 1.5vw;
+    margin: 1vw 0;
+	}
+	
+	#sponsorask {
+		width: 20vw;
 	}
 
 	#population {
-		margin-top: 4vw;
+		margin-top: 2vw;
 	}
 
 	.a img {
-		width: 8vw;
-    height: 10vw;
-    margin: 2vw 2vw 2vw 5vw;
+		width: 3vw;
+    height: 4vw;
+    margin: 2vw .5vw 2vw 25vw;
 	}
 
 	#about-you, #services {
-		padding-bottom: 0;
+		padding: 0vw;
+    margin: 0;
 	}
 
 	#count {
@@ -140,36 +167,56 @@
 		cursor: pointer;
 	}
 
+	#sponsors {
+		width: 20vw;
+    border-left: .25vw solid #df972d;
+    border-bottom: .25vw solid #df972d;
+		border-right: .25vw solid #df972d;
+		margin: 1vw 1vw 0 0;
+	}
+
 	#sponsors h2 {
 		font-weight: bold;
 	}
 
 	#sponsors h3 {
-		border-top: .25vw dotted #df972d;
     padding-top: 1vw;
 	}
 
-	#presenting img, #sponsors h2, #sponsors h3{
-		padding-bottom: 0;
+	#presenting img, #sponsors h2, #sponsors h3, #visionary h3{
+		padding: 1vw;
+    width: 18vw;
+    font-size: 1vw;
+    line-height: 1.5vw;
+    margin: 0;
 	}
 
 	#presenting img {
-		width: 50vw;
-		margin: 0 25vw;
+		width: 17vw;
+    padding-left: 1.5vw; 
 	}
 	
 	#changemaker img {
-		height: 8vw;
-    margin: 1vw;
+		margin: 1vw;
+    width: 8vw;
+    height: 2vw;
 	}
 	
 	#visionary img, #catalyst img {
-		width: 25vw;
-    margin: 1vw 5vw;
+		width: 8vw;
+    margin: .5vw;
 	}
 	
-	#grassroots img {
+  #evergreen, #jfs {
+		padding-top: .5vw;
+	}
+
+  #catalyst ul, #grassroots ul {
 		width: 20vw;
+	}
+
+	#grassroots img {
+		width: 4vw;
     margin: 1vw;
 	}
 	
@@ -221,5 +268,9 @@
 
 	#filter-label-container {
 		padding-left: 14vw;
+	}
+
+	.d {
+		height: 10vw;
 	}
 }

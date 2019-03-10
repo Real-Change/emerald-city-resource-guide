@@ -1,11 +1,10 @@
 <%- include('../layout/head') %>
 <body class="index">
-    <%- include('../layout/header') %>
-		<div>
-			<p id="instructions">Fill out the form below to receive a custom list of resources in the Seattle area.</p>
-		</div>			 
+		<%- include('../layout/header') %>	
+		<div id="index-container">
+				
 		<form action ="/results" method="POST" id="search-form">
-						<div id="about-you">
+			<p id="instructions">Fill out the form below to receive a custom list of resources in the Seattle area.</p>
 						  <div class="selectdiv">
                 <label for="gender"><h3>What is your gender identity?</h3></label>    
                     <select name="gender" id="gender" required>
@@ -34,7 +33,6 @@
                     <label><input type="checkbox" name="category[5]" value="18">Immigrants or Refugees</label> 
                     <label><input type="checkbox" name="category[6]" value="27">Survivors of Violence</label> 
                 </div>
-						</div>  
                 <div id="services">
                     <h3>What kinds of resources are you looking for?</h3>
                     <section id="basic-needs">
@@ -73,13 +71,10 @@
                 <button type="submit" id="submit-button"><i class="fas fa-search"></i> &nbsp; Search</button>
            
             </form>
-           
-        </div>
-		</div>
 		<div id="sponsors">
 			<section id="sponsorheader">
 				<h2>Thanks to all of our sponsors for making the Emerald City Resource Guide possible!</h2>
-				<p id="sponsorask">Want to become a sponsor? Get started <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">here</a>.</p>
+				<p id="sponsorask">Want to become a sponsor? <br> Get started <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">here</a>.</p>
 			</section>
 			<section id="presenting">
 				<h3>Presenting Sponsor</h3>
@@ -120,9 +115,10 @@
 						<li><a href="https://byrdbarrplace.org/"><img src="images/byrd.png" alt="Byrd Barr Place"></a></li>
 					</ul>
 			</section>
-			<pre id="result"></pre>
 		</div>
+		</div>
+	</div>
     <%- include('../layout/footer') %>
-    </div>
+		</div>
 </body>
 </html>
