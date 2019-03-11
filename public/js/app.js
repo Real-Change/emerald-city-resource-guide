@@ -68,13 +68,15 @@ $(document).ready(function () {
   $('#filters').change( function() {
     let selection = $('option:selected').val();
     $('li').not(':contains(\'' + selection +'\')').addClass('hidden');
-		$('li:contains(\'' + selection +'\')').removeClass('hidden');
-		$('#clear-filter').removeClass('hidden');
+    $('li:contains(\'' + selection +'\')').removeClass('hidden');
+    $('#clear-filter').removeClass('hidden');
   });
 
   // clear filters
   $('#clear-filter').on('click', function() {
     $('li').removeClass('hidden');
+    $('#clear-filter').addClass('hidden');
+    $('#filters').val('default');
   });
 
   // save selected populations and services to local storage -- NOT CURRENTLY IN USE

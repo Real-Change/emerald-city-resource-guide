@@ -97,10 +97,9 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 // method to render results
 function getOrgs (request, response) {
 
-  let {gender, kids, category} = request.body;
+  let {gender, category} = request.body;
   let SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
   let genderQuery = '';
-  let kidsQuery = '';
   let categoryQuery = '';
 
   // add gender selection to SQL query
@@ -115,15 +114,6 @@ function getOrgs (request, response) {
     genderQuery = 'gender=\'no restrictions\'';
   }
 
-  // add child selection to SQL query
-  switch(kids) {
-  case 'yes':
-    kidsQuery = 'kids=\'allowed\'';
-    break;
-  default:
-    kidsQuery = '(kids=\'not allowed\' OR kids=\'allowed\')';
-  }
-
   // add category selection to SQL query and terminate the query with the last category in the array
   category.forEach(el => {
     let i = category.length - 1;
@@ -135,7 +125,7 @@ function getOrgs (request, response) {
   });
 
   // add all the query components  into a single SQL query
-  SQL = SQL + genderQuery + ' AND ' + kidsQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
+  SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
   // pass SQL query and values from request to render results
   return client.query(SQL)
     .then(results => response.render('./pages/results.ejs', { results: results.rows }))

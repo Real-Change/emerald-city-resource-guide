@@ -12,7 +12,7 @@
 		display: flex;
 		width: 100%;
 		align-content: space-between;
-		background-color: #006085;
+		background-color:#0e7dc2;
 		color: white;
 	}
 
@@ -33,7 +33,13 @@
     font-size: 1.2vw;
     line-height: 1.5vw;
 	}
-	
+
+	#rclogo img {
+    width: 30vw;
+    height: auto;
+		margin: 0 35vw;
+	}
+
 	#banner {
 		padding-bottom: 0;
 	}
@@ -47,8 +53,9 @@
 	h1 {
 		font-size: 3vw;
     line-height: 4vw;
-    width: 75vw;
-    margin: 1.5vw;
+		width: 100vw;
+		text-align: center;
+    margin: 2vw 0;
     padding-top: .5vw;
 	}
 
@@ -96,6 +103,10 @@
 		cursor: pointer;
 	}
 	
+  .selectdiv {
+		height: 2.5vw;
+	}
+
 	.selectdiv select {
 		width: 19vw;
     margin: .5vw 0;
@@ -132,12 +143,13 @@
 
 	#population {
 		margin-top: 2vw;
+		height: 8vw;
 	}
 
 	.a img {
 		width: 3vw;
     height: 4vw;
-    margin: 2vw .5vw 2vw 25vw;
+    margin: 2vw .5vw 2vw 35vw;
 	}
 
 	#about-you, #services {
@@ -257,12 +269,13 @@
 	}
 	#clear-filter {
 		margin: 0;
-    font-size: 2vw;
+    font-size: 1.5vw;
     padding: .3vw 1.5vw;
 	}
 
 	#filters {
 		width: 30vw;
+		height: 3vw;
     margin: 0vw 4vw 0vw 2vw;
 	}
 

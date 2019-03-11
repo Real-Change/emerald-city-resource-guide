@@ -2,7 +2,7 @@
 		<div id="filter-label-container">
 	    <label for="filters">Only show:</label>
       <select name="filters" id="filters">
-		     <option disabled selected value>Select One</option>
+		     <option disabled selected value="default">Select One</option>
 		<% let catsArr = []; %>
 		<% organizations.forEach(organization => { %>
 				<% organization.array_agg.forEach(category => { %>
