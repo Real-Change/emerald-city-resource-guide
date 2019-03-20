@@ -26,7 +26,7 @@
 				</div>
 				<div id="feedback">
 					<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource Guide, please fill out the form below.</p>
-					<form action="/confirmation" method="POST" class="contact">
+					<form action="/confirmation" method="POST" class="contact" id="feedback-form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization">
 						
@@ -36,8 +36,8 @@
 						<label for="email">Email Address</label>
 						<input type="email" id="form-email" name="email">
 
-						<label for="feedback-field">Feedback, questions, or stories you'd like to share.</label>
-						<input type="textarea" id="feedback-field" name="feedback-field" rows="5" cols="200">
+						<label for="feedback-field">Feedback, questions, or stories</label>
+						<textarea form="feedback-form" id="feedback-field" name="feedback-field" rows="5" cols="36" wrap="hard"></textarea>
 
 						<button type="submit" id="request-button">Submit</button>
 

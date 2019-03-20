@@ -322,7 +322,7 @@ form.contact label, form.contact input{
 
 form.contact input {
 	border: solid 2px #df972d;
-	border-radius: 2px;
+	border-radius: 5px;
 	height: 6vw;
 	padding-left: 1vw;
 }
@@ -343,6 +343,12 @@ form.contact input {
 	width: 55vw;
 }
 
-textarea {
+#feedback-field {
 	overflow: auto;
+	font-size: 5vw;
+	margin: 0 1vw;
+	border: solid 2px #df972d;
+	border-radius: 5px;
+	max-width: 95%;
+
 }

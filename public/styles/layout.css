@@ -304,8 +304,8 @@
 	}
 
 	#feedback-field {
+		font-size: 1.5vw;
 		width: 35vw;
-		height: 8.5vw;
-		
+    padding: 1vw;
 	}
 }
