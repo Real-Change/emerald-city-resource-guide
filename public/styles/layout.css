@@ -237,8 +237,10 @@
 	}
 
 	p.contact {
-		font-size: 3vw;
-    line-height: 4vw;
+		font-size: 1.5vw;
+		line-height: 2.5vw;
+		width: 40vw;
+		margin: 1vw 5vw;
 	}
 
 	#emailcopy {
@@ -249,20 +251,34 @@
 		padding: 2vw;
 	}
 
+  #contact-page {
+		display: flex;
+		flex-wrap: wrap;
+		height: 101.5vw;
+	}
+
+	#copy-request, #feedback {
+		width: 49.9vw;
+	}
+
+	#feedback {
+		border-left: .2vw dotted #0e7dc2;
+	}
   form.contact {
-		width: 60vw;
-		margin: 2vw 20vw;
+		width:40vw;
+		margin: 2vw 5vw;
 		padding: 1vw;
 	}
 	
 	form.contact label, form.contact input{
 		padding: 1vw;
-		font-size: 3vw;
+		font-size: 1.5vw;
 	}
 	
 	form.contact input {
-		height: 4vw;
-		border-radius: 4px;
+		height: 2vw;
+		border-radius: 5px;
+		width: 35vw;
 	}
   #filter-label-container {
 		display: flex;
@@ -285,5 +301,11 @@
 
 	.d {
 		height: 10vw;
+	}
+
+	#feedback-field {
+		width: 35vw;
+		height: 8.5vw;
+		
 	}
 }

@@ -343,3 +343,6 @@ form.contact input {
 	width: 55vw;
 }
 
+textarea {
+	overflow: auto;
+}
