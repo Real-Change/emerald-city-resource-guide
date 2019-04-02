@@ -56,13 +56,7 @@ $(document).ready(function () {
     mm='0' + mm
   }
   today = yyyy + '-' + mm + '-' + dd;
-
   $('#form-date').attr('min', today);
-
-  // clear local storage on page load
-  if($('body').is('.index')) {
-    localStorage.clear();
-  }
 
   // only show results that match dropdown selection
   $('#filters').change( function() {
@@ -77,18 +71,6 @@ $(document).ready(function () {
     $('li').removeClass('hidden');
     $('#clear-filter').addClass('hidden');
     $('#filters').val('default');
-  });
-
-  // save selected populations and services to local storage -- NOT CURRENTLY IN USE
-  $('#search-form input').change(function(){
-    if ($(this).prop('checked')){
-      localStorage.setItem(this.name, this.value);
-    } else {
-      localStorage.removeItem(this.name, this.value);
-    }
-  });
-  $('#search-form select').change(function(){
-    localStorage.setItem(this.name, this.value);
   });
 
 });

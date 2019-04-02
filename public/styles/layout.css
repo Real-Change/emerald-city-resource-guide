@@ -104,7 +104,9 @@
 	}
 	
   .selectdiv {
-		height: 2.5vw;
+		height: 3vw;
+    padding: 0;
+    margin: 0;
 	}
 
 	.selectdiv select {
@@ -131,7 +133,7 @@
 		cursor: pointer;
 	}
 
-	#instructions, #sponsorask {
+	.instructions, #sponsorask {
 		font-size: 1vw;
     line-height: 1.5vw;
     margin: 1vw 0;
@@ -142,8 +144,9 @@
 	}
 
 	#population {
-		margin-top: 2vw;
-		height: 8vw;
+		height: 5vw;
+    margin-left: 0;
+    padding-left: 0;
 	}
 
 	.a img {
@@ -180,11 +183,9 @@
 	}
 
 	#sponsors {
-		width: 20vw;
-    border-left: .25vw solid #df972d;
-    border-bottom: .25vw solid #df972d;
-		border-right: .25vw solid #df972d;
-		margin: 1vw 1vw 0 0;
+		width: 20.25vw;
+    border: .25vw solid #df972d;
+    margin: 1vw 1vw 0 0;
 	}
 
 	#sponsors h2 {
@@ -233,6 +234,7 @@
 	}
 	
 	#sponsorheader {
+		width: 20.75vw;
 		padding: 1vw 0 0 0;
 	}
 
@@ -303,9 +305,14 @@
 		height: 10vw;
 	}
 
-	#feedback-field {
+	#feedbackfield {
 		font-size: 1.5vw;
 		width: 35vw;
     padding: 1vw;
+	}
+
+	#all-form {
+		margin-bottom: 0;
+    padding: 0;
 	}
 }

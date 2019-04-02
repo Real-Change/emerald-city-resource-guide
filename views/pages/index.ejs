@@ -2,72 +2,77 @@
 <body class="index">
 		<%- include('../layout/header') %>	
 		<div id="index-container">
-				
+		<div id ="forms-container">
+			<form action="/results" method="POST" id="all-form">
+			<p class="instructions">Click on the button below to see the full contents of the Emerald City Resource Guide.</p>
+			<button type="submit" name="submitbutton" value="all"><i class="fas fa-book"></i> &nbsp See Full Guide</button>
+		</form>		
 		<form action ="/results" method="POST" id="search-form">
-			<p id="instructions">Fill out the form below to receive a custom list of resources in the Seattle area.</p>
-						  <div class="selectdiv">
-                <label for="gender"><h3>What is your gender identity?</h3></label>    
-                    <select name="gender" id="gender" required>
-                        <option disabled selected value>Select One</option>
-                        <option value="no-restrictions">Rather not say</option>
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                        <option value="no-restrictions">Other</option>
-										</select>
-							</div>
-                <div id="population">
-                    <h3>What groups do you belong to? </h3>
-                    <label><input type="checkbox" name="category[0]" value="14">People of Color</label> 
-                    <label><input type="checkbox" name="category[1]" value="13">Native People</label> 
-                    <label><input type="checkbox" name="category[2]" value="20">LGBTQIA</label> 
-                    <label><input type="checkbox" name="category[3]" value="29">Veterans</label> 
-                    <label><input type="checkbox" name="category[4]" value="24">Senior Citizens</label> 
-                    <label><input type="checkbox" name="category[5]" value="18">Immigrants or Refugees</label> 
-                    <label><input type="checkbox" name="category[6]" value="27">Survivors of Violence</label> 
-                </div>
-                <div id="services">
-                    <h3>What kinds of resources are you looking for?</h3>
-                    <section id="basic-needs">
-                        <h4>Basic Needs</h4>
-                        <label><input type="checkbox" name="category[7]" value="1">Emergency and Crisis Lines</label>
-												<label><input type="checkbox" name="category[8]" value="3">Hygiene Services</label>
-												<label><input type="checkbox" name="category[9]" value="4">Encampments</label> 
-												<label><input type="checkbox" name="category[10]" value="6">Day Centers</label> 
-												<label><input type="checkbox" name="category[11]" value="12">Food Assistance</label> 
-												<label><input type="checkbox" name="category[12]" value="17">Housing Services</label> 
-												<label><input type="checkbox" name="category[13]" value="25">Shelters</label> 
-												<label><input type="checkbox" name="category[14]" value="5">Clothing Services</label> 
-                    </section>
-                    <section id="health">
-                        <h4>Health</h4>
-                        <label><input type="checkbox" name="category[15]" value="7">Dental and Vision Services </label> 
-                        <label><input type="checkbox" name="category[16]" value="8">Drug and Alchohol Services</label> 
-                        <label><input type="checkbox" name="category[17]" value="10">Family and Maternity Services</label> 
-                        <label><input type="checkbox" name="category[18]" value="15">General Health Services</label> 
-                        <label><input type="checkbox" name="category[19]" value="16"> HIV/AIDS Services</label> 
-                        <label><input type="checkbox" name="category[20]" value="22">Mental Health Services</label> 
-                    </section>
-                    <section id="financial">
-                        <h4>Financial, Legal, and Employment</h4>
-                        <label><input type="checkbox" name="category[21]" value="2">Identification Services</label> 
-                        <label><input type="checkbox" name="category[22]" value="9">Employment and Training Services</label> 
-                        <label><input type="checkbox" name="category[23]" value="11">Financial Assistance</label> 
-                        <label><input type="checkbox" name="category[24]" value="19">Legal Services</label> 
-                        <label><input type="checkbox" name="category[25]" value="21">Mail Services</label> 
-                        <label><input type="checkbox" name="category[26]" value="26">Storage Services</label> 
-                        <label><input type="checkbox" name="category[27]" value="23">Re-entry Assistance</label> 
-                        <label><input type="checkbox" name="category[28]" value="28">Transportation Services</label> 
-                    </section>
-                </div>
-                
-                <button type="submit" id="submit-button"><i class="fas fa-search"></i> &nbsp; Search</button>
+			<p class="instructions">Or, fill out the form below to receive a custom list of resources in the Seattle area.</p>
+			<div class="selectdiv">
+				<label for="gender"><h3>What is your gender identity?</h3></label>    
+					<select name="gender" id="gender" required>
+						<option disabled selected value>Select One</option>
+						<option value="no-restrictions">Rather not say</option>
+						<option value="female">Female</option>
+						<option value="male">Male</option>
+						<option value="no-restrictions">Other</option>
+					</select>
+			</div>
+			<div id="population">
+				<h3>What groups do you belong to? </h3>
+				<label><input type="checkbox" name="category[0]" value="14">People of Color</label> 
+				<label><input type="checkbox" name="category[1]" value="13">Native People</label> 
+				<label><input type="checkbox" name="category[2]" value="20">LGBTQIA</label> 
+				<label><input type="checkbox" name="category[3]" value="29">Veterans</label> 
+				<label><input type="checkbox" name="category[4]" value="24">Senior Citizens</label> 
+				<label><input type="checkbox" name="category[5]" value="18">Immigrants or Refugees</label> 
+				<label><input type="checkbox" name="category[6]" value="27">Survivors of Violence</label> 
+			</div>
+			<div id="services">
+				<h3>What kinds of resources are you looking for?</h3>
+				<section id="basic-needs">
+					<h4>Basic Needs</h4>
+					<label><input type="checkbox" name="category[7]" value="1">Emergency and Crisis Lines</label>
+											<label><input type="checkbox" name="category[8]" value="3">Hygiene Services</label>
+											<label><input type="checkbox" name="category[9]" value="4">Encampments</label> 
+											<label><input type="checkbox" name="category[10]" value="6">Day Centers</label> 
+											<label><input type="checkbox" name="category[11]" value="12">Food Assistance</label> 
+											<label><input type="checkbox" name="category[12]" value="17">Housing Services</label> 
+											<label><input type="checkbox" name="category[13]" value="25">Shelters</label> 
+											<label><input type="checkbox" name="category[14]" value="5">Clothing Services</label> 
+				</section>
+				<section id="health">
+					<h4>Health</h4>
+					<label><input type="checkbox" name="category[15]" value="7">Dental and Vision Services </label> 
+					<label><input type="checkbox" name="category[16]" value="8">Drug and Alchohol Services</label> 
+					<label><input type="checkbox" name="category[17]" value="10">Family and Maternity Services</label> 
+					<label><input type="checkbox" name="category[18]" value="15">General Health Services</label> 
+					<label><input type="checkbox" name="category[19]" value="16"> HIV/AIDS Services</label> 
+					<label><input type="checkbox" name="category[20]" value="22">Mental Health Services</label> 
+				</section>
+				<section id="financial">
+					<h4>Financial, Legal, and Employment</h4>
+					<label><input type="checkbox" name="category[21]" value="2">Identification Services</label> 
+					<label><input type="checkbox" name="category[22]" value="9">Employment and Training Services</label> 
+					<label><input type="checkbox" name="category[23]" value="11">Financial Assistance</label> 
+					<label><input type="checkbox" name="category[24]" value="19">Legal Services</label> 
+					<label><input type="checkbox" name="category[25]" value="21">Mail Services</label> 
+					<label><input type="checkbox" name="category[26]" value="26">Storage Services</label> 
+					<label><input type="checkbox" name="category[27]" value="23">Re-entry Assistance</label> 
+					<label><input type="checkbox" name="category[28]" value="28">Transportation Services</label> 
+				</section>
+			</div>
+			
+			<button type="submit" id="submit-button" name="submitbutton" value="search"><i class="fas fa-search"></i> &nbsp; Search</button>
            
-            </form>
+			</form>
+		</div>
 		<div id="sponsors">
-			<section id="sponsorheader">
+			<div id="sponsorheader">
 				<h2>Thanks to all of our sponsors for making the Emerald City Resource Guide possible!</h2>
 				<p id="sponsorask">Want to become a sponsor? <br> Get started <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">here</a>.</p>
-			</section>
+			</div>
 			<section id="presenting">
 				<h3>Presenting Sponsor</h3>
 					<a href="https://www.seattle.gov/humanservices" target="_blank"><img src="images/city_human_services.png" alt="Seattle Human Services"></a>

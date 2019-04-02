@@ -52,7 +52,7 @@ i {
 	display: block;
 }
 
-h1, h2, h3, #instructions {
+h1, h2, h3, .instructions {
 		font-family: 'franklin-gothic-urw-cond','Helvetica','Arial',sans-serif;
 }
 
@@ -67,7 +67,7 @@ h1 {
 		padding-top: 3vw;
 }
 
-#instructions, #sponsorask {
+.instructions, #sponsorask {
 	font-style: oblique;
 	margin: 2vw;
 	width: 96vw;
@@ -78,11 +78,10 @@ h1 {
 
 label, select {
 	display: inline-block;
-	/* margin: 1vw auto; */
 }
 
 select {
-	margin: 0 auto 1vw auto;
+	margin: 0vw 0vw 0vw 5vw;
 	font-size: 5vw;
 	background-color: lightgrey;
 }
@@ -98,7 +97,6 @@ h3 {
 	font-weight: bold;
 	margin: 8vw 1vw 1.5vw;
 	color:  #df972d;
-	width: 96vw;
 }
 
 .organization-item h3 {
@@ -113,7 +111,7 @@ h4 {
 	font-size: 5vw;
 }
 
-#about-you, #services {
+#about-you, #services, #population, .selectdiv {
 	border-radius: 5px;
 	padding: 1vw 1vw 3vw 1vw;
 	margin: 2vw;
@@ -122,7 +120,7 @@ h4 {
 #services label, #population label {
 	border-radius: 5px;
 	width: 90vw;
-	margin: 0vw 5vw;
+	margin: 0vw 0vw 0vw 5vw;
 	line-height: 6vw;
 	font-size: 5vw;
 	background-color:lightgrey;
@@ -248,6 +246,7 @@ select::-ms-expand {
 	width: 100vw;
 	text-align: center;
 	padding-bottom: 3vw;
+	margin:0;
 }
 
 #changemaker img {
@@ -343,7 +342,7 @@ form.contact input {
 	width: 55vw;
 }
 
-#feedback-field {
+#feedbackfield {
 	overflow: auto;
 	font-size: 5vw;
 	margin: 0 1vw;
