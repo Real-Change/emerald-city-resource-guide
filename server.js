@@ -1,8 +1,6 @@
 'use strict';
 
 // application dependencies
-const firebase = require('firebase/app');
-require('firebase/auth');
 require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
@@ -38,9 +36,6 @@ app.post('/', function (req, res) {
   formContents = req;
   console.log(formContents);
 })
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
 
 // GET method route to render contact page
 app.get('/contact', function (req, res){
@@ -171,11 +166,4 @@ function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry, something went wrong');
 }
-
-
-// TODO: Replace the following with your app's Firebase project configuration
-var firebaseConfig = {
-  // ...
-};
-
 
