@@ -52,6 +52,17 @@ app.get('/confirmation', function(req, res){
   res.render('./pages/confirmation.ejs');
 })
 
+// GET method route to render login page
+app.get('/login', function(req, res){
+  res.render('./pages/auth/login.ejs');
+});
+
+// POST method for login page
+app.post('/login', function(req, res){
+  res.render('./pages/auth/login.ejs');
+});
+
+
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
 
