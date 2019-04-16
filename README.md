@@ -19,7 +19,7 @@ These csv files can be used to populate your local database:
 2. Create schema - load table schema within the root file in the CLI with 'psql -d <database_name> -f guide.sql'
 3. Populate tables - load table contents with csv data from within the root file in the CLI using 'psql -d <database_name> -f load.sql'
 
-## Dependencies
+### Dependencies
 From within the CLI, install the following npms:
 
 - dotenv
@@ -45,7 +45,7 @@ Within your .env file, you must declare the following variables:
 - Express web application framework
 - Embedded JavaScript Templates (EJS)
 - Postgres database
-- Nodemailer server-side email 
+- Nodemailer server-side email management
 
 ## Author
 Erin Eckerman - [https://www.linkedin.com/in/erineckerman/](https://www.linkedin.com/in/erineckerman/)
