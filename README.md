@@ -55,4 +55,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 
 ## Acknowledgements
 
-Gratitude to both Katie Comboy and Camilla Walter at Real Change for their partnership throughout the design and testing process.  Thanks to Vinicio Sanchez for his input in designing the data model.  Extra big thanks to Bogdan Gheorghe for his countless code reviews and assistance in debugging.
+Gratitude to both Katie Comboy and Camilla Walter at Real Change for their partnership throughout the design and testing process.  Thanks to Vinicio Sanchez, Jessica Lovell, and Zahra Mohamed for their input in designing the data model and wireframes.  Extra big thanks to Bogdan Gheorghe for his countless code reviews and assistance in debugging.
