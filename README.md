@@ -1,6 +1,6 @@
 # [Emerald City Resource Guide](http://www.emeraldcityresourceguide.org/)
 
-The Emerald City Resource Guide (ECRG, [http://www.emeraldcityresourceguide.org/](http://www.emeraldcityresourceguide.org/)) is a directory of social service organizations located in Seattle.  The first hard copy of the guide was published by local non-profit, [Real Change](https://www.realchangenews.org/), in April, 2018, in the hopes of providing an easy reference guide for individuals who may not have access to a computer. v1 of the online version of the guide was released in January, 2019, with the intention of providing the means for the guide's data to be updated on a more frequent basis and a friendly UI for those with access to the internet.
+The Emerald City Resource Guide (ECRG, [http://www.emeraldcityresourceguide.org/](http://www.emeraldcityresourceguide.org/)) is a directory of social service organizations located in Seattle.  The first hard copy of the guide was published by local non-profit, [Real Change](https://www.realchangenews.org/), in April, 2018, in the hopes of providing an easy reference guide for individuals who may not have access to a computer. v1 of the online version of the guide was released in January, 2019, with the intention of providing the means for updating the guide on a more frequent basis and a creating a dynamic UI for those with access to the internet.
 
 ## Getting Started
 To run this application on your local machine, you will need to set up a local relational database, install the necessary dependencies, and set up your own environmental variables file.
@@ -35,6 +35,9 @@ Within your .env file, you must declare the following variables:
 - PORT - the port you'll use to run the app locally (e.g. 8080)
 - GMAIL_USER - the email address that will send the emails using Nodemailer (e.g. NAME@gmail.com)
 - GMAIL_PASS - the password for the email address listed above
+
+## Testing
+Local testing is conducted using mocha and chai.  The test file within this repo is intended to cover the server methods that transform the user inputs in the search form into a SQL query and then retrieves the corresponding records from the database.
 
 ## Upcoming Features
 - Print button to print search results to PDF (ETA 4/26/19)
