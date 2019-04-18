@@ -6,6 +6,12 @@ const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
 
+// const requirejs = require('requirejs');
+
+// requirejs.config({
+//   nodeRequire: require
+// });
+
 // application setup
 const app = express();
 const PORT = process.env.PORT || 8080;

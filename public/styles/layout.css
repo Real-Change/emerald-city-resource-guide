@@ -70,7 +70,7 @@
 		width: 100vw;
 	}
 
-	form {
+	.form {
 		display: flex;
     width: 76vw;
     flex-wrap: wrap;
