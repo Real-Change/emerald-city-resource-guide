@@ -5,12 +5,23 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
+const firebase = require('firebase');
+const firebaseConfig = {
+  apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
+  authDomain: 'emerald-city-resource-guide.firebaseapp.com',
+  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com',
+  projectId: 'emerald-city-resource-guide',
+  storageBucket: 'emerald-city-resource-guide.appspot.com',
+  messagingSenderId: '162425982724'
+};
+require('firebase-app');
+require('firebase-auth');
 
-// const requirejs = require('requirejs');
 
-// requirejs.config({
-//   nodeRequire: require
-// });
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const user = firebase.auth().currentUser;
 
 // application setup
 const app = express();
@@ -67,6 +78,15 @@ app.get('/login', function(req, res){
 app.post('/login', function(req, res){
   res.render('./pages/auth/login.ejs');
 });
+
+// GET method route to render account page
+app.get('/account', function(req, res){
+  res.render('./pages/auth/account.ejs');
+});
+
+// POST method for account page
+
+app.post('/account', checkAuth);
 
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
@@ -184,15 +204,25 @@ function getOrgs (request, response) {
     .catch(handleError);
 }
 
+// check for authentication
+function checkAuth(req, res){
+  if (user) {
+    res.render('./pages/auth/account.ejs');
+  } else {
+    res.redirect('/login');
+  }
+}
+
 // error handling
 function handleError(err, res) {
   console.error(err);
   if (res) res.status(500).send('Sorry, something went wrong');
 }
 
-// export methods for testing
+// export methods for testing and authorization
 module.exports = {
   makeCategoryQuery : makeCategoryQuery,
   makeGenderQuery : makeGenderQuery,
   makeSQL : makeSQL,
+  checkAuth : checkAuth,
 }
