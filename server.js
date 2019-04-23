@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
-const firebase = require('firebase');
+var firebase = require('firebase');
 const firebaseConfig = {
   apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
   authDomain: 'emerald-city-resource-guide.firebaseapp.com',
@@ -16,12 +16,17 @@ const firebaseConfig = {
 };
 require('firebase-app');
 require('firebase-auth');
+var admin = require('firebase-admin');
 
+var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
-// Initialize Firebase
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://emerald-city-resource-guide.firebaseio.com"
+});
+
+// initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-const user = firebase.auth().currentUser;
 
 // application setup
 const app = express();
@@ -45,22 +50,8 @@ app.get('/', function (req, res) {
   res.render('./pages/index.ejs');
 })
 
-// POST method route to render form page
-let formContents = [];
-
-app.post('/', function (req, res) {
-  res.render('./pages/index.ejs');
-  formContents = req;
-  console.log(formContents);
-})
-
 // GET method route to render contact page
 app.get('/contact', function (req, res){
-  res.render('./pages/contact.ejs');
-})
-
-// POST method route to render contact page
-app.post('/contact', function(req, res){
   res.render('./pages/contact.ejs');
 })
 
@@ -70,23 +61,12 @@ app.get('/confirmation', function(req, res){
 })
 
 // GET method route to render login page
-app.get('/login', function(req, res){
-  res.render('./pages/auth/login.ejs');
-});
+app.get('/login', checkLoginAuth);
 
-// POST method for login page
-app.post('/login', function(req, res){
-  res.render('./pages/auth/login.ejs');
-});
+app.post('/account', checkAccountAuth);
 
 // GET method route to render account page
-app.get('/account', function(req, res){
-  res.render('./pages/auth/account.ejs');
-});
-
-// POST method for account page
-
-app.post('/account', checkAuth);
+app.get('/account', checkAccountAuth);
 
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
@@ -205,7 +185,18 @@ function getOrgs (request, response) {
 }
 
 // check for authentication
-function checkAuth(req, res){
+function checkLoginAuth(req, res){
+  let user = firebase.auth().currentUser;
+  console.log(user);
+  if(user){
+    res.redirect('/account');
+  } else {
+    res.render('./pages/auth/login.ejs')
+  }
+}
+function checkAccountAuth(req, res){
+  let user = firebase.auth().currentUser;
+  console.log(user);
   if (user) {
     res.render('./pages/auth/account.ejs');
   } else {
@@ -223,6 +214,5 @@ function handleError(err, res) {
 module.exports = {
   makeCategoryQuery : makeCategoryQuery,
   makeGenderQuery : makeGenderQuery,
-  makeSQL : makeSQL,
-  checkAuth : checkAuth,
+  makeSQL : makeSQL
 }
