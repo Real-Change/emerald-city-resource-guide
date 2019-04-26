@@ -184,7 +184,7 @@
 
 	#sponsors {
 		width: 20.25vw;
-    border: .25vw solid #df972d;
+		background:rgba(223,151,45, .15);
     margin: 1vw 1vw 0 0;
 	}
 
