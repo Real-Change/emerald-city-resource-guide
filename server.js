@@ -5,6 +5,8 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 var firebase = require('firebase');
 const firebaseConfig = {
   apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
@@ -20,13 +22,12 @@ var admin = require('firebase-admin');
 
 var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://emerald-city-resource-guide.firebaseio.com"
-});
-
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
+});
 
 // application setup
 const app = express();
@@ -34,7 +35,14 @@ const PORT = process.env.PORT || 8080;
 
 // application middleware
 app.use(express.static('./public'));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({
+  extended: true
+}));
+app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
 
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
@@ -46,34 +54,32 @@ app.set('view engine', 'ejs');
 app.post('/results', getOrgs);
 
 // GET method route to render form page
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.render('./pages/index.ejs');
 })
 
 // GET method route to render contact page
-app.get('/contact', function (req, res){
+app.get('/contact', function(req, res) {
   res.render('./pages/contact.ejs');
 })
 
 // GET method route to render request confirmation page
-app.get('/confirmation', function(req, res){
+app.get('/confirmation', function(req, res) {
   res.render('./pages/confirmation.ejs');
 })
 
 // GET method route to render login page
-app.get('/login', checkLoginAuth);
+// app.get('/login', checkLoginAuth);
+app.get('/login', function(req, res) {
+  res.render('./pages/auth/login.ejs');
+});
 
-app.post('/account', checkAccountAuth);
-
-// GET method route to render account page
-app.get('/account', checkAccountAuth);
 
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
 
 // method to submit copy requests
-function submitRequest(req, res){
-  console.log(req);
+function submitRequest(req, res) {
   let mailOptions = {
     from: req.body.email,
     to: 'erineckerman@gmail.com',
@@ -91,7 +97,7 @@ function submitRequest(req, res){
   }
 
   let transporter = nodemailer.createTransport({
-    host:'smtp.gmail.com',
+    host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     service: 'Gmail',
@@ -100,15 +106,15 @@ function submitRequest(req, res){
       pass: process.env.GMAIL_PASS
     }
   });
-  transporter.verify(function(err, success){
-    if(err) {
+  transporter.verify(function(err, success) {
+    if (err) {
       console.log(err);
     } else {
       console.log(success);
     }
   })
-  transporter.sendMail(mailOptions, function (err, info){
-    if(err) {
+  transporter.sendMail(mailOptions, function(err, info) {
+    if (err) {
       console.log(err);
     } else {
       console.log(info);
@@ -124,9 +130,9 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 function makeCategoryQuery(category) {
   // add category selection to SQL query and terminate the query with the last category in the array
   let categoryQuery = '';
-  category.forEach(function (el) {
+  category.forEach(function(el) {
     let i = category.length - 1;
-    if(el === category[i]){
+    if (el === category[i]) {
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el;
     } else {
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el + ' OR ';
@@ -136,11 +142,11 @@ function makeCategoryQuery(category) {
 }
 
 // method to identify selected gender
-function makeGenderQuery(gender){
+function makeGenderQuery(gender) {
   let genderQuery = '';
 
   // add gender selection to SQL query
-  switch(gender){
+  switch (gender) {
   case 'female':
     genderQuery = '(gender=\'women only\' OR gender=\'no restrictions\')';
     break;
@@ -154,9 +160,9 @@ function makeGenderQuery(gender){
 }
 
 // method to generate SQL query
-function makeSQL (requestType, category, gender){
+function makeSQL(requestType, category, gender) {
   let SQL;
-  if(requestType === 'all') {
+  if (requestType === 'all') {
     SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
@@ -172,7 +178,7 @@ function makeSQL (requestType, category, gender){
 }
 
 // method to render results
-function getOrgs (request, response) {
+function getOrgs(request, response) {
   let requestType = request.body.submitbutton;
   let {gender, category} = request.body;
 
@@ -180,28 +186,10 @@ function getOrgs (request, response) {
 
   // pass SQL query and values from request to render results
   return client.query(SQL)
-    .then(results => response.render('./pages/results.ejs', { results: results.rows }))
+    .then(results => response.render('./pages/results.ejs', {
+      results: results.rows
+    }))
     .catch(handleError);
-}
-
-// check for authentication
-function checkLoginAuth(req, res){
-  let user = firebase.auth().currentUser;
-  console.log(user);
-  if(user){
-    res.redirect('/account');
-  } else {
-    res.render('./pages/auth/login.ejs')
-  }
-}
-function checkAccountAuth(req, res){
-  let user = firebase.auth().currentUser;
-  console.log(user);
-  if (user) {
-    res.render('./pages/auth/account.ejs');
-  } else {
-    res.redirect('/login');
-  }
 }
 
 // error handling
@@ -212,7 +200,68 @@ function handleError(err, res) {
 
 // export methods for testing and authorization
 module.exports = {
-  makeCategoryQuery : makeCategoryQuery,
-  makeGenderQuery : makeGenderQuery,
-  makeSQL : makeSQL
+  makeCategoryQuery: makeCategoryQuery,
+  makeGenderQuery: makeGenderQuery,
+  makeSQL: makeSQL
 }
+
+
+app.post('/sessionLogin', (req, res) => {
+  // Get the ID token passed and the CSRF token.
+  const idToken = req.body.idToken.toString();
+
+  // Set session expiration to 5 days.
+  const expiresIn = 60 * 60 * 24 * 5 * 1000;
+  // Create the session cookie. This will also verify the ID token in the process.
+  // The session cookie will have the same claims as the ID token.
+  // To only allow session cookie setting on recent sign-in, auth_time in ID token
+  // can be checked to ensure user was recently signed in before creating a session cookie.
+  admin.auth().verifyIdToken(idToken)
+    .then((decodedIdToken) => {
+      console.log('decodedIdToken:', decodedIdToken);
+      // Create session cookie and set it.
+      admin.auth().createSessionCookie(idToken, {
+        expiresIn
+      })
+        .then((sessionCookie) => {
+          // Set cookie policy for session cookie.
+          const options = {
+            maxAge: expiresIn,
+            httpOnly: true,
+            secure: false
+          };
+          res.cookie('session', sessionCookie, options);
+          res.end(JSON.stringify({
+            status: 'success'
+          }))
+        })
+        .catch(error => {
+          res.status(401).send('UNAUTHORIZED REQUEST!', error);
+        });
+
+    })
+    .catch(error => {
+      res.status(401).send(error);
+    });
+
+});
+
+
+// Whenever a user is accessing restricted content that requires authentication.
+app.get('/account', (req, res) => {
+  const sessionCookie = req.cookies.session || '';
+  console.log('your session cookie is:      \'' + sessionCookie + '\'');
+  // Verify the session cookie. In this case an additional check is added to detect
+  // if the user's Firebase session was revoked, user deleted/disabled, etc.
+  admin.auth().verifySessionCookie(
+    sessionCookie, true /** checkRevoked */ )
+    .then((decodedClaims) => {
+      // serveContentForUser('/account', req, res, decodedClaims);
+      res.render('./pages/auth/account.ejs')
+    })
+    .catch(error => {
+      console.log(error);
+      // Session cookie is unavailable or invalid. Force user to login.
+      res.redirect('/login');
+    });
+});
