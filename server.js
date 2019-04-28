@@ -219,26 +219,36 @@ app.post('/sessionLogin', (req, res) => {
   admin.auth().verifyIdToken(idToken)
     .then((decodedIdToken) => {
       console.log('decodedIdToken:', decodedIdToken);
-      // Create session cookie and set it.
-      admin.auth().createSessionCookie(idToken, {
-        expiresIn
-      })
-        .then((sessionCookie) => {
-          // Set cookie policy for session cookie.
-          const options = {
-            maxAge: expiresIn,
-            httpOnly: true,
-            secure: false
-          };
-          res.cookie('session', sessionCookie, options);
-          res.end(JSON.stringify({
-            status: 'success'
-          }))
-        })
-        .catch(error => {
-          res.status(401).send('UNAUTHORIZED REQUEST!', error);
-        });
+      let userEmail = decodedIdToken.email;
+      let SQL = 'SELECT * FROM users WHERE email = \'' + userEmail + '\';';
+      console.log('SQL', SQL);
 
+      return(client.query(SQL))
+        .then((results)=> {
+          if (results.rowCount > 0 ){
+            // Create session cookie and set it.
+            admin.auth().createSessionCookie(idToken, {
+              expiresIn
+            })
+              .then((sessionCookie) => {
+                // Set cookie policy for session cookie.
+                const options = {
+                  maxAge: expiresIn,
+                  httpOnly: true,
+                  secure: false
+                };
+                res.cookie('session', sessionCookie, options);
+                res.end(JSON.stringify({
+                  status: 'success'
+                }))
+              })
+              .catch(error => {
+                res.status(401).send('UNAUTHORIZED REQUEST!', error);
+              });
+          } else {
+            res.redirect('/login');
+          }
+        })
     })
     .catch(error => {
       res.status(401).send(error);
@@ -257,6 +267,7 @@ app.get('/account', (req, res) => {
     sessionCookie, true /** checkRevoked */ )
     .then((decodedClaims) => {
       // serveContentForUser('/account', req, res, decodedClaims);
+      console.log(decodedClaims);
       res.render('./pages/auth/account.ejs')
     })
     .catch(error => {
