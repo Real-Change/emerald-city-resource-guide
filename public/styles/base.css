@@ -354,3 +354,11 @@ form.contact input {
 #firebaseui-auth-container {
 	margin: 4vw 2vw;
 }
+
+button:disabled {
+	background-color: rgba(14, 125, 194, .50);
+}
+
+button:disabled:hover {
+	cursor: auto;
+}
