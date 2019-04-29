@@ -75,11 +75,7 @@ $(document).ready(function () {
 
 });
 
-// enable contact form submit buttons when reCAPTCHA completed
-function recaptcha_callback(){
-  console.log('recaptcha callback triggered');
-  $('.request-button').prop('disabled', false);
-}
+
 
 
 

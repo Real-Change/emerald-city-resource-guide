@@ -5,32 +5,11 @@ $(document).ready(function() {
 
   // When the user signs in with email and password.
   firebase.auth().onAuthStateChanged(function(user) {
+    console.log('getIdtoken:  ', firebase.auth().currentUser.getIdToken());
     firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
       return postIdTokenToSessionLogin('/sessionLogin', idToken);
     });
   });
-
-
-  // sign out user
-  $('#signout-button').on('click', function() {
-    firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
-    }, function(error) {
-      console.error('Sign Out Error', error);
-    });
-  });
-
-  // allow user to change their password
-  $('#changepassword-button').on('click', function() {
-    let user = firebase.auth().currentUser;
-    let newPassword = getASecureRandomPassword();
-    user.updatePassword(newPassword).then(() => {
-      // Update successful.
-    }, (error) => {
-      // An error happened.
-    });
-  });
-
 
   function postIdTokenToSessionLogin(url, idToken) {
     // POST to session login endpoint.
@@ -46,3 +25,9 @@ $(document).ready(function() {
 
 })
 
+
+// enable contact form submit buttons when reCAPTCHA completed
+function recaptcha_callback(){
+  console.log('recaptcha callback triggered');
+  $('.request-button').prop('disabled', false);
+}

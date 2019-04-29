@@ -69,7 +69,6 @@ app.get('/confirmation', function(req, res) {
 })
 
 // GET method route to render login page
-// app.get('/login', checkLoginAuth);
 app.get('/login', function(req, res) {
   res.render('./pages/auth/login.ejs');
 });
@@ -276,3 +275,10 @@ app.get('/account', (req, res) => {
       res.redirect('/login');
     });
 });
+
+// Sign out user by clearing cookie and redirecting
+app.post('/sessionLogout', (req, res) => {
+  res.clearCookie('session');
+  res.redirect('/login')
+});
+

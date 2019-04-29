@@ -3,11 +3,9 @@
 <body>
 	<%- include('../../layout/header') %>
 
-<div>
-    <a id="signout-button" href='/login'><i class="fas fa-sign-out-alt"></i> &nbsp Sign Out</a>
-    <button id="changepassword-button">Change Password</button>
-    <input type="text" value="new-password" id="new-password">
-    <input type="text" id="password-confirm">
+    <div>
+    <%- include('../auth/sidebar.ejs') %>
+    
 	<%- include('../../layout/footer') %>
 	</div>
 </body>
