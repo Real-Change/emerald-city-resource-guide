@@ -3,7 +3,8 @@
 <body>
     <%- include('../layout/header') %>
 		<div id="count"></div>
-		<%- include('./dropdown', {organizations: results}) %>
+    <%- include('./dropdown', {organizations: results}) %>
+    <button id='print-button'>Print Results</button>
     <main>
         <%- include('./detail', {organizations: results}) %>
     </main>

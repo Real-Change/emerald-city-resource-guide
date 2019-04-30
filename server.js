@@ -204,7 +204,6 @@ module.exports = {
   makeSQL: makeSQL
 }
 
-
 app.post('/sessionLogin', (req, res) => {
   // Get the ID token passed and the CSRF token.
   const idToken = req.body.idToken.toString();
@@ -217,10 +216,8 @@ app.post('/sessionLogin', (req, res) => {
   // can be checked to ensure user was recently signed in before creating a session cookie.
   admin.auth().verifyIdToken(idToken)
     .then((decodedIdToken) => {
-      console.log('decodedIdToken:', decodedIdToken);
       let userEmail = decodedIdToken.email;
       let SQL = 'SELECT * FROM users WHERE email = \'' + userEmail + '\';';
-      console.log('SQL', SQL);
 
       return(client.query(SQL))
         .then((results)=> {
@@ -245,7 +242,7 @@ app.post('/sessionLogin', (req, res) => {
                 res.status(401).send('UNAUTHORIZED REQUEST!', error);
               });
           } else {
-            res.redirect('/login');
+            // res.redirect('/login');
           }
         })
     })
@@ -257,28 +254,44 @@ app.post('/sessionLogin', (req, res) => {
 
 
 // Whenever a user is accessing restricted content that requires authentication.
-app.get('/account', (req, res) => {
+
+app.get('/sessionConfirmation', (req, res) => {
   const sessionCookie = req.cookies.session || '';
   console.log('your session cookie is:      \'' + sessionCookie + '\'');
   // Verify the session cookie. In this case an additional check is added to detect
   // if the user's Firebase session was revoked, user deleted/disabled, etc.
   admin.auth().verifySessionCookie(
     sessionCookie, true /** checkRevoked */ )
-    .then((decodedClaims) => {
-      // serveContentForUser('/account', req, res, decodedClaims);
-      console.log(decodedClaims);
-      res.render('./pages/auth/account.ejs')
+    .then(() => {
+      res.redirect('/account');
     })
     .catch(error => {
-      console.log(error);
+      console.log('verification error', error);
       // Session cookie is unavailable or invalid. Force user to login.
-      res.redirect('/login');
+      // res.redirect('/login');
+      console.log('forced back to login')
     });
 });
 
+// Render account page if authorized
+
+app.get('/account', (req, res) => {
+  if(req.cookies.session !== undefined){
+    console.log('good jorb');
+    res.render('./pages/auth/account.ejs')
+  } else {
+    console.log('not so fast');
+    // res.redirect('/login')
+  }
+})
+
 // Sign out user by clearing cookie and redirecting
 app.post('/sessionLogout', (req, res) => {
-  res.clearCookie('session');
-  res.redirect('/login')
+  firebase.auth().signOut().then(function() {
+    res.clearCookie('session');
+    res.redirect('/login')
+  }).catch(function(error) {
+    console.log('sign out error:  ', error)
+  });
 });
 

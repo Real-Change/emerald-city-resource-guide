@@ -73,6 +73,25 @@ $(document).ready(function () {
     $('#filters').val('default');
   });
 
+  // create printer-friendly version of results page
+  $('#print-button').on('click', function(){
+    $('header').toggleClass('no-print');
+    $('#count').toggleClass('no-print');
+    $('#filter-container').toggleClass('no-print');
+    $('.d').toggleClass('no-print');
+    $('main').toggleClass('print-style');
+    $('.desc').removeClass('hidden');
+    $('.fas').addClass('hidden');
+    $(this).text($(this).text() === 'Print Results' ? 'Return to Results' : 'Print Results');
+    if($('#print-button').text() === 'Return to Results') {
+      window.print();
+    } else {
+      $('.desc').addClass('hidden');
+      $('.fas').removeClass('hidden');
+    }
+  });
+
+
 });
 
 

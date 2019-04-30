@@ -191,7 +191,7 @@ p {
 	line-height: 5vw;
 }
 
-.organization-container {
+#organization-container {
 	margin-bottom: 8vw;
 }
 
@@ -361,4 +361,8 @@ button:disabled {
 
 button:disabled:hover {
 	cursor: auto;
+}
+
+#print-button {
+	display: none;
 }
