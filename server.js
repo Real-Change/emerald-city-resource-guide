@@ -295,3 +295,15 @@ app.post('/sessionLogout', (req, res) => {
   });
 });
 
+app.post('/:searchTerm', returnAdminResults);
+// app.get('/:searchTerm', returnAdminResults);
+
+function returnAdminResults(req, res){
+  console.log('req.body.searchbar:', req.body.searchbar);
+  let searchTerm = (req.body.searchbar).trim();
+  let SQL = 'SELECT * FROM organization WHERE organization_name LIKE \'%' + searchTerm + '%\' OR website LIKE \'%' + searchTerm + '%\' OR phone_number LIKE \'%' + searchTerm + '%\' OR org_address LIKE \'%' + searchTerm + '%\' OR org_description LIKE \'%' + searchTerm + '%\' ORDER BY organization_name;';
+
+  return client.query(SQL)
+    .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
+    .catch(error => handleError(error, res));
+}

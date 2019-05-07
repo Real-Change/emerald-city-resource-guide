@@ -1,0 +1,15 @@
+<%- include('../../layout/head') %>
+</head>
+<%- include('../../layout/header') %>
+<body>
+    <%- include('../auth/sidebar.ejs') %>
+	
+	<%- include('./search-admin.ejs') %>
+    <main>
+        <%- include('../auth/results-detail.ejs', {organizations: results}) %>
+    </main>
+    </div>
+    <%- include('../../layout/footer') %>
+    </div>
+</body>
+</html>

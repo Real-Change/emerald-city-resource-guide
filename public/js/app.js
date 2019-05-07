@@ -90,7 +90,13 @@ $(document).ready(function () {
       $('.fas').removeClass('hidden');
     }
   });
+  
+  // dynamically render the action for the admin search form
 
+  $('#admin-search-button').on('click', () => {
+    let term = $('#searchbar').val();
+    $('#admin-search').attr('action', term)
+  })
 
 });
 
