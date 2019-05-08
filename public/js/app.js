@@ -58,6 +58,7 @@ $(document).ready(function () {
   today = yyyy + '-' + mm + '-' + dd;
   $('#form-date').attr('min', today);
 
+
   // only show results that match dropdown selection
   $('#filters').change( function() {
     let selection = $('option:selected').val();
@@ -73,5 +74,40 @@ $(document).ready(function () {
     $('#filters').val('default');
   });
 
+  // create printer-friendly version of results page
+  $('#print-button').on('click', function(){
+    $('header').toggleClass('no-print');
+    $('#count').toggleClass('no-print');
+    $('#filter-container').toggleClass('no-print');
+    $('.d').toggleClass('no-print');
+    $('main').toggleClass('print-style');
+    $('.desc').removeClass('hidden');
+    $('.fas').addClass('hidden');
+    $(this).text($(this).text() === 'Print Results' ? 'Return to Results' : 'Print Results');
+    if($('#print-button').text() === 'Return to Results') {
+      window.print();
+    } else {
+      $('.desc').addClass('hidden');
+      $('.fas').removeClass('hidden');
+    }
+  });
+  
+  // dynamically render the action for the admin search form
+
+  $('#admin-search-button').on('click', () => {
+    let term = $('#searchbar').val();
+    $('#admin-search').attr('action', term)
+  })
+
+  // redirect to account page if "discard changes" button is checked
+
+  // $('#discard').on('click', () => {
+  //   history.back();
+  // })
 });
+
+
+
+
+
 

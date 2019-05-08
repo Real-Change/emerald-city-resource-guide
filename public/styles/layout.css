@@ -66,11 +66,11 @@
 		width: 76vw;
 	}
  
-	.organization-container h3 {
+	#organization-container h3 {
 		width: 100vw;
 	}
 
-	form {
+	.form {
 		display: flex;
     width: 76vw;
     flex-wrap: wrap;
@@ -165,8 +165,8 @@
 	}
 	
 	.label, .content, .desc {
-		font-size: 2vw;
-		line-height: 3vw;
+		font-size: 1.5vw;
+		line-height: 2.5vw;
 	}
 
 	.label {
@@ -184,7 +184,7 @@
 
 	#sponsors {
 		width: 20.25vw;
-    border: .25vw solid #df972d;
+		background:rgba(223,151,45, .15);
     margin: 1vw 1vw 0 0;
 	}
 
@@ -314,5 +314,9 @@
 	#all-form {
 		margin-bottom: 0;
     padding: 0;
+	}
+
+	#print-button {
+		display: block;
 	}
 }
