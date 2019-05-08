@@ -299,11 +299,31 @@ app.post('/:searchTerm', returnAdminResults);
 // app.get('/:searchTerm', returnAdminResults);
 
 function returnAdminResults(req, res){
-  console.log('req.body.searchbar:', req.body.searchbar);
-  let searchTerm = (req.body.searchbar).trim();
-  let SQL = 'SELECT * FROM organization WHERE organization_name LIKE \'%' + searchTerm + '%\' OR website LIKE \'%' + searchTerm + '%\' OR phone_number LIKE \'%' + searchTerm + '%\' OR org_address LIKE \'%' + searchTerm + '%\' OR org_description LIKE \'%' + searchTerm + '%\' ORDER BY organization_name;';
+  let searchTerm = ((req.body.searchbar).trim()).split(' ');
+  console.log('SEARCH TERM:   ', searchTerm[0]);
+  let SQL;
 
+  if(searchTerm.length === 1){
+    let searchInput = searchTerm[0].toUpperCase();
+    SQL= 'SELECT * FROM organization WHERE upper(organization_name) LIKE \'%' + searchInput + '%\' OR upper(website) LIKE \'%' + searchInput + '%\' OR phone_number LIKE \'%' + searchInput + '%\' OR upper(org_address) LIKE \'%' + searchInput + '%\' OR upper(org_description) LIKE \'%' + searchInput + '%\' ORDER BY organization_name;';
+    console.log('SQL   :', SQL);
+  } else {
+    SQL = 'SELECT * FROM organization WHERE organization_name LIKE \'%' + searchTerm + '%\' OR website LIKE \'%' + searchTerm + '%\' OR phone_number LIKE \'%' + searchTerm + '%\' OR org_address LIKE \'%' + searchTerm + '%\' OR org_description LIKE \'%' + searchTerm + '%\' ORDER BY organization_name;';
+  }
+  
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
 }
+
+app.post('/update/:orgId', editOrg);
+
+function editOrg(req, res){
+  let orgId = req.params.orgId;
+  let SQL = 'SELECT DISTINCT * from organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE organization.organization_id=' + orgId + ';';
+
+  client.query(SQL)
+    .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
+    .catch(error => handleError(error, res));
+}
+

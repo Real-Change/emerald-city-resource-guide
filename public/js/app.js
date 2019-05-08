@@ -58,6 +58,7 @@ $(document).ready(function () {
   today = yyyy + '-' + mm + '-' + dd;
   $('#form-date').attr('min', today);
 
+
   // only show results that match dropdown selection
   $('#filters').change( function() {
     let selection = $('option:selected').val();
@@ -98,6 +99,11 @@ $(document).ready(function () {
     $('#admin-search').attr('action', term)
   })
 
+  // redirect to account page if "discard changes" button is checked
+
+  // $('#discard').on('click', () => {
+  //   history.back();
+  // })
 });
 
 
