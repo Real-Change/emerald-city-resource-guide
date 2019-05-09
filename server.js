@@ -5,6 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
+
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 var firebase = require('firebase');
@@ -29,20 +30,14 @@ firebase.initializeApp(firebaseConfig);
 //   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
 // });
 
+
 // application setup
 const app = express();
 const PORT = process.env.PORT;
 
 // application middleware
 app.use(express.static('./public'));
-app.use(express.urlencoded({
-  extended: true
-}));
-app.use(cookieParser());
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2']
-}))
+app.use(express.urlencoded({extended: true}));
 
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
@@ -54,31 +49,50 @@ app.set('view engine', 'ejs');
 app.post('/results', getOrgs);
 
 // GET method route to render form page
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.render('./pages/index.ejs');
 })
 
+// POST method route to render form page
+let formContents = [];
+
+app.post('/', function (req, res) {
+  res.render('./pages/index.ejs');
+  formContents = req;
+  console.log(formContents);
+})
+
 // GET method route to render contact page
-app.get('/contact', function(req, res) {
+app.get('/contact', function (req, res){
+  res.render('./pages/contact.ejs');
+})
+
+// POST method route to render contact page
+app.post('/contact', function(req, res){
   res.render('./pages/contact.ejs');
 })
 
 // GET method route to render request confirmation page
-app.get('/confirmation', function(req, res) {
+app.get('/confirmation', function(req, res){
   res.render('./pages/confirmation.ejs');
 })
 
 // GET method route to render login page
-app.get('/login', function(req, res) {
+app.get('/login', function(req, res){
   res.render('./pages/auth/login.ejs');
 });
 
+// POST method for login page
+app.post('/login', function(req, res){
+  res.render('./pages/auth/login.ejs');
+});
 
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
 
 // method to submit copy requests
-function submitRequest(req, res) {
+function submitRequest(req, res){
+  console.log(req);
   let mailOptions = {
     from: req.body.email,
     to: 'erineckerman@gmail.com',
@@ -96,7 +110,7 @@ function submitRequest(req, res) {
   }
 
   let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host:'smtp.gmail.com',
     port: 465,
     secure: true,
     service: 'Gmail',
@@ -105,15 +119,15 @@ function submitRequest(req, res) {
       pass: process.env.GMAIL_PASS
     }
   });
-  transporter.verify(function(err, success) {
-    if (err) {
+  transporter.verify(function(err, success){
+    if(err) {
       console.log(err);
     } else {
       console.log(success);
     }
   })
-  transporter.sendMail(mailOptions, function(err, info) {
-    if (err) {
+  transporter.sendMail(mailOptions, function (err, info){
+    if(err) {
       console.log(err);
     } else {
       console.log(info);
@@ -129,9 +143,9 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 function makeCategoryQuery(category) {
   // add category selection to SQL query and terminate the query with the last category in the array
   let categoryQuery = '';
-  category.forEach(function(el) {
+  category.forEach(function (el) {
     let i = category.length - 1;
-    if (el === category[i]) {
+    if(el === category[i]){
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el;
     } else {
       categoryQuery = categoryQuery + 'organization_x_category.category_id=' + el + ' OR ';
@@ -141,11 +155,11 @@ function makeCategoryQuery(category) {
 }
 
 // method to identify selected gender
-function makeGenderQuery(gender) {
+function makeGenderQuery(gender){
   let genderQuery = '';
 
   // add gender selection to SQL query
-  switch (gender) {
+  switch(gender){
   case 'female':
     genderQuery = '(gender=\'women only\' OR gender=\'no restrictions\')';
     break;
@@ -159,9 +173,9 @@ function makeGenderQuery(gender) {
 }
 
 // method to generate SQL query
-function makeSQL(requestType, category, gender) {
+function makeSQL (requestType, category, gender){
   let SQL;
-  if (requestType === 'all') {
+  if(requestType === 'all') {
     SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
@@ -177,7 +191,7 @@ function makeSQL(requestType, category, gender) {
 }
 
 // method to render results
-function getOrgs(request, response) {
+function getOrgs (request, response) {
   let requestType = request.body.submitbutton;
   let {gender, category} = request.body;
 
@@ -185,9 +199,7 @@ function getOrgs(request, response) {
 
   // pass SQL query and values from request to render results
   return client.query(SQL)
-    .then(results => response.render('./pages/results.ejs', {
-      results: results.rows
-    }))
+    .then(results => response.render('./pages/results.ejs', { results: results.rows }))
     .catch(handleError);
 }
 
@@ -197,8 +209,9 @@ function handleError(err, res) {
   if (res) res.status(500).send('Sorry, something went wrong');
 }
 
-// export methods for testing and authorization
+// export methods for testing
 module.exports = {
+
   makeCategoryQuery: makeCategoryQuery,
   makeGenderQuery: makeGenderQuery,
   makeSQL: makeSQL
@@ -317,15 +330,3 @@ function returnAdminResults(req, res){
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
 }
-
-app.post('/update/:orgId', editOrg);
-
-function editOrg(req, res){
-  let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT * from organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id WHERE organization.organization_id=' + orgId + ';';
-
-  client.query(SQL)
-    .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
-    .catch(error => handleError(error, res));
-}
-

@@ -1,11 +1,11 @@
-<div id="organization-container">
+<section class="organization-container">
     <ul>
 						<% organizations.forEach(organization => { %>
                 <li class="organization-item">
                 <h3><%= organization.organization_name %></h3>
 								<% if(organization.website != ""){ %>
 										<div class="label">Website |</div>
-										<a target="_blank" href=<%= organization.website %> target="_blank">
+										<a href=<%= organization.website %> target="_blank">
 										<div class="content"><%= organization.website %></div>
 										</a>
 								<% } %>
@@ -38,5 +38,5 @@
 						    <% })%>
 								</li>
     </ul>
-	</div>
+</section>
 
