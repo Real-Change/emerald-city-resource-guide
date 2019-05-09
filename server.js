@@ -20,14 +20,14 @@ require('firebase-app');
 require('firebase-auth');
 var admin = require('firebase-admin');
 
-var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+// var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
+// });
 
 // application setup
 const app = express();
@@ -302,12 +302,14 @@ function returnAdminResults(req, res){
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
   console.log('SEARCH TERM:   ', searchTerm[0]);
   let SQL;
+  let searchInput;
 
   if(searchTerm.length === 1){
-    let searchInput = searchTerm[0].toUpperCase();
+    searchInput = searchTerm[0].toUpperCase();
     SQL= 'SELECT * FROM organization WHERE upper(organization_name) LIKE \'%' + searchInput + '%\' OR upper(website) LIKE \'%' + searchInput + '%\' OR phone_number LIKE \'%' + searchInput + '%\' OR upper(org_address) LIKE \'%' + searchInput + '%\' OR upper(org_description) LIKE \'%' + searchInput + '%\' ORDER BY organization_name;';
     console.log('SQL   :', SQL);
   } else {
+    searchInput = (searchTerm.join('')).toUpperCase();
     SQL = 'SELECT * FROM organization WHERE organization_name LIKE \'%' + searchTerm + '%\' OR website LIKE \'%' + searchTerm + '%\' OR phone_number LIKE \'%' + searchTerm + '%\' OR org_address LIKE \'%' + searchTerm + '%\' OR org_description LIKE \'%' + searchTerm + '%\' ORDER BY organization_name;';
   }
   
