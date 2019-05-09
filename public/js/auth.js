@@ -1,22 +1,29 @@
-// Account creation (video #5)
+$(document).ready(function() {
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(function() {
+      // When the user signs in with email and password.
+      firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+          return postIdTokenToSessionLogin('/sessionLogin', idToken);
+        });
+      });
 
-const signupForm = document.querySelector('#signup-form');
+      function postIdTokenToSessionLogin(url, idToken) {
+        // POST to session login endpoint.
+        return $.ajax({
+          type: 'POST',
+          url: url,
+          data: {
+            idToken: idToken
+          },
+          contentType: 'application/x-www-form-urlencoded'
+        });
+      }
+    })
+})
 
-// set up event listener for submit of sign up
-
-
-// Save signup email and password - password must be at least 6 characters long
-
-
-// Create user account using native create method and automatically sign in
-
-  auth.createUserWithEmailAndPassword(email, password).then(cred => {
-
-  })
-
-// Reset form
-
-
-// Logout
-
-
+// enable contact form submit buttons when reCAPTCHA completed
+function recaptcha_callback(){
+  console.log('recaptcha callback triggered');
+  $('.request-button').prop('disabled', false);
+}

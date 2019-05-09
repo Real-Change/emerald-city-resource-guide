@@ -1,13 +1,14 @@
 <%- include('../layout/head') %>
+</head>
 <body class="index">
 		<%- include('../layout/header') %>	
 		<div id="index-container">
 		<div id ="forms-container">
-			<form action="/results" method="POST" id="all-form">
+			<form action="/results" method="POST" id="all-form" class="form">
 			<p class="instructions">Click on the button below to see the full contents of the Emerald City Resource Guide.</p>
 			<button type="submit" name="submitbutton" value="all"><i class="fas fa-book"></i> &nbsp See Full Guide</button>
 		</form>		
-		<form action ="/results" method="POST" id="search-form">
+		<form action ="/results" method="POST" id="search-form" class="form">
 			<p class="instructions">Or, fill out the form below to receive a custom list of resources in the Seattle area.</p>
 			<div class="selectdiv">
 				<label for="gender"><h3>What is your gender identity?</h3></label>    
@@ -80,14 +81,14 @@
 			<section id="visionary">
 				<h3 id="visionary">Visionary Sponsors</h3>
 					<ul>
-						<li><a href="https://www.ywcaworks.org/" target="_blank"><img src="images/ywca.jpg" alt="YWCA"></a></li>
-						<li><a href="https://www.crisisconnections.org/king-county-2-1-1/" target="_blank"><img src="images/211.jpeg" alt="King County 2-1-1"></a></li>
+						<li><a href="https://www.ywcaworks.org/" target="_blank"><img src="images/ywca.png" alt="YWCA"></a></li>
+						<li><a href="https://www.crisisconnections.org/king-county-2-1-1/" target="_blank"><img src="images/211.png" alt="King County 2-1-1"></a></li>
 					</ul>
 			</section>
 			<section id="changemaker">
 				<h3>Changemaker Sponsor</h3>
 						<ul>
-							<li><a href="https://www.swedish.org/" target="_blank"><img src="images/swedish.jpg" alt="Swedish Medical Group"></a></li>
+							<li><a href="https://www.swedish.org/" target="_blank"><img src="images/swedish.png" alt="Swedish Medical Group"></a></li>
 						</ul>
 			</section>
 			<section id="catalyst">
@@ -103,7 +104,7 @@
 				<h3 id="grassroots">Grassroots Sponsors</h3>
 					<ul>
 						<li><a href="https://www.desc.org" target="_blank"><img src="images/desc.png" alt="The Downtown Emergency Service Center"></a></li>
-						<li><a href="https://www.evergreentx.org/" target="_blank"><img src="images/evergreen.jpg" alt="Evergreen Treatment Services" id="evergreen"></a></li>
+						<li><a href="https://www.evergreentx.org/" target="_blank"><img src="images/evergreen.png" alt="Evergreen Treatment Services" id="evergreen"></a></li>
 						<li><a href="https://www.chpw.org/" target="_blank"><img src="images/community_health_plan.png" alt="Community Health Plan of Washington"></a></li>
 						<li><a href="https://www.jfsseattle.org/" target="_blank"><img src="images/jfs.png" alt="Jewish Family Service" id="jfs"></a></li>
 						<li><a href="https://westseattlefoodbank.org/" target="_blank"><img src="images/west_seattle_food_bank.png" alt="West Seattle Food Bank"></a></li>
