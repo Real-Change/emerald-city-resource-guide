@@ -329,9 +329,4 @@ function returnAdminResults(req, res){
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
-
-  makeCategoryQuery : makeCategoryQuery,
-  makeGenderQuery : makeGenderQuery,
-  makeSQL : makeSQL,
-
 }
