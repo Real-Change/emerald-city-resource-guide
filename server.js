@@ -29,20 +29,6 @@ admin.initializeApp({
   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
 });
 
-const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
-var firebase = require('firebase');
-const firebaseConfig = {
-  apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
-  authDomain: 'emerald-city-resource-guide.firebaseapp.com',
-  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com',
-  projectId: 'emerald-city-resource-guide',
-  storageBucket: 'emerald-city-resource-guide.appspot.com',
-  messagingSenderId: '162425982724'
-};
-require('firebase-app');
-require('firebase-auth');
-var admin = require('firebase-admin');
 
 // var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
