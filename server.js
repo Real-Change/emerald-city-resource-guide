@@ -6,6 +6,31 @@ const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
 
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+var firebase = require('firebase');
+const firebaseConfig = {
+  apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
+  authDomain: 'emerald-city-resource-guide.firebaseapp.com',
+  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com',
+  projectId: 'emerald-city-resource-guide',
+  storageBucket: 'emerald-city-resource-guide.appspot.com',
+  messagingSenderId: '162425982724'
+};
+require('firebase-app');
+require('firebase-auth');
+var admin = require('firebase-admin');
+
+// var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
+// initialize Firebase
+firebase.initializeApp(firebaseConfig);
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
+// });
+
+
 // application setup
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -186,7 +211,127 @@ function handleError(err, res) {
 
 // export methods for testing
 module.exports = {
+
+  makeCategoryQuery: makeCategoryQuery,
+  makeGenderQuery: makeGenderQuery,
+  makeSQL: makeSQL
+}
+
+app.post('/sessionLogin', (req, res) => {
+  // Get the ID token passed and the CSRF token.
+  const idToken = req.body.idToken.toString();
+
+  // Set session expiration to 5 days.
+  const expiresIn = 60 * 60 * 24 * 5 * 1000;
+  // Create the session cookie. This will also verify the ID token in the process.
+  // The session cookie will have the same claims as the ID token.
+  // To only allow session cookie setting on recent sign-in, auth_time in ID token
+  // can be checked to ensure user was recently signed in before creating a session cookie.
+  admin.auth().verifyIdToken(idToken)
+    .then((decodedIdToken) => {
+      let userEmail = decodedIdToken.email;
+      let SQL = 'SELECT * FROM users WHERE email = \'' + userEmail + '\';';
+
+      return(client.query(SQL))
+        .then((results)=> {
+          if (results.rowCount > 0 ){
+            // Create session cookie and set it.
+            admin.auth().createSessionCookie(idToken, {
+              expiresIn
+            })
+              .then((sessionCookie) => {
+                // Set cookie policy for session cookie.
+                const options = {
+                  maxAge: expiresIn,
+                  httpOnly: true,
+                  secure: false
+                };
+                res.cookie('session', sessionCookie, options);
+                res.end(JSON.stringify({
+                  status: 'success'
+                }))
+              })
+              .catch(error => {
+                res.status(401).send('UNAUTHORIZED REQUEST!', error);
+              });
+          } else {
+            // res.redirect('/login');
+          }
+        })
+    })
+    .catch(error => {
+      res.status(401).send(error);
+    });
+
+});
+
+
+// Whenever a user is accessing restricted content that requires authentication.
+
+app.get('/sessionConfirmation', (req, res) => {
+  const sessionCookie = req.cookies.session || '';
+  console.log('your session cookie is:      \'' + sessionCookie + '\'');
+  // Verify the session cookie. In this case an additional check is added to detect
+  // if the user's Firebase session was revoked, user deleted/disabled, etc.
+  admin.auth().verifySessionCookie(
+    sessionCookie, true /** checkRevoked */ )
+    .then(() => {
+      res.redirect('/account');
+    })
+    .catch(error => {
+      console.log('verification error', error);
+      // Session cookie is unavailable or invalid. Force user to login.
+      // res.redirect('/login');
+      console.log('forced back to login')
+    });
+});
+
+// Render account page if authorized
+
+app.get('/account', (req, res) => {
+  if(req.cookies.session !== undefined){
+    console.log('good jorb');
+    res.render('./pages/auth/account.ejs')
+  } else {
+    console.log('not so fast');
+    // res.redirect('/login')
+  }
+})
+
+// Sign out user by clearing cookie and redirecting
+app.post('/sessionLogout', (req, res) => {
+  firebase.auth().signOut().then(function() {
+    res.clearCookie('session');
+    res.redirect('/login')
+  }).catch(function(error) {
+    console.log('sign out error:  ', error)
+  });
+});
+
+app.post('/:searchTerm', returnAdminResults);
+// app.get('/:searchTerm', returnAdminResults);
+
+function returnAdminResults(req, res){
+  let searchTerm = ((req.body.searchbar).trim()).split(' ');
+  console.log('SEARCH TERM:   ', searchTerm[0]);
+  let SQL;
+  let searchInput;
+
+  if(searchTerm.length === 1){
+    searchInput = searchTerm[0].toUpperCase();
+    SQL= 'SELECT * FROM organization WHERE upper(organization_name) LIKE \'%' + searchInput + '%\' OR upper(website) LIKE \'%' + searchInput + '%\' OR phone_number LIKE \'%' + searchInput + '%\' OR upper(org_address) LIKE \'%' + searchInput + '%\' OR upper(org_description) LIKE \'%' + searchInput + '%\' ORDER BY organization_name;';
+    console.log('SQL   :', SQL);
+  } else {
+    searchInput = (searchTerm.join('')).toUpperCase();
+    SQL = 'SELECT * FROM organization WHERE organization_name LIKE \'%' + searchTerm + '%\' OR website LIKE \'%' + searchTerm + '%\' OR phone_number LIKE \'%' + searchTerm + '%\' OR org_address LIKE \'%' + searchTerm + '%\' OR org_description LIKE \'%' + searchTerm + '%\' ORDER BY organization_name;';
+  }
+  
+  return client.query(SQL)
+    .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
+    .catch(error => handleError(error, res));
+
   makeCategoryQuery : makeCategoryQuery,
   makeGenderQuery : makeGenderQuery,
   makeSQL : makeSQL,
+
 }
