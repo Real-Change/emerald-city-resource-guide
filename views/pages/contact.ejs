@@ -1,10 +1,11 @@
 <%- include('../layout/head') %>
+</head>
 <body>
     <%- include('../layout/header') %>
     <main id="contact-page">
 				<div  id="copy-request">
 					<p class="contact">To request printed copies of the guide, please fill out the form below.</p>
-					<form action="/confirmation" method="POST" class="contact">
+					<form action="/confirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization">
 						
@@ -20,13 +21,17 @@
 						<label for="date">Desired Pick Up Date</label>
 						<input type="date" id="form-date" name="date">
 
-						<button type="submit" id="request-button">Submit</button>
+						<br>
+						<div class="g-recaptcha" data-sitekey="6LdHsaAUAAAAAFUNawihqVVNfdxrX5w__fq232H9" data-callback="recaptcha_callback"></div>
+						<br>
+
+						<button type="submit" class="request-button" disabled>Submit</button>
 
 					</form>
 				</div>
 				<div id="feedback">
 					<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource Guide, please fill out the form below.</p>
-					<form action="/confirmation" method="POST" class="contact" id="feedback-form">
+					<form action="/confirmation" method="POST" class="contact form" id="feedback-form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization">
 						
@@ -39,7 +44,11 @@
 						<label for="feedbackfield">Feedback, questions, or stories</label>
 						<textarea form="feedback-form" id="feedbackfield" name="feedbackfield" rows="5" cols="36" wrap="hard"></textarea>
 
-						<button type="submit" id="request-button">Submit</button>
+						<br>
+						<div class="g-recaptcha" data-sitekey="6LdHsaAUAAAAAFUNawihqVVNfdxrX5w__fq232H9" data-callback="recaptcha_callback"></div>
+						<br>
+
+						<button type="submit" class="request-button" disabled >Submit</button>
 
 					</form>
 				</div>

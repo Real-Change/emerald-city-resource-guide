@@ -1,0 +1,32 @@
+.no-print {
+    display: none;
+}
+
+.print-style h3, .print-style div{
+    color: black;
+}
+
+.print-style h3 {
+    font-size: 14px;
+    width: 100vw;
+    margin-bottom: 2px;
+}
+
+.print-style div {
+    font-size: 12px;
+    line-height: 13px;
+}
+
+.print-style .desc {
+    font-size: 12px;
+    line-height: 13px;
+    margin:0;
+}
+
+.print-style #last-content {
+    margin-bottom: 5px;
+}
+
+.print-style .organization-item {
+    margin-bottom: 5px;
+}

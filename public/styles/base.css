@@ -126,13 +126,13 @@ h4 {
 	background-color:lightgrey;
 }
 
-form {
+.form {
 	border-radius: 5px;
 	margin-bottom: 4vw;
 	padding-bottom: 2vw;
 }
 
-form p {
+.form p {
 	margin: 1.5vw 2vw;
 }
 
@@ -191,7 +191,7 @@ p {
 	line-height: 5vw;
 }
 
-.organization-container {
+#organization-container {
 	margin-bottom: 8vw;
 }
 
@@ -349,5 +349,20 @@ form.contact input {
 	border: solid 2px #df972d;
 	border-radius: 5px;
 	max-width: 95%;
+}
 
+#firebaseui-auth-container {
+	margin: 4vw 2vw;
+}
+
+button:disabled {
+	background-color: rgba(14, 125, 194, .50);
+
+
+button:disabled:hover {
+	cursor: auto;
+}
+
+#print-button {
+	display: none;
 }
