@@ -30,16 +30,6 @@ firebase.initializeApp(firebaseConfig);
 // });
 
 
-// var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-
-// initialize Firebase
-firebase.initializeApp(firebaseConfig);
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
-// });
-
-
 // application setup
 const app = express();
 const PORT = process.env.PORT || 8080;
