@@ -1,4 +1,6 @@
 <%- include('../../layout/head') %>
+<%- include('../../layout/head-auth') %>
+</head>
 <body>
 	<%- include('../../layout/header') %>
 	<script type="text/javascript">
@@ -24,7 +26,10 @@
 		ui.start('#firebaseui-auth-container', uiConfig);
 	</script>
 	<div id="firebaseui-auth-container"></div>
+
 <div>
+	<div id="firebaseui-auth-container"></div>
+
 	<%- include('../../layout/footer') %>
 	</div>
 </body>

@@ -357,7 +357,7 @@ form.contact input {
 
 button:disabled {
 	background-color: rgba(14, 125, 194, .50);
-}
+
 
 button:disabled:hover {
 	cursor: auto;
