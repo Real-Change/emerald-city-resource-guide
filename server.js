@@ -6,8 +6,8 @@ const express = require('express');
 const pg = require('pg');
 const nodemailer = require('nodemailer');
 
-// const cookieParser = require('cookie-parser');
-// const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 var firebase = require('firebase');
 const firebaseConfig = {
   apiKey: 'AIzaSyDE2WnFpEFIYTMGuMdTJEvREj3P3K3sL5c',
