@@ -24,7 +24,7 @@ var admin = require('firebase-admin');
 const fs=require('fs'); 
 fs.writeFile(process.env.GOOGLE_APPLICATION_CREDENTIALS, process.env.GOOGLE_CONFIG, (err) => {});
 
-var serviceAccount = require(process.env.GOOGLE_APPLICATION_ CREDENTIALS);
+var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
