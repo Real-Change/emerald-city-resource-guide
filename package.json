@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch ./test ./",
-    "start": "node server.js"
+    "start": "node server.js",
+    "preinstall": "node preinstall.js"
   },
   "repository": {
     "type": "git",
