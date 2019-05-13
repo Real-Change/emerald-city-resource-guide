@@ -1,10 +1,8 @@
 'use strict';
 
 // create json file for google admin credentials
-const fs = require('fs'); 
+// const fs = require('fs');
 // fs.writeFile(process.env.GOOGLE_APPLICATION_CREDENTIALS, process.env.GOOGLE_CONFIG, (err) => {});
-
-fs.writeFile('./google-credentials-heroku.json', process.env.GOOGLE_CONFIG, (err) => {});
 
 // application dependencies
 require('dotenv').config();
