@@ -99,11 +99,10 @@ $(document).ready(function () {
     $('#admin-search').attr('action', term)
   })
 
-  // redirect to account page if "discard changes" button is checked
+  // set timestamp for admin edit form
+  let timestamp = yyyy + '-' + today.getMonth() + '-' + today.getDate() + ' ' + today.getHours() + ':' + today.getMinutes();
+  $('#timestamp').att('value', timestamp)
 
-  // $('#discard').on('click', () => {
-  //   history.back();
-  // })
 });
 
 

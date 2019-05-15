@@ -4,6 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
+const methodOverride = require('method-override');
 const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -49,6 +50,14 @@ const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
   .catch(e => console.error('connection error', e.stack));
 client.on('error', err => console.log(err));
+
+app.use(methodOverride((request) => {
+  if (request.body && typeof request.body === 'object' && '_method' in request.body) {
+    let method = request.body._method;
+    delete request.body._method;
+    return method;
+  }
+}));
 
 // set the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -300,15 +309,14 @@ app.post('/:searchTerm', returnAdminResults);
 // app.get('/:searchTerm', returnAdminResults);
 
 function returnAdminResults(req, res){
+  console.log('Admin search results req:   ', req.body)
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
-  console.log('SEARCH TERM:   ', searchTerm[0]);
   let searchInput;
   let SQL;
 
   if(searchTerm.length === 1){
     searchInput = '\'%' + (searchTerm[0].toUpperCase()) + '%\'';
     SQL = 'SELECT * FROM organization WHERE (upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ') ORDER BY organization_name;';
-    console.log('**** Single Term SQL   :', SQL);
   } else {
     let nameInput = '(upper(organization_name) LIKE ';
     let websiteInput = '(upper(website) LIKE ';
@@ -339,7 +347,6 @@ function returnAdminResults(req, res){
       }
     });
     SQL = 'SELECT * FROM organization WHERE ' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ' ORDER BY organization_name;';
-    console.log('*** Multi Term SQL   :', SQL);
   }
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
@@ -352,10 +359,30 @@ function editOrg(req, res){
   let orgId = req.params.orgId;
   let SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_id) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.organization_id=' + orgId + 'GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;'
 
-  console.log('editOrg SQL  :', SQL)
-
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
     .catch(error => handleError(error, res));
 }
+
+
+// Submit and confirm record edits
+
+app.put('/editconfirmation', function (req, res) {
+  let organization_id = req.body.id;
+  let organization_name = req.body.name;
+  let website = req.body.website;
+  let phone_number = req.body.phone_number;
+  let org_address = req.body.org_address;
+  let org_description = req.body.org_description;
+  let schedule = req.body.schedule;
+  let gender = req.body.gender;
+  let SQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\' WHERE organization_id=' + organization_id + ';';
+  console.log('SQL  :', SQL);
+
+  client.query(SQL)
+    .then(res.render('./pages/auth/edit-confirmation'))
+    .catch(err => handleError(err, res));
+})
+
+
 
