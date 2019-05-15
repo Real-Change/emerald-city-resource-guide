@@ -26,12 +26,12 @@ var admin = require('firebase-admin');
 
 
 
-var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+// var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.applicationDefault(),
   databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
 });
 
