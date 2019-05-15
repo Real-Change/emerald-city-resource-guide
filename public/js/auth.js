@@ -1,11 +1,15 @@
+/* eslint-disable no-undef */
 $(document).ready(function() {
   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(function() {
       // When the user signs in with email and password.
       firebase.auth().onAuthStateChanged(function(user) {
-        firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
-          return postIdTokenToSessionLogin('/sessionLogin', idToken);
-        });
+        if(user){
+          console.log('getIdToken   :', firebase.auth().currentUser.getIdToken());
+          firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
+            return postIdTokenToSessionLogin('/sessionLogin', idToken);
+          });
+        }
       });
 
       function postIdTokenToSessionLogin(url, idToken) {
