@@ -1,9 +1,5 @@
 'use strict';
 
-// // create json file for google admin credentials
-const fs = require('fs');
-fs.writeFile('./google-credentials-heroku.json', process.env.GOOGLE_CONFIG, (err) => {});
-
 // application dependencies
 require('dotenv').config();
 const express = require('express');
@@ -24,13 +20,16 @@ require('firebase-app');
 require('firebase-auth');
 var admin = require('firebase-admin');
 
+var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+console.log(serviceAccount);
 
-
-// var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
-admin.initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
+});
 
 
 // application setup
