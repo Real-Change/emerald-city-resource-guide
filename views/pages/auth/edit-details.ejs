@@ -1,7 +1,9 @@
 <main>
-    <form action="/account" method="post" >
+    <form action="/editconfirmation" method="POST" >
         <h2>Edit Organization</h4>
-        <input name="_method" class="hidden" value="put">
+        <input name="_method" class="hidden" value="PUT">
+
+        <input name="id" class="hidden" value=<%= organization.organization_id %> >
         <fieldset>
             <label >
                 <span>Name</span>
@@ -17,25 +19,25 @@
         <fieldset>
             <label>
                 <span>Phone</span>
-                <textarea name="website" type="text"><%= organization.phone_number %></textarea>
+                <textarea name="phone_number" type="text"><%= organization.phone_number %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Address</span>
-                <textarea name="website" type="text"><%= organization.org_address %></textarea>
+                <textarea name="org_address" type="text"><%= organization.org_address %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Hours</span>
-                <textarea name="website" type="text"><%= organization.schedule %></textarea>
+                <textarea name="schedule" type="text"><%= organization.schedule %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Description</span>
-                <textarea name="website" type="text"><%= organization.org_description %></textarea>
+                <textarea name="org_description" type="text"><%= organization.org_description %></textarea>
             </label>
         </fieldset>
         <fieldset>
@@ -218,6 +220,8 @@
                     >Transportation Services</label> 
             </section>
         </div>
+        <textarea class="hidden" name="prior_cats"> <%= organization.array_agg %> </textarea>
+        <input class="hidden" name="timestamp" id="timestamp">
         <button type="submit">Submit</button>
       </form>
 </main>

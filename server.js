@@ -4,6 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
+const methodOverride = require('method-override');
 const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
@@ -49,6 +50,14 @@ const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
   .catch(e => console.error('connection error', e.stack));
 client.on('error', err => console.log(err));
+
+app.use(methodOverride((request) => {
+  if (request.body && typeof request.body === 'object' && '_method' in request.body) {
+    let method = request.body._method;
+    delete request.body._method;
+    return method;
+  }
+}));
 
 // set the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -163,7 +172,7 @@ function makeGenderQuery(gender) {
 function makeSQL(requestType, category, gender) {
   let SQL;
   if (requestType === 'all') {
-    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;';
+    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
 
@@ -171,7 +180,7 @@ function makeSQL(requestType, category, gender) {
     let categoryQuery = makeCategoryQuery(category);
 
     // add all the query components  into a single SQL query
-    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
+    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update ORDER by orgs.organization_name;';
   }
   console.log(SQL);
   return SQL;
@@ -300,15 +309,14 @@ app.post('/:searchTerm', returnAdminResults);
 // app.get('/:searchTerm', returnAdminResults);
 
 function returnAdminResults(req, res){
+  console.log('Admin search results req:   ', req.body)
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
-  console.log('SEARCH TERM:   ', searchTerm[0]);
   let searchInput;
   let SQL;
 
   if(searchTerm.length === 1){
     searchInput = '\'%' + (searchTerm[0].toUpperCase()) + '%\'';
     SQL = 'SELECT * FROM organization WHERE (upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ') ORDER BY organization_name;';
-    console.log('**** Single Term SQL   :', SQL);
   } else {
     let nameInput = '(upper(organization_name) LIKE ';
     let websiteInput = '(upper(website) LIKE ';
@@ -339,7 +347,6 @@ function returnAdminResults(req, res){
       }
     });
     SQL = 'SELECT * FROM organization WHERE ' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ' ORDER BY organization_name;';
-    console.log('*** Multi Term SQL   :', SQL);
   }
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
@@ -350,12 +357,102 @@ app.post('/update/:orgId', editOrg);
 
 function editOrg(req, res){
   let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_id) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.organization_id=' + orgId + 'GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;'
-
-  console.log('editOrg SQL  :', SQL)
+  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;'
 
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
-    .catch(error => handleError(error, res));
+    .catch(handleError);
 }
+
+// Submit and confirm record edits
+
+app.put('/editconfirmation', function (req, res) {
+  // Map form updates into SQL query for organization table
+  let organization_id = req.body.id;
+  let organization_name = req.body.name;
+  let website = (req.body.website).trim();
+  let phone_number = req.body.phone_number;
+  let org_address = req.body.org_address;
+  let org_description = req.body.org_description;
+  let schedule = req.body.schedule;
+  let gender = req.body.gender;
+  let timestamp = req.body.timestamp
+  let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
+
+  //Create SQL queries to remove and add categories for an organization
+  let catsArray = compareCategories(req);
+  let catsToRemove = catsArray[1];
+  let catsToAdd = catsArray[0];
+
+  let category_remove_id = 'category_id=';
+  let category_add_id = '(';
+
+  for(let i=0; i<catsToRemove.length; i++){
+    if (catsToRemove.length === 1) {
+      category_remove_id = category_remove_id + catsToRemove[i];
+    } else if (i=== 0){
+      category_remove_id = category_remove_id + catsToRemove[i] + ' OR ';
+    } else if(i === (catsToRemove.length - 1)){
+      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i];
+    } else {
+      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i] + ' OR ';
+    }
+  }
+  
+  let catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
+
+  for (let i=0; i<catsToAdd.length; i++){
+    if (catsToAdd.length === 1) {
+      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true)'
+    } else if(i === 0){
+      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true), '
+    } else if(i === (catsToAdd.length -1)){
+      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true)';
+    } else {
+      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true), ';
+    }
+  }
+
+  let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES ' + category_add_id + ';';
+
+  // Submit update/insert to database and render confirmation page
+  let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
+  client.query(completeSQL)
+    .then(res.render('./pages/auth/edit-confirmation'))
+    .catch(function(error){
+      console.log(error);
+    });
+})
+
+// Identify which categories should be removed to the org to category mapping and which should be added
+function compareCategories(req){
+  let newCats = req.body.category;
+  let priorCats = (req.body.prior_cats).split(',');
+  priorCats[0] = priorCats[0].trim();
+  priorCats[priorCats.length-1] = priorCats[priorCats.length-1].trim();
+
+  let catsToRemove = [];
+  let catsToAdd = [];
+  let outputCats = [];
+
+  for(let i = 0; i < newCats.length; i++){
+    if(priorCats.indexOf(newCats[i]) === -1){
+      catsToAdd.push(newCats[i])
+    }
+  }
+
+  outputCats.push(catsToAdd);
+
+  for (let i=0; i<priorCats.length; i++){
+    if(newCats.indexOf(priorCats[i]) === -1){
+      catsToRemove.push(priorCats[i])
+    }
+  }
+
+  outputCats.push(catsToRemove);
+  console.log(outputCats);
+  return outputCats;
+}
+
+
 
