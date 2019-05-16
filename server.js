@@ -357,13 +357,12 @@ app.post('/update/:orgId', editOrg);
 
 function editOrg(req, res){
   let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_id) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.organization_id=' + orgId + 'GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;'
+  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;'
 
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
-    .catch(error => handleError(error, res));
+    .catch(handleError);
 }
-
 
 // Submit and confirm record edits
 
@@ -379,7 +378,6 @@ app.put('/editconfirmation', function (req, res) {
   let gender = req.body.gender;
   let timestamp = req.body.timestamp
   let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
-  console.log('mainSQL  :', mainSQL);
 
   //Create SQL queries to remove and add categories for an organization
   let catsArray = compareCategories(req);
@@ -390,7 +388,9 @@ app.put('/editconfirmation', function (req, res) {
   let category_add_id = '(';
 
   for(let i=0; i<catsToRemove.length; i++){
-    if (i=== 0){
+    if (catsToRemove.length === 1) {
+      category_remove_id = category_remove_id + catsToRemove[i];
+    } else if (i=== 0){
       category_remove_id = category_remove_id + catsToRemove[i] + ' OR ';
     } else if(i === (catsToRemove.length - 1)){
       category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i];
@@ -402,7 +402,9 @@ app.put('/editconfirmation', function (req, res) {
   let catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
 
   for (let i=0; i<catsToAdd.length; i++){
-    if(i === 0){
+    if (catsToAdd.length === 1) {
+      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true)'
+    } else if(i === 0){
       category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true), '
     } else if(i === (catsToAdd.length -1)){
       category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true)';
@@ -413,46 +415,42 @@ app.put('/editconfirmation', function (req, res) {
 
   let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES ' + category_add_id + ';';
 
-  console.log('catAddSQL', catAddSQL);
-  console.log('catRemoveSQL', catRemoveSQL);
-
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
   client.query(completeSQL)
     .then(res.render('./pages/auth/edit-confirmation'))
-    .catch(err => handleError(err, res));
+    .catch(function(error){
+      console.log(error);
+    });
 })
 
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req){
   let newCats = req.body.category;
-  let priorCats = Object.values(req.body.prior_cats);
-
-  function removeEmpty(num){
-    return num !== ' ' && num !== ','
-  }
-
-  let cleanPriorCats = priorCats.filter(removeEmpty);
+  let priorCats = (req.body.prior_cats).split(',');
+  priorCats[0] = priorCats[0].trim();
+  priorCats[priorCats.length-1] = priorCats[priorCats.length-1].trim();
 
   let catsToRemove = [];
   let catsToAdd = [];
   let outputCats = [];
 
   for(let i = 0; i < newCats.length; i++){
-    if(cleanPriorCats.indexOf(newCats[i]) === -1){
+    if(priorCats.indexOf(newCats[i]) === -1){
       catsToAdd.push(newCats[i])
     }
   }
 
   outputCats.push(catsToAdd);
 
-  for (let i=0; i<cleanPriorCats.length; i++){
-    if(newCats.indexOf(cleanPriorCats[i]) === -1){
-      catsToRemove.push(cleanPriorCats[i])
+  for (let i=0; i<priorCats.length; i++){
+    if(newCats.indexOf(priorCats[i]) === -1){
+      catsToRemove.push(priorCats[i])
     }
   }
 
   outputCats.push(catsToRemove);
+  console.log(outputCats);
   return outputCats;
 }
 
