@@ -172,7 +172,7 @@ function makeGenderQuery(gender) {
 function makeSQL(requestType, category, gender) {
   let SQL;
   if (requestType === 'all') {
-    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;';
+    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
 
@@ -180,7 +180,7 @@ function makeSQL(requestType, category, gender) {
     let categoryQuery = makeCategoryQuery(category);
 
     // add all the query components  into a single SQL query
-    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
+    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update ORDER by orgs.organization_name;';
   }
   console.log(SQL);
   return SQL;
@@ -357,7 +357,7 @@ app.post('/update/:orgId', editOrg);
 
 function editOrg(req, res){
   let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_id) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.organization_id=' + orgId + 'GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;'
+  let SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_id) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.organization_id=' + orgId + 'GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;'
 
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
@@ -368,21 +368,59 @@ function editOrg(req, res){
 // Submit and confirm record edits
 
 app.put('/editconfirmation', function (req, res) {
+  compareCategories(req);
   let organization_id = req.body.id;
   let organization_name = req.body.name;
-  let website = req.body.website;
+  let website = (req.body.website).trim();
   let phone_number = req.body.phone_number;
   let org_address = req.body.org_address;
   let org_description = req.body.org_description;
   let schedule = req.body.schedule;
   let gender = req.body.gender;
-  let SQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\' WHERE organization_id=' + organization_id + ';';
+  let timestamp = req.body.timestamp
+  let SQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ';';
   console.log('SQL  :', SQL);
 
   client.query(SQL)
     .then(res.render('./pages/auth/edit-confirmation'))
     .catch(err => handleError(err, res));
 })
+
+// Identify which categories should be removed to the org to category mapping and which should be added
+function compareCategories(req){
+  let newCats = req.body.category;
+  console.log('newCats', newCats);
+  let priorCats = Object.values(req.body.prior_cats);
+
+  function removeEmpty(num){
+    return num !== ' ' && num !== ','
+  }
+
+  let cleanPriorCats = priorCats.filter(removeEmpty);
+
+  console.log('priorcats', cleanPriorCats);
+  let catsToRemove = [];
+  let catsToAdd = [];
+  let outputCats = [];
+
+  for(let i = 0; i < newCats.length; i++){
+    if(cleanPriorCats.indexOf(newCats[i]) === -1){
+      catsToAdd.push(newCats[i])
+    }
+  }
+
+  outputCats.push(catsToAdd);
+
+  for (let i=0; i<cleanPriorCats.length; i++){
+    if(newCats.indexOf(cleanPriorCats[i]) === -1){
+      catsToRemove.push(cleanPriorCats[i])
+    }
+  }
+  
+  outputCats.push(catsToRemove);
+  console.log('Should be an array with two arrays inside. . . ', outputCats)
+  return outputCats;
+}
 
 
 

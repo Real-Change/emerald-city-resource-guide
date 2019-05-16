@@ -100,8 +100,8 @@ $(document).ready(function () {
   })
 
   // set timestamp for admin edit form
-  let timestamp = yyyy + '-' + today.getMonth() + '-' + today.getDate() + ' ' + today.getHours() + ':' + today.getMinutes();
-  $('#timestamp').att('value', timestamp)
+  let timestamp = yyyy + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate() + ' ' + (new Date()).getHours() + ':' + (new Date()).getMinutes();
+  $('#timestamp').attr('value', timestamp)
 
 });
 

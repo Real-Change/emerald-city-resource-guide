@@ -220,6 +220,7 @@
                     >Transportation Services</label> 
             </section>
         </div>
+        <textarea class="hidden" name="prior_cats"> <%= organization.array_agg %> </textarea>
         <input class="hidden" name="timestamp" id="timestamp">
         <button type="submit">Submit</button>
       </form>
