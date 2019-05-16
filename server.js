@@ -368,7 +368,7 @@ function editOrg(req, res){
 // Submit and confirm record edits
 
 app.put('/editconfirmation', function (req, res) {
-  compareCategories(req);
+  // Map form updates into SQL query for organization table
   let organization_id = req.body.id;
   let organization_name = req.body.name;
   let website = (req.body.website).trim();
@@ -378,10 +378,47 @@ app.put('/editconfirmation', function (req, res) {
   let schedule = req.body.schedule;
   let gender = req.body.gender;
   let timestamp = req.body.timestamp
-  let SQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ';';
-  console.log('SQL  :', SQL);
+  let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
+  console.log('mainSQL  :', mainSQL);
 
-  client.query(SQL)
+  //Create SQL queries to remove and add categories for an organization
+  let catsArray = compareCategories(req);
+  let catsToRemove = catsArray[1];
+  let catsToAdd = catsArray[0];
+
+  let category_remove_id = 'category_id=';
+  let category_add_id = '(';
+
+  for(let i=0; i<catsToRemove.length; i++){
+    if (i=== 0){
+      category_remove_id = category_remove_id + catsToRemove[i] + ' OR ';
+    } else if(i === (catsToRemove.length - 1)){
+      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i];
+    } else {
+      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i] + ' OR ';
+    }
+  }
+  
+  let catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
+
+  for (let i=0; i<catsToAdd.length; i++){
+    if(i === 0){
+      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true), '
+    } else if(i === (catsToAdd.length -1)){
+      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true)';
+    } else {
+      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true), ';
+    }
+  }
+
+  let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES ' + category_add_id + ';';
+
+  console.log('catAddSQL', catAddSQL);
+  console.log('catRemoveSQL', catRemoveSQL);
+
+  // Submit update/insert to database and render confirmation page
+  let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
+  client.query(completeSQL)
     .then(res.render('./pages/auth/edit-confirmation'))
     .catch(err => handleError(err, res));
 })
@@ -389,7 +426,6 @@ app.put('/editconfirmation', function (req, res) {
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req){
   let newCats = req.body.category;
-  console.log('newCats', newCats);
   let priorCats = Object.values(req.body.prior_cats);
 
   function removeEmpty(num){
@@ -398,7 +434,6 @@ function compareCategories(req){
 
   let cleanPriorCats = priorCats.filter(removeEmpty);
 
-  console.log('priorcats', cleanPriorCats);
   let catsToRemove = [];
   let catsToAdd = [];
   let outputCats = [];
@@ -416,9 +451,8 @@ function compareCategories(req){
       catsToRemove.push(cleanPriorCats[i])
     }
   }
-  
+
   outputCats.push(catsToRemove);
-  console.log('Should be an array with two arrays inside. . . ', outputCats)
   return outputCats;
 }
 

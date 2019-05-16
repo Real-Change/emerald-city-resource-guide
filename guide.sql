@@ -16,9 +16,10 @@ CREATE TABLE IF NOT EXISTS organization (
 );
 
 CREATE TABLE IF NOT EXISTS organization_x_category (
-  match_id INT,
+  match_id SERIAL PRIMARY KEY,
   organization_id INT,
-  category_id INT
+  category_id INT,
+  active BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS category (

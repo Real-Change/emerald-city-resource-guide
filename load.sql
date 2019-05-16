@@ -2,7 +2,7 @@ COPY organization(organization_id, organization_name, website, phone_number, org
 
 COPY category(category_id, category_name) FROM '/Users/erineckerman/projects/emerald-city-resource-guide/category.csv' DELIMITER ',' CSV HEADER;
 
-COPY organization_x_category(match_id, organization_id, category_id) FROM '/Users/erineckerman/projects/emerald-city-resource-guide/organization_x_category.csv' DELIMITER ',' CSV HEADER;
+COPY organization_x_category(match_id, organization_id, category_id, active) FROM '/Users/erineckerman/projects/emerald-city-resource-guide/organization_x_category.csv' DELIMITER ',' CSV HEADER;
 
 UPDATE organization
 SET organization_name = REPLACE(organization_name, '\', ''),
