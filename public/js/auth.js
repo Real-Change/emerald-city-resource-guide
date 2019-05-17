@@ -24,6 +24,11 @@ $(document).ready(function() {
         });
       }
     })
+
+    if(location.href === 'http://localhost:8080/credentialcheck'){
+      setTimeout(location.reload.bind(location), 5000);
+    }
+
 })
 
 // enable contact form submit buttons when reCAPTCHA completed

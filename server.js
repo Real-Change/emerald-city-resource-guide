@@ -454,5 +454,19 @@ function compareCategories(req){
   return outputCats;
 }
 
-
-
+app.get('/credentialcheck', function(req, res){
+  
+   // Listen for session cookie creation
+   let sessionCookie = req.cookies.session || ''
+   if(sessionCookie !== ''){
+     // window.location.replace('/account');
+     console.log('yes cookie');
+     res.redirect('/account')
+   } else {
+     // window.location.replace('/login');
+     console.log('no cookie');
+     res.render('./pages/auth/credential-check');
+   }
+   
+ 
+})
