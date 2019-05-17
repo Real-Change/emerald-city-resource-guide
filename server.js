@@ -214,6 +214,25 @@ module.exports = {
   makeSQL: makeSQL
 }
 
+// Function to call in every admin page to verify permissions
+function verifyPerms(req, res, page){
+  let userEmail = req.cookies.user || '';
+  console.log('userEmail *****', userEmail)
+  let SQL = 'SELECT * FROM users WHERE email=\'' + userEmail +'\';';
+  return(client.query(SQL))
+    .then((results) => {
+      if(results.rowCount > 0){
+        console.log('Permissions confirmed.')
+        res.render(page);
+      } else {
+        alert('You do not have permission to view this page.');
+        res.redirect('/login')
+      }
+    })
+    .catch(handleError)
+}
+
+
 app.post('/sessionLogin', (req, res) => {
   // Get the ID token passed and the CSRF token.
   const idToken = req.body.idToken.toString();
@@ -244,6 +263,7 @@ app.post('/sessionLogin', (req, res) => {
                   secure: false
                 };
                 res.cookie('session', sessionCookie, options);
+                res.cookie('user', userEmail, options);
                 res.end(JSON.stringify({
                   status: 'success'
                 }))
@@ -252,7 +272,7 @@ app.post('/sessionLogin', (req, res) => {
                 res.status(401).send('UNAUTHORIZED REQUEST!', error);
               });
           } else {
-            // res.redirect('/login');
+            res.redirect('/login');
           }
         })
     })
@@ -288,10 +308,10 @@ app.get('/sessionConfirmation', (req, res) => {
 app.get('/account', (req, res) => {
   if(req.cookies.session !== undefined){
     console.log('good jorb');
-    res.render('./pages/auth/account.ejs')
+    verifyPerms(req, res, './pages/auth/account.ejs')
   } else {
     console.log('not so fast');
-    // res.redirect('/login')
+    res.redirect('/login')
   }
 })
 
@@ -455,18 +475,17 @@ function compareCategories(req){
 }
 
 app.get('/credentialcheck', function(req, res){
-  
-   // Listen for session cookie creation
-   let sessionCookie = req.cookies.session || ''
-   if(sessionCookie !== ''){
-     // window.location.replace('/account');
-     console.log('yes cookie');
-     res.redirect('/account')
-   } else {
-     // window.location.replace('/login');
-     console.log('no cookie');
-     res.render('./pages/auth/credential-check');
-   }
+  // Listen for session cookie creation
+  let sessionCookie = req.cookies.session || ''
+  if(sessionCookie !== ''){
+    // window.location.replace('/account');
+    console.log('yes cookie');
+    res.redirect('/account')
+  } else {
+    // window.location.replace('/login');
+    console.log('no cookie');
+    res.render('./pages/auth/credential-check');
+  }
    
  
 })
