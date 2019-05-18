@@ -83,7 +83,6 @@ app.get('/login', function(req, res) {
   res.render('./pages/auth/login.ejs');
 });
 
-
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
 
@@ -180,7 +179,7 @@ function makeSQL(requestType, category, gender) {
     let categoryQuery = makeCategoryQuery(category);
 
     // add all the query components  into a single SQL query
-    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update ORDER by orgs.organization_name;';
+    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update ORDER by orgs.organization_name;';
   }
   console.log(SQL);
   return SQL;
@@ -217,7 +216,6 @@ module.exports = {
 // Function to call in every admin page to verify permissions
 function verifyPerms(req, res, page){
   let userEmail = req.cookies.user || '';
-  console.log('userEmail *****', userEmail)
   let SQL = 'SELECT * FROM users WHERE email=\'' + userEmail +'\';';
   return(client.query(SQL))
     .then((results) => {
@@ -298,7 +296,7 @@ app.get('/sessionConfirmation', (req, res) => {
     .catch(error => {
       console.log('verification error', error);
       // Session cookie is unavailable or invalid. Force user to login.
-      // res.redirect('/login');
+      res.redirect('/login');
       console.log('forced back to login')
     });
 });
@@ -307,10 +305,8 @@ app.get('/sessionConfirmation', (req, res) => {
 
 app.get('/account', (req, res) => {
   if(req.cookies.session !== undefined){
-    console.log('good jorb');
     verifyPerms(req, res, './pages/auth/account.ejs')
   } else {
-    console.log('not so fast');
     res.redirect('/login')
   }
 })
@@ -318,6 +314,8 @@ app.get('/account', (req, res) => {
 // Sign out user by clearing cookie and redirecting
 app.post('/sessionLogout', (req, res) => {
   firebase.auth().signOut().then(function() {
+    console.log('Signed Out');
+    res.clearCookie('user');
     res.clearCookie('session');
     res.redirect('/login')
   }).catch(function(error) {
@@ -478,14 +476,9 @@ app.get('/credentialcheck', function(req, res){
   // Listen for session cookie creation
   let sessionCookie = req.cookies.session || ''
   if(sessionCookie !== ''){
-    // window.location.replace('/account');
-    console.log('yes cookie');
     res.redirect('/account')
   } else {
-    // window.location.replace('/login');
-    console.log('no cookie');
     res.render('./pages/auth/credential-check');
   }
-   
- 
+
 })
