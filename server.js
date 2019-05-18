@@ -313,15 +313,21 @@ app.get('/account', (req, res) => {
 
 // Sign out user by clearing cookie and redirecting
 app.post('/sessionLogout', (req, res) => {
-  firebase.auth().signOut().then(function() {
-    console.log('Signed Out');
-    res.clearCookie('user');
-    res.clearCookie('session');
-    res.redirect('/login')
-  }).catch(function(error) {
-    console.log('sign out error:  ', error)
-  });
+  const sessionCookie = req.cookies.session || '';
+  res.clearCookie('user');
+  res.clearCookie('session');
+  admin.auth().verifySessionCookie(sessionCookie)
+    .then((decodedClaims) => {
+      return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+    })
+    .then(() => {
+      res.redirect('/login');
+    })
+    .catch((error) => {
+      res.redirect('/login');
+    });
 });
+
 
 app.post('/:searchTerm', returnAdminResults);
 // app.get('/:searchTerm', returnAdminResults);
