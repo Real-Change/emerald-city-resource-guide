@@ -1,4 +1,13 @@
 <form id="admin-search" method='POST' action='/admin/:searchTerm'>
-    <input type="text" name="searchbar" id="searchbar" placeholder="Search for a name, phone number, address, or keyword">
-    <button id="admin-search-button">Search</button>
+    <div>
+        <span>Find an organization whose name</span>
+        <input type="radio" value="starts" id="starts" name="adminradio" required>
+        <label for="starts">starts with</label>
+        <input type="radio" value="includes" id="includes" name="adminradio" required>
+        <label for="includes">includes</label>
+    </div>
+    <input type="text" name="searchbar" id="searchbar" required>
+    <label for="updatedate">That hasn't been updated since:</label>
+    <input id="updatedate" type="date" name="updatedate">
+    <button id="admin-search-button"><i class="fas fa-search"></i> &nbsp; Search</button>
 </form>
