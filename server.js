@@ -19,9 +19,9 @@ const firebaseConfig = {
 };
 require('firebase-app');
 require('firebase-auth');
-var admin = require('firebase-admin');
+const admin = require('firebase-admin');
 
-var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 // initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -82,7 +82,6 @@ app.get('/confirmation', function(req, res) {
 app.get('/login', function(req, res) {
   res.render('./pages/auth/login.ejs');
 });
-
 
 // POST method for hardcopy request submission on contact page
 app.post('/confirmation', submitRequest);
@@ -172,7 +171,7 @@ function makeGenderQuery(gender) {
 function makeSQL(requestType, category, gender) {
   let SQL;
   if (requestType === 'all') {
-    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;';
+    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active=\'t\' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
 
@@ -180,7 +179,7 @@ function makeSQL(requestType, category, gender) {
     let categoryQuery = makeCategoryQuery(category);
 
     // add all the query components  into a single SQL query
-    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update ORDER by orgs.organization_name;';
+    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') AND (orgs.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode ORDER by orgs.organization_name;';
   }
   console.log(SQL);
   return SQL;
@@ -214,6 +213,23 @@ module.exports = {
   makeSQL: makeSQL
 }
 
+// Function to call in every admin page to verify permissions
+function verifyPerms(req, res, page){
+  let userEmail = req.cookies.user || '';
+  let SQL = 'SELECT * FROM users WHERE email=\'' + userEmail +'\';';
+  return(client.query(SQL))
+    .then((results) => {
+      if(results.rowCount > 0){
+        res.render(page);
+      } else {
+        alert('You do not have permission to view this page.');
+        res.redirect('/login')
+      }
+    })
+    .catch(handleError)
+}
+
+
 app.post('/sessionLogin', (req, res) => {
   // Get the ID token passed and the CSRF token.
   const idToken = req.body.idToken.toString();
@@ -244,6 +260,7 @@ app.post('/sessionLogin', (req, res) => {
                   secure: false
                 };
                 res.cookie('session', sessionCookie, options);
+                res.cookie('user', userEmail, options);
                 res.end(JSON.stringify({
                   status: 'success'
                 }))
@@ -252,7 +269,7 @@ app.post('/sessionLogin', (req, res) => {
                 res.status(401).send('UNAUTHORIZED REQUEST!', error);
               });
           } else {
-            // res.redirect('/login');
+            res.redirect('/login');
           }
         })
     })
@@ -273,50 +290,57 @@ app.get('/sessionConfirmation', (req, res) => {
   admin.auth().verifySessionCookie(
     sessionCookie, true /** checkRevoked */ )
     .then(() => {
-      res.redirect('/account');
+      res.redirect('/admin/account');
     })
     .catch(error => {
       console.log('verification error', error);
       // Session cookie is unavailable or invalid. Force user to login.
-      // res.redirect('/login');
+      res.redirect('/login');
       console.log('forced back to login')
     });
 });
 
 // Render account page if authorized
 
-app.get('/account', (req, res) => {
+app.get('/admin/account', (req, res) => {
   if(req.cookies.session !== undefined){
-    console.log('good jorb');
-    res.render('./pages/auth/account.ejs')
+    verifyPerms(req, res, './pages/auth/account.ejs')
   } else {
-    console.log('not so fast');
-    // res.redirect('/login')
+    res.redirect('/login')
   }
 })
 
 // Sign out user by clearing cookie and redirecting
 app.post('/sessionLogout', (req, res) => {
-  firebase.auth().signOut().then(function() {
-    res.clearCookie('session');
-    res.redirect('/login')
-  }).catch(function(error) {
-    console.log('sign out error:  ', error)
-  });
+  const sessionCookie = req.cookies.session || '';
+  res.clearCookie('user');
+  res.clearCookie('session');
+  admin.auth().verifySessionCookie(sessionCookie)
+    .then((decodedClaims) => {
+      return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+    })
+    .then(() => {
+      res.redirect('/login');
+    })
+    .catch((error) => {
+      res.redirect('/login');
+    });
 });
 
-app.post('/:searchTerm', returnAdminResults);
-// app.get('/:searchTerm', returnAdminResults);
+
+app.post('/admin/:searchTerm', returnAdminResults);
 
 function returnAdminResults(req, res){
   console.log('Admin search results req:   ', req.body)
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
+  console.log('SEARCH TERM ****', searchTerm);
   let searchInput;
   let SQL;
 
   if(searchTerm.length === 1){
     searchInput = '\'%' + (searchTerm[0].toUpperCase()) + '%\'';
-    SQL = 'SELECT * FROM organization WHERE (upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ') ORDER BY organization_name;';
+    SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND ((upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ')) ORDER BY organization_name;';
+    console.log(SQL);
   } else {
     let nameInput = '(upper(organization_name) LIKE ';
     let websiteInput = '(upper(website) LIKE ';
@@ -347,17 +371,18 @@ function returnAdminResults(req, res){
       }
     });
     SQL = 'SELECT * FROM organization WHERE ' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ' ORDER BY organization_name;';
+    console.log(SQL);
   }
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
 }
 
-app.post('/update/:orgId', editOrg);
+app.post('/admin/update/:orgId', editOrg);
 
 function editOrg(req, res){
   let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update ORDER by organization.organization_name;'
+  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode ORDER by organization.organization_name;'
 
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
@@ -366,7 +391,7 @@ function editOrg(req, res){
 
 // Submit and confirm record edits
 
-app.put('/editconfirmation', function (req, res) {
+app.put('/admin/editconfirmation', function (req, res) {
   // Map form updates into SQL query for organization table
   let organization_id = req.body.id;
   let organization_name = req.body.name;
@@ -386,34 +411,42 @@ app.put('/editconfirmation', function (req, res) {
 
   let category_remove_id = 'category_id=';
   let category_add_id = '(';
+  let catRemoveSQL;
+  let catAddSQL;
 
-  for(let i=0; i<catsToRemove.length; i++){
-    if (catsToRemove.length === 1) {
-      category_remove_id = category_remove_id + catsToRemove[i];
-    } else if (i=== 0){
-      category_remove_id = category_remove_id + catsToRemove[i] + ' OR ';
-    } else if(i === (catsToRemove.length - 1)){
-      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i];
-    } else {
-      category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i] + ' OR ';
+  if(catsToRemove.length <1){
+    catRemoveSQL = '';
+  } else {
+    for(let i=0; i<catsToRemove.length; i++){
+      if (catsToRemove.length === 1) {
+        category_remove_id = category_remove_id + catsToRemove[i];
+      } else if (i=== 0){
+        category_remove_id = category_remove_id + catsToRemove[i] + ' OR ';
+      } else if(i === (catsToRemove.length - 1)){
+        category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i];
+      } else {
+        category_remove_id = category_remove_id + 'category_id=' + catsToRemove[i] + ' OR ';
+      }
     }
+    catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
   }
   
-  let catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
-
-  for (let i=0; i<catsToAdd.length; i++){
-    if (catsToAdd.length === 1) {
-      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true)'
-    } else if(i === 0){
-      category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true), '
-    } else if(i === (catsToAdd.length -1)){
-      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true)';
-    } else {
-      category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true), ';
+  if(catsToAdd.length <1){
+    catAddSQL='';
+  } else {
+    for (let i=0; i<catsToAdd.length; i++){
+      if (catsToAdd.length === 1) {
+        category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true)'
+      } else if(i === 0){
+        category_add_id = category_add_id + organization_id + ',' + catsToAdd[i] + ',' + 'true), '
+      } else if(i === (catsToAdd.length -1)){
+        category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true)';
+      } else {
+        category_add_id = category_add_id + '(' + organization_id + ',' + catsToAdd[i] + ',' + 'true), ';
+      }
     }
+    catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES ' + category_add_id + ';';
   }
-
-  let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES ' + category_add_id + ';';
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
@@ -454,5 +487,28 @@ function compareCategories(req){
   return outputCats;
 }
 
+app.get('/credentialcheck', function(req, res){
+  // Listen for session cookie creation
+  let sessionCookie = req.cookies.session || ''
+  if(sessionCookie !== ''){
+    res.redirect('/admin/account')
+  } else {
+    res.render('./pages/auth/credential-check');
+  }
+})
 
-
+app.post('/sessionLogout', (req, res) => {
+  const sessionCookie = res.cookies.session || '';
+  res.clearCookie('user');
+  res.clearCookie('session');
+  admin.auth().verifySessionCookie(sessionCookie)
+    .then((decodedClaims) => {
+      return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+    })
+    .then(() => {
+      res.redirect('/login');
+    })
+    .catch((error) => {
+      res.redirect('/login');
+    });
+})

@@ -21,7 +21,7 @@
 		text-align: center;
 		text-decoration: none;
 		color: white;
-		padding: 1vw;
+		padding: 1.2vw;
 	}
 
 	#desktop-nav a:hover {
@@ -47,6 +47,7 @@
 	#index-container {
 		display: flex;
 		flex-wrap: wrap;
+		margin-bottom: 15vw;
 	}
 
 
@@ -91,7 +92,7 @@
 		width: 100vw;
 	}
 
-	button {
+	button, input[type="button"] {
 		font-size: 1.5vw;
     border-radius: 5px;
     padding: 1vw 1.5vw 1vw 1.5vw;
@@ -319,4 +320,69 @@
 	#print-button {
 		display: block;
 	}
+
+	button.signout {
+		border: none;
+		margin: 0 auto;
+		width: 20vw;
+		font-size: 1.2vw;
+    line-height: 1.5vw;
+	}
+
+	a.admin-nav {
+		width: 20vw;
+		vertical-align: baseline
+	}
+	input#searchbar {
+		height: 5vw;
+	}
+
+	#editform h2 {
+		border: none;
+	}
+	
+	#editform span {
+		width: 15vw;
+		font-size: 2vw;
+		padding-top: 1vw;
+		line-height: 3vw;
+		padding-left: 5vw;
+	}
+	
+	#editform textarea, #genderopts {
+		width: 73vw;
+		border-radius: 5px;
+		margin: 0 2vw 2vw 0;
+		font-size: 1vw;
+		line-height: 2vw;
+		height: 2vw;
+		padding: 1vw;
+	}
+	
+	#editform textarea.big {
+		height:5vw;
+	}
+	
+	#editform textarea.bigger {
+		height: 10vw;
+	}
+	
+	#adminedit {
+		padding-bottom: 15vw;
+	}
+
+	#editform span.timestamp-display {
+		font-size: 1vw;
+		line-height: 2vw;
+	}
+
+	#editform span#timestamp-data {
+		width: 60vw;
+		padding-left: 0;
+	}
+
+	#genderopts input {
+    margin: .5vw 2vw;
+}
+
 }
