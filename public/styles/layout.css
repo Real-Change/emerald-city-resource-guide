@@ -335,6 +335,7 @@
 	}
 	input#searchbar {
 		height: 3vw;
+		font-size: 2vw;
 	}
 
 	#editform h2 {
