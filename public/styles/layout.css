@@ -385,5 +385,7 @@
 	#genderopts input {
     margin: .5vw 2vw;
 }
-
+  button#admin-search-button {
+		margin-bottom: 15vw;
+	}
 }

@@ -58,6 +58,11 @@ $(document).ready(function() {
   // set timestamp for admin edit form
   let timestamp = (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate() + ' ' + (new Date()).getHours() + ':' + (new Date()).getMinutes() +':00-07';
   $('#timestamp').attr('value', timestamp)
+
+  // show tooltip on admin search page
+  $('#tooltip-container').hover(function(){
+    $('span.tooltip').toggleClass('hidden')
+  })
 })
 
 // enable contact form submit buttons when reCAPTCHA completed

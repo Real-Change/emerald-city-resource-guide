@@ -333,51 +333,67 @@ app.post('/admin/:searchTerm', returnAdminResults);
 function returnAdminResults(req, res){
   console.log('Admin search results req:   ', req.body)
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
+  let radioChoice = req.body.adminradio;
+  let updateDate = req.body.updatedate;
   console.log('SEARCH TERM ****', searchTerm);
   let searchInput;
   let SQL;
-  let values;
+  let nameInput;
+  let dateInput ='';
 
-  if(searchTerm.length === 1){
-    let cleanSearchTerm = searchTerm[0].split('\'');
-    searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
-    SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND ((upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ')) ORDER BY organization_name;';
-    console.log(SQL);
-    
-  } else {
-    let nameInput = '(upper(organization_name) LIKE ';
-    let websiteInput = '(upper(website) LIKE ';
-    let phoneInput = '(phone_number LIKE ';
-    let addressInput = '(upper(org_address) LIKE ';
-    let descInput = '(upper(org_description) LIKE ';
-    searchTerm.forEach(function(el) {
-      let i = searchTerm.indexOf(el);
-      let cleanSearchTerm = searchTerm[i].split('\'');
-      searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
-      if ( i === 0){
-        nameInput = nameInput + searchInput + ' OR ';
-        websiteInput = websiteInput + searchInput + ' OR ';
-        phoneInput = phoneInput + searchInput + ' OR ';
-        addressInput = addressInput + searchInput + ' OR ';
-        descInput = descInput + searchInput + ' OR ';
-      } else if (i < (searchTerm.length - 1)) {
-        nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' OR ';
-        websiteInput = websiteInput + 'upper(website) LIKE ' + searchInput + ' OR ';
-        phoneInput = phoneInput + 'phone_number LIKE ' + searchInput + ' OR ';
-        addressInput = addressInput + 'upper(org_address) LIKE ' + searchInput + ' OR ';
-        descInput = descInput + 'upper(org_description) LIKE ' + searchInput + ' OR ';
-      } else {
-        nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ')';
-        websiteInput = websiteInput + 'upper(website) LIKE ' + searchInput + ')';
-        phoneInput = phoneInput + 'phone_number LIKE ' + searchInput + ')';
-        addressInput = addressInput + 'upper(org_address) LIKE ' + searchInput + ')';
-        descInput = descInput + 'upper(org_description) LIKE ' + searchInput + ')';
-      }
-    });
-    SQL = 'SELECT * FROM organization WHERE (' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ') AND active=\'t\' ORDER BY organization_name;';
-    console.log(SQL);
+  if(updateDate){
+    dateInput = 'AND (last_update<to_timestamp(\'' + updateDate + '\', \'YYYY-MM-DD HH:MI:SS\')) '
   }
-  return client.query(SQL, values)
+  
+  if(radioChoice === 'includes'){
+    if(searchTerm.length === 1){
+      let cleanSearchTerm = searchTerm[0].split('\'');
+      searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
+
+      SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND (upper(organization_name) LIKE '+ searchInput + ') ' + dateInput + 'ORDER BY organization_name;'
+      
+    } else {
+      let nameInput = '(upper(organization_name) LIKE ';
+      searchTerm.forEach(function(el) {
+        let i = searchTerm.indexOf(el);
+        let cleanSearchTerm = searchTerm[i].split('\'');
+        searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
+        if ( i === 0){
+          nameInput = nameInput + searchInput + ' OR ';
+        } else if (i < (searchTerm.length - 1)) {
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' OR ';
+        } else {
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ')';
+        }
+      });
+      SQL = 'SELECT DISTINCT * FROM organization WHERE (' + nameInput + ') AND active=\'t\'' + dateInput + ' ORDER BY organization_name;';
+    }
+  } else {
+    if(searchTerm.length === 1){
+      let cleanSearchTerm = searchTerm[0].split('\'');
+      searchInput = '\'' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
+
+      SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND (upper(organization_name) LIKE '+ searchInput + ') ' + dateInput + ' ORDER BY organization_name;'
+      
+    } else {
+      nameInput = '(upper(organization_name)= ';
+      searchTerm.forEach(function(el) {
+        let i = searchTerm.indexOf(el);
+        let cleanSearchTerm = searchTerm[i].split('\'');
+        searchInput = '\'' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
+        if ( i === 0){
+          nameInput = nameInput + searchInput + ' OR ';
+        } else if (i < (searchTerm.length - 1)) {
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' OR ';
+        } else {
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ')';
+        }
+      });
+      SQL = 'SELECT DISTINCT * FROM organization WHERE (' + nameInput + ') AND active=\'t\'' + dateInput + ' ORDER BY organization_name;';
+    } 
+  }
+  console.log(SQL);
+  return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
 }
