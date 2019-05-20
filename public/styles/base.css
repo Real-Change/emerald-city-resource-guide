@@ -137,7 +137,7 @@ h4 {
 	margin: 1.5vw 2vw;
 }
 
-button {
+button, input[type="button"] {
 	display: block;
 	background-color:#0e7dc2;
 	color: white;
@@ -153,6 +153,9 @@ button {
 }
 
 .d {
+	position: fixed;
+	bottom: 0;
+	width: 100vw;
 	background-image: url('../images/skyline.jpg');
 	height: 20vw;
 	background-repeat: repeat-x;
@@ -236,7 +239,7 @@ select::-ms-expand {
 #sponsors {
 	display: flex;
 	flex-wrap: wrap;
-	margin-bottom: 4vw;
+	margin-bottom: 30vw;
 }
 
 #sponsors a {
@@ -358,7 +361,7 @@ form.contact input {
 
 button:disabled {
 	background-color: rgba(14, 125, 194, .50);
-
+}
 
 button:disabled:hover {
 	cursor: auto;
@@ -366,4 +369,97 @@ button:disabled:hover {
 
 #print-button {
 	display: none;
+}
+
+button.signout {
+	border: none;
+	margin: 0 auto;
+}
+
+#gearbox, #cred-check h3 {
+	text-align: center;
+	margin: 2vw auto;
+}
+
+input#searchbar {
+	width: 80vw;
+	height: 10vw;
+	margin: 2vw 10vw;
+	border-radius: 5px;
+}
+
+#editform label {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#editform h2 {	
+	text-align: center;
+	border-top: 2px solid;
+	margin-top: 2vw;
+	padding: 2vw;
+	width: 100vw;	
+	color: #df972d;
+	font-weight: bold
+}
+
+#editform fieldset {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100vw;
+}
+
+#editform span {
+	width: 28vw;
+	font-size: 4vw;
+	line-height: 5vw;
+	padding-left: 2vw;
+}
+
+#editform textarea, #genderopts{
+	width: 63vw;
+	padding: 2vw;
+	border-radius: 5px;
+	margin: 0 2vw 2vw 0;
+	font-size: 3vw;
+}
+
+#genderopts input {
+	margin: 3vw;
+}
+
+span.timestamp-display {
+	font-size: 3vw;
+	margin: 2vw 0;
+	color: blue;
+}
+
+span#timestamp-data {
+	width: 60vw;
+}
+
+textarea.big {
+	height:10vw;
+}
+
+textarea.bigger {
+	height: 20vw;
+}
+
+#adminedit {
+	padding-bottom: 30vw;
+}
+
+#allcats #population, #allcats #services {
+	padding-left: 2vw;
+}
+
+#allcats #population {
+	margin-bottom: 3vw
+}
+
+#editconfheader {
+	margin: 5vw auto;
+	width: 100vw;
+	text-align: center;
 }

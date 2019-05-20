@@ -99,10 +99,6 @@ $(document).ready(function () {
     $('#admin-search').attr('action', term)
   })
 
-  // set timestamp for admin edit form
-  let timestamp = yyyy + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate() + ' ' + (new Date()).getHours() + ':' + (new Date()).getMinutes();
-  $('#timestamp').attr('value', timestamp)
-
 });
 
 

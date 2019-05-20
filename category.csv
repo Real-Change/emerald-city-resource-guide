@@ -11,14 +11,14 @@ category_id,category_name
 10,Family and Maternity Services
 11,Financial Assistance
 12,Food Assistance
-13,For Native Peoples
-14,For People of Color
-15,Health Services
+13,Native & Indigenous Services
+14,Services For People of Color
+15,General Health Services
 16,HIV/AIDS Services
 17,Housing Services
 18,Immigrant and Refugee Services
 19,Legal Services
-20,LGBTQIA Services
+20,LGBTQIA+ Services
 21,Mail Services
 22,Mental Health Services
 23,Re-entry Assistance
@@ -28,3 +28,6 @@ category_id,category_name
 27,Survivor Support Services
 28,Transportation Assistance
 29,Veteran Services
+30,Womxn's Health Services
+31,Pets and Service Animals
+32,Problem Gambling Resources

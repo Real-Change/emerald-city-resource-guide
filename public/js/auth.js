@@ -24,15 +24,23 @@ $(document).ready(function() {
         });
       }
     })
-  
+
   // Only allow two refreshes of credential check site when signing in
 
-  if(location.href === 'http://localhost:8080/account'){
-    localStorage.setItem('counter', 0)
+  if(window.location.href.indexOf('admin') > -1){
+    localStorage.setItem('counter', 0);
+    $('#desktop-nav form').toggleClass('hidden');
+    $('#mobile-nav form').toggleClass('hidden');
+    $('#admin-search').toggleClass('hidden');
+    $('#login').toggleClass('hidden');
+    $('#admin-search-desktop').toggleClass('hidden');
+    $('#login-desktop').toggleClass('hidden');
+    $('#desktop-nav a').addClass('admin-nav');
+    $('#rclogoimg').attr('src', '/../images/RC_Logo_HigherRes.jpg')
   }
 
-  if(location.href === 'http://localhost:8080/credentialcheck'){
-    let counter = parseInt(localStorage.getItem('counter'));  
+  if(window.location.href.indexOf('credentialcheck') > -1){
+    let counter = parseInt(localStorage.getItem('counter'));
     if(counter === undefined){
       localStorage.setItem('counter', 0);
       setTimeout(location.reload.bind(location), 5000);
@@ -47,6 +55,9 @@ $(document).ready(function() {
     }
   }
 
+  // set timestamp for admin edit form
+  let timestamp = (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate() + ' ' + (new Date()).getHours() + ':' + (new Date()).getMinutes() +':00-07';
+  $('#timestamp').attr('value', timestamp)
 })
 
 // enable contact form submit buttons when reCAPTCHA completed

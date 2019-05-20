@@ -1,9 +1,15 @@
 <main>
-    <form action="/editconfirmation" method="POST" >
-        <h2>Edit Organization</h4>
+    <form action="/admin/editconfirmation" id="adminedit" method="POST" >
+        <div id="editform">
+        <h2>Edit Organization</h2>
         <input name="_method" class="hidden" value="PUT">
-
         <input name="id" class="hidden" value=<%= organization.organization_id %> >
+        <fieldset>
+            <label>
+                <span class="timestamp-display">Last Updated</span>
+                <span class="timestamp-display" id="timestamp-data"><%= organization.last_update %></span>
+            </label>
+        </fieldset>
         <fieldset>
             <label >
                 <span>Name</span>
@@ -19,69 +25,59 @@
         <fieldset>
             <label>
                 <span>Phone</span>
-                <textarea name="phone_number" type="text"><%= organization.phone_number %></textarea>
+                <textarea name="phone_number" type="text" class="big"><%= organization.phone_number %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Address</span>
-                <textarea name="org_address" type="text"><%= organization.org_address %></textarea>
+                <textarea name="org_address" type="text" class="big"><%= organization.org_address %></textarea>
             </label>
         </fieldset>
         <fieldset>
+                <label>
+                    <span>Zip Code</span>
+                    <textarea name="zipcode" type="text" ><%= organization.zipcode %></textarea>
+                </label>
+            </fieldset>
+        <fieldset>
             <label>
                 <span>Hours</span>
-                <textarea name="schedule" type="text"><%= organization.schedule %></textarea>
+                <textarea name="schedule" type="text" class="big"><%= organization.schedule %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Description</span>
-                <textarea name="org_description" type="text"><%= organization.org_description %></textarea>
+                <textarea name="org_description" type="text" class="bigger"><%= organization.org_description %></textarea>
             </label>
         </fieldset>
         <fieldset>
             <label>
                 <span>Genders Served</span>
-                <input name="gender" type="radio" value="men-only"
+                <div id="genderopts">
+                <label><input name="gender" type="radio" value="men only"
                 <% if (organization.gender === 'men only') { %>
                     checked
                 <% } %>
-                >Men Only
-                <input name="gender" type="radio" value="women-only"
+                >Men Only</label>
+                <label><input name="gender" type="radio" value="women only"
                 <% if (organization.gender === 'women only') { %>
                     checked
                 <% } %>
-                >Women Only
-                <input name="gender" type="radio" value="no-restrictions"
+                >Women Only</label>
+                <label><input name="gender" type="radio" value="no restrictions"
                 <% if (organization.gender === 'no restrictions') { %>
                     checked
                 <% } %>
-                >No Restrictions
+                >No Restrictions </label>
+                </div>
             </label>
         </fieldset>
+        </div>
+        <div id="allcats">
         <div id="population">
             <h3>Target Populations </h3>
-            <label><input type="checkbox" name="category[0]" value="14" 
-                <% if (organization.array_agg.indexOf(14) >= 0){ %>
-                    checked
-                <% } %>
-                >People of Color</label> 
-            <label><input type="checkbox" name="category[1]" value="13"
-                <% if (organization.array_agg.indexOf(13) >= 0){ %>
-                    checked
-                <% } %>
-                >Native People</label> 
-            <label><input type="checkbox" name="category[2]" value="20"
-                <% if (organization.array_agg.indexOf(20) >= 0){ %>
-                    checked
-                <% } %>
-                >LGBTQIA+</label> 
-            <label><input type="checkbox" name="category[3]" value="29"
-                <% if (organization.array_agg.indexOf(29) >= 0){ %>
-                    checked
-                <% } %>
-                >Veterans</label> 
             <label><input type="checkbox" name="category[4]" value="24"
                 <% if (organization.array_agg.indexOf(24) >= 0){ %>
                     checked
@@ -97,6 +93,26 @@
                     checked
                 <% } %>
                 >Survivors of Violence</label> 
+            <label><input type="checkbox" name="category[0]" value="14" 
+                <% if (organization.array_agg.indexOf(14) >= 0){ %>
+                    checked
+                <% } %>
+                >People of Color</label> 
+            <label><input type="checkbox" name="category[1]" value="13"
+                <% if (organization.array_agg.indexOf(13) >= 0){ %>
+                    checked
+                <% } %>
+                >Native & Indigenous People</label> 
+            <label><input type="checkbox" name="category[2]" value="20"
+                <% if (organization.array_agg.indexOf(20) >= 0){ %>
+                    checked
+                <% } %>
+                >LGBTQIA+</label> 
+            <label><input type="checkbox" name="category[3]" value="29"
+                <% if (organization.array_agg.indexOf(29) >= 0){ %>
+                    checked
+                <% } %>
+                >Veterans</label> 
             </div>
         <div id="services">
             <h3>Services Offered</h3>
@@ -128,7 +144,7 @@
                     <% } %>
                     >Food Assistance</label> 
                 <label><input type="checkbox" name="category[12]" value="17"
-                    <% if (organization.array_agg.indexOf(12) >= 0){ %>
+                    <% if (organization.array_agg.indexOf(17) >= 0){ %>
                         checked
                     <% } %>
                     >Housing Services</label> 
@@ -160,13 +176,18 @@
                         checked
                     <% } %>
                     >Family and Maternity Services</label> 
+                <label><input type="checkbox" name="category[29]" value="30"
+                    <% if (organization.array_agg.indexOf(30) >= 0){ %>
+                        checked
+                    <% } %>
+                    >Womxn's Health Services</label>
                 <label><input type="checkbox" name="category[18]" value="15"
                     <% if (organization.array_agg.indexOf(15) >= 0){ %>
                         checked
                     <% } %>
                     >General Health Services</label> 
                 <label><input type="checkbox" name="category[19]" value="16"
-                    <% if (organization.array_agg.indexOf(19) >= 0){ %>
+                    <% if (organization.array_agg.indexOf(16) >= 0){ %>
                         checked
                     <% } %>
                     > HIV/AIDS Services</label> 
@@ -175,6 +196,16 @@
                         checked
                     <% } %>
                     >Mental Health Services</label> 
+                <label><input type="checkbox" name="category[31]" value="32"
+                    <% if (organization.array_agg.indexOf(32) >= 0) { %>
+                        checked
+                    <% } %>
+                    >Problem Gambling Resources</label>
+                <label><input type="checkbox" name="category[32]" value="31"
+                    <% if (organization.array_agg.indexOf(31) >= 0){ %>
+                        checked
+                    <% } %>
+                    >Pets and Service Animals</label>
             </section>
             <section id="financial">
                 <h4>Financial, Legal, and Employment</h4>
@@ -219,6 +250,7 @@
                     <% } %>
                     >Transportation Services</label> 
             </section>
+        </div>
         </div>
         <textarea class="hidden" name="prior_cats"> <%= organization.array_agg %> </textarea>
         <input class="hidden" name="timestamp" id="timestamp">
