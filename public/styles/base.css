@@ -153,7 +153,7 @@ button, input[type="button"] {
 }
 
 .d {
-	position: fixed;
+	position: relative;
 	bottom: 0;
 	width: 100vw;
 	background-image: url('../images/skyline.jpg');
