@@ -46,10 +46,8 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
-console.log('DATABASE URL****', process.env.DATABASE_URL);
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
-  .then(console.log('CONNECTED*!*!*!'))
   .catch(e => console.error('connection error', e.stack));
 client.on('error', err => console.log(err));
 
@@ -338,11 +336,14 @@ function returnAdminResults(req, res){
   console.log('SEARCH TERM ****', searchTerm);
   let searchInput;
   let SQL;
+  let values;
 
   if(searchTerm.length === 1){
-    searchInput = '\'%' + (searchTerm[0].toUpperCase()) + '%\'';
+    let cleanSearchTerm = searchTerm[0].split('\'');
+    searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
     SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND ((upper(organization_name) LIKE '+ searchInput + ') OR (upper(website) LIKE ' + searchInput + ') OR (phone_number LIKE '+ searchInput + ') OR (upper(org_address) LIKE ' + searchInput + ') OR (upper(org_description) LIKE ' + searchInput + ')) ORDER BY organization_name;';
     console.log(SQL);
+    
   } else {
     let nameInput = '(upper(organization_name) LIKE ';
     let websiteInput = '(upper(website) LIKE ';
@@ -351,7 +352,8 @@ function returnAdminResults(req, res){
     let descInput = '(upper(org_description) LIKE ';
     searchTerm.forEach(function(el) {
       let i = searchTerm.indexOf(el);
-      searchInput = '\'%' + (searchTerm[i].toUpperCase()) + '%\'';
+      let cleanSearchTerm = searchTerm[i].split('\'');
+      searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
       if ( i === 0){
         nameInput = nameInput + searchInput + ' OR ';
         websiteInput = websiteInput + searchInput + ' OR ';
@@ -372,10 +374,10 @@ function returnAdminResults(req, res){
         descInput = descInput + 'upper(org_description) LIKE ' + searchInput + ')';
       }
     });
-    SQL = 'SELECT * FROM organization WHERE ' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ' ORDER BY organization_name;';
+    SQL = 'SELECT * FROM organization WHERE (' + nameInput + ' OR ' + websiteInput + ' OR ' + phoneInput + ' OR ' + addressInput + ' OR ' + descInput + ') AND active=\'t\' ORDER BY organization_name;';
     console.log(SQL);
   }
-  return client.query(SQL)
+  return client.query(SQL, values)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
 }
