@@ -463,3 +463,29 @@ textarea.bigger {
 	width: 100vw;
 	text-align: center;
 }
+
+#admin-search-radio, #admin-search-date {
+	width: 70vw;
+	margin: 2vw auto;
+	text-align: center;
+}
+
+#tooltip-container {
+	width: 10vw;
+	margin: 4vw 4vw 4vw 90vw;
+}
+
+/* Tooltip text */
+.tooltip {
+	left: 50vw;
+	width: 40vw;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 2vw;
+	border-radius: 5px;
+	position: absolute;
+	z-index: 1;
+	font-size: 1.5vw;
+	line-height: 2.5vw;
+}

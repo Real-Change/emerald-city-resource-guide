@@ -342,7 +342,7 @@ function returnAdminResults(req, res){
   let dateInput ='';
 
   if(updateDate){
-    dateInput = 'AND (last_update<\'' + updateDate + ' 23:00:00-07\')'
+    dateInput = 'AND (last_update<to_timestamp(\'' + updateDate + '\', \'YYYY-MM-DD HH:MI:SS\')) '
   }
   
   if(radioChoice === 'includes'){
