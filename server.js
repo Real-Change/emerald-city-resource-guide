@@ -46,8 +46,10 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+console.log('DATABASE URL****', process.env.DATABASE_URL);
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect()
+  .then(console.log('CONNECTED*!*!*!'))
   .catch(e => console.error('connection error', e.stack));
 client.on('error', err => console.log(err));
 
