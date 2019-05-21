@@ -397,7 +397,7 @@ input#searchbar {
 	text-align: center;
 	border-top: 2px solid;
 	margin-top: 2vw;
-	padding: 2vw;
+	padding: 2vw 0;
 	width: 100vw;	
 	color: #df972d;
 	font-weight: bold
@@ -446,10 +446,6 @@ textarea.bigger {
 	height: 20vw;
 }
 
-#adminedit {
-	padding-bottom: 30vw;
-}
-
 #allcats #population, #allcats #services {
 	padding-left: 2vw;
 }
@@ -488,4 +484,36 @@ textarea.bigger {
 	z-index: 1;
 	font-size: 1.5vw;
 	line-height: 2.5vw;
+}
+
+#final-checks label {
+	margin: 2vw;
+  font-size: 5vw;
+}
+
+#final-checks fieldset {
+	width: 96vw;
+	background-color: lightgrey;
+	border-radius: 5px;
+	margin: 2vw;
+}
+
+#final-checks textarea {
+	width: 80vw;
+	margin: 0 auto;
+}
+
+p.script {
+	font-size: 1.5vw;
+	padding: 1vw 2vw;
+	background-color: lightgreen;
+	width: 80vw;
+	margin: 0 auto 1vw auto;
+	border-radius: 5px;
+	text-align: center;
+}
+
+span.emphasis {
+	font-style: italic;
+	padding: 0;
 }
