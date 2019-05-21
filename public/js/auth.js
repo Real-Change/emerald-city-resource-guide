@@ -63,6 +63,12 @@ $(document).ready(function() {
   $('#tooltip-container').hover(function(){
     $('span.tooltip').toggleClass('hidden')
   })
+
+  // toggle visibility of call script
+  $('#script-button').on('click', function() {
+    $('p.script').toggleClass('hidden');
+    $(this).text($(this).text() === 'Show Call Script' ? 'Hide Call Script' : 'Show Call Script');
+  })
 })
 
 // enable contact form submit buttons when reCAPTCHA completed

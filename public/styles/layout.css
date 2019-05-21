@@ -388,4 +388,37 @@
   button#admin-search-button {
 		margin-bottom: 15vw;
 	}
+
+	#adminedit {
+		padding-bottom: 5vw;
+	}
+
+	#adminedit h3, #final-checks h3 {
+	  margin:2vw;
+	}
+
+	#final-checks label {
+		font-size: 1.5vw;
+	}
+
+	#final-checks textarea {
+		width: 50vw;
+		height: 2vw;
+    padding-left: 1vw;
+	}
+	
+	label.checks-email {
+		margin: 0 2vw;
+	}
+
+	#final-checks span {
+		vertical-align: top;
+	}
+
+	#editform span.emphasis {
+		font-size: 1.5vw;
+	}
+	#financial {
+		margin-bottom: 2vw;
+	}
 }

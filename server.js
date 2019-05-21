@@ -171,7 +171,7 @@ function makeGenderQuery(gender) {
 function makeSQL(requestType, category, gender) {
   let SQL;
   if (requestType === 'all') {
-    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active=\'t\' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode ORDER by organization.organization_name;';
+    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active=\'t\' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.id_req ORDER by organization.organization_name;';
   } else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
 
@@ -179,7 +179,7 @@ function makeSQL(requestType, category, gender) {
     let categoryQuery = makeCategoryQuery(category);
 
     // add all the query components  into a single SQL query
-    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') AND (orgs.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode ORDER by orgs.organization_name;';
+    SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') AND (orgs.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.id_req ORDER by orgs.organization_name;';
   }
   console.log(SQL);
   return SQL;
@@ -402,7 +402,7 @@ app.post('/admin/update/:orgId', editOrg);
 
 function editOrg(req, res){
   let orgId = req.params.orgId;
-  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode ORDER by organization.organization_name;'
+  let SQL = 'SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=' + orgId + ' AND organization_x_category.active=\'t\') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.id_req ORDER by organization.organization_name;'
 
   client.query(SQL)
     .then(result => res.render('./pages/auth/org-edit', {results: result.rows[0]}))
@@ -413,6 +413,7 @@ function editOrg(req, res){
 
 app.put('/admin/editconfirmation', function (req, res) {
   // Map form updates into SQL query for organization table
+  console.log('EDIT REQ.BODY', req.body);
   let organization_id = req.body.id;
   let organization_name = req.body.name;
   let website = (req.body.website).trim();
@@ -421,8 +422,44 @@ app.put('/admin/editconfirmation', function (req, res) {
   let org_description = req.body.org_description;
   let schedule = req.body.schedule;
   let gender = req.body.gender;
-  let timestamp = req.body.timestamp
-  let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp+ '\' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
+  let timestamp = req.body.timestamp;
+  let contact_name = req.body.contact_name;
+  let contact_title = req.body.contact_title;
+  let contact_email = req.body.contact_email;
+  let contact_phone = req.body.contact_phone;
+
+  let id_req;
+  if(req.body.id_req === 't'){
+    id_req='t'
+  } else {
+    id_req='f'
+  }
+
+  let distribution;
+  if(req.body.distribution === 't'){
+    distribution='t'
+  } else {
+    distribution='f'
+  }
+
+  let distribution_email = req.body.distribution_email;
+
+  let sponsorship;
+  if(req.body.sponsorship === 't'){
+    sponsorship='t'
+  } else {
+    sponsorship='f'
+  }
+
+  let sponsorship_email = req.body.sponsorship_email;
+
+  let zipcode = req.body.zipcode;
+  if (zipcode === ''){
+    zipcode = null
+  }
+  console.log('zipcode datatype', typeof zipcode)
+
+  let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp + '\', contact_name=\'' + contact_name + '\', contact_title=\'' + contact_title + '\', contact_email=\'' + contact_email + '\', contact_phone=\'' + contact_phone + '\', id_req=\'' + id_req + '\', distribution=\'' + distribution + '\', distribution_email=\'' + distribution_email + '\', sponsorship=\'' + sponsorship + '\', sponsorship_email=\'' + sponsorship_email + '\', zipcode=' + zipcode + ' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
 
   //Create SQL queries to remove and add categories for an organization
   let catsArray = compareCategories(req);
@@ -470,6 +507,7 @@ app.put('/admin/editconfirmation', function (req, res) {
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
+  console.log('SQL FOR RECORD UPDATE***', completeSQL);
   client.query(completeSQL)
     .then(res.render('./pages/auth/edit-confirmation'))
     .catch(function(error){
