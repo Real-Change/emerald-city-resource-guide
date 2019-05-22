@@ -39,19 +39,25 @@ $(document).ready(function() {
     $('#rclogoimg').attr('src', '/../images/RC_Logo_HigherRes.jpg')
   }
 
+  if (window.location.href.indexOf('login') > -1){
+    localStorage.setItem('counter', 0);
+  }
+
   if(window.location.href.indexOf('credentialcheck') > -1){
     let counter = parseInt(localStorage.getItem('counter'));
     if(counter === undefined){
       localStorage.setItem('counter', 0);
       setTimeout(location.reload.bind(location), 5000);
-    } else if(counter< 2){
+    } else if (counter< 2){
       counter++;
       localStorage.setItem('counter', counter)
       setTimeout(location.reload.bind(location), 5000);
-    } else {
+    } else if(counter >= 2) {
       alert('You do not have administrative permissions for this site. Please email ecrgseattle@gmail.com to request assistance if you believe you have received this message in error.')
       window.location.replace('/login');
       localStorage.setItem('counter', 0)
+    } else {
+      setTimeout(location.reload.bind(location), 5000);  
     }
   }
 
