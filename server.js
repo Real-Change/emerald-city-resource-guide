@@ -359,9 +359,9 @@ function returnAdminResults(req, res){
         let cleanSearchTerm = searchTerm[i].split('\'');
         searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
         if ( i === 0){
-          nameInput = nameInput + searchInput + ' OR ';
+          nameInput = nameInput + searchInput + ' AND ';
         } else if (i < (searchTerm.length - 1)) {
-          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' OR ';
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' AND ';
         } else {
           nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ')';
         }
@@ -382,9 +382,9 @@ function returnAdminResults(req, res){
         let cleanSearchTerm = searchTerm[i].split('\'');
         searchInput = '\'' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
         if ( i === 0){
-          nameInput = nameInput + searchInput + ' OR ';
+          nameInput = nameInput + searchInput + ' AND ';
         } else if (i < (searchTerm.length - 1)) {
-          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' OR ';
+          nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ' AND ';
         } else {
           nameInput = nameInput + 'upper(organization_name) LIKE ' + searchInput + ')';
         }
