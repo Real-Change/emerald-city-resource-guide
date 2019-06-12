@@ -388,12 +388,12 @@ input#searchbar {
 	border-radius: 5px;
 }
 
-#editform label {
+#editform label, #addform label {
 	display: flex;
 	flex-wrap: wrap;
 }
 
-#editform h2 {	
+#editform h2, #addform h2 {	
 	text-align: center;
 	border-top: 2px solid;
 	margin-top: 2vw;
@@ -403,20 +403,20 @@ input#searchbar {
 	font-weight: bold
 }
 
-#editform fieldset {
+#editform fieldset, #addform fieldset {
 	display: flex;
 	flex-wrap: wrap;
 	width: 100vw;
 }
 
-#editform span {
+#editform span, #addform span {
 	width: 28vw;
 	font-size: 4vw;
 	line-height: 5vw;
 	padding-left: 2vw;
 }
 
-#editform textarea, #genderopts{
+#editform textarea, #genderopts, #addform textarea{
 	width: 63vw;
 	padding: 2vw;
 	border-radius: 5px;

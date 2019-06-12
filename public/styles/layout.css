@@ -337,11 +337,11 @@
 		font-size: 2vw;
 	}
 
-	#editform h2 {
+	#editform h2, #addform h2 {
 		border: none;
 	}
 	
-	#editform span {
+	#editform span, #addform span {
 		width: 15vw;
 		font-size: 2vw;
 		padding-top: 1vw;
@@ -349,7 +349,7 @@
 		padding-left: 5vw;
 	}
 	
-	#editform textarea, #genderopts {
+	#editform textarea, #genderopts, #addform textarea {
 		width: 73vw;
 		border-radius: 5px;
 		margin: 0 2vw 2vw 0;
@@ -359,11 +359,11 @@
 		padding: 1vw;
 	}
 	
-	#editform textarea.big {
+	#editform textarea.big, #addform textarea.big {
 		height:5vw;
 	}
 	
-	#editform textarea.bigger {
+	#editform textarea.bigger, #addform textarea.bigger {
 		height: 10vw;
 	}
 	
