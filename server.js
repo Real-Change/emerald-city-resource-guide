@@ -570,3 +570,7 @@ app.post('/sessionLogout', (req, res) => {
       res.redirect('/login');
     });
 })
+
+app.get('/admin/addnew', function(req,res){
+  res.render('./pages/auth/addnew')
+})
