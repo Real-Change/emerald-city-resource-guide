@@ -53,7 +53,7 @@
                 <textarea name="website" type="text"><%= organization.website %></textarea>
             </label>
         </fieldset>
-        <p class="script hidden">The phone number listed in teh guidebook will be called by individuals seeking services.  Is this the correct phone number? <br><span class="emphasis">Read phone number below aloud.</span></p>
+        <p class="script hidden">The phone number listed in the guidebook will be called by individuals seeking services.  Is this the correct phone number? <br><span class="emphasis">Read phone number below aloud.</span></p>
         <fieldset>
             <label>
                 <span>Phone</span>
@@ -70,7 +70,7 @@
         <fieldset>
                 <label>
                     <span>Zip Code</span>
-                    <textarea name="zipcode" type="text" ><%= organization.zipcode %></textarea>
+                    <input name="zipcode" type="text" pattern="[0-9]{5}" value=<%= organization.zipcode %> class="zip"></textarea>
                 </label>
         </fieldset>
         <p class="script hidden">What hours are you open for people to walk in?</p>

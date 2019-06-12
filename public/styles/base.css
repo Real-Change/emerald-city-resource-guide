@@ -388,12 +388,12 @@ input#searchbar {
 	border-radius: 5px;
 }
 
-#editform label {
+#editform label, #addform label {
 	display: flex;
 	flex-wrap: wrap;
 }
 
-#editform h2 {	
+#editform h2, #addform h2 {	
 	text-align: center;
 	border-top: 2px solid;
 	margin-top: 2vw;
@@ -403,25 +403,26 @@ input#searchbar {
 	font-weight: bold
 }
 
-#editform fieldset {
+#editform fieldset, #addform fieldset {
 	display: flex;
 	flex-wrap: wrap;
 	width: 100vw;
 }
 
-#editform span {
+#editform span, #addform span {
 	width: 28vw;
 	font-size: 4vw;
 	line-height: 5vw;
 	padding-left: 2vw;
 }
 
-#editform textarea, #genderopts{
+#editform textarea, #genderopts, #addform textarea, .zip{
 	width: 63vw;
 	padding: 2vw;
 	border-radius: 5px;
 	margin: 0 2vw 2vw 0;
 	font-size: 3vw;
+	border: 1px black solid;
 }
 
 #genderopts input {
@@ -454,7 +455,7 @@ textarea.bigger {
 	margin-bottom: 3vw
 }
 
-#editconfheader {
+#editconfheader, #addconfheader {
 	margin: 5vw auto;
 	width: 100vw;
 	text-align: center;
@@ -468,7 +469,7 @@ textarea.bigger {
 
 #tooltip-container {
 	width: 10vw;
-	margin: 4vw 4vw 4vw 90vw;
+	margin: 2vw 4vw 2vw 90vw;
 }
 
 /* Tooltip text */
@@ -516,4 +517,9 @@ p.script {
 span.emphasis {
 	font-style: italic;
 	padding: 0;
+}
+
+#new-org-button {
+	background-color: #df972d;
+	margin-top: 5vw;
 }

@@ -337,11 +337,11 @@
 		font-size: 2vw;
 	}
 
-	#editform h2 {
+	#editform h2, #addform h2 {
 		border: none;
 	}
 	
-	#editform span {
+	#editform span, #addform span {
 		width: 15vw;
 		font-size: 2vw;
 		padding-top: 1vw;
@@ -349,7 +349,7 @@
 		padding-left: 5vw;
 	}
 	
-	#editform textarea, #genderopts {
+	#editform textarea, #genderopts, #addform textarea, .zip {
 		width: 73vw;
 		border-radius: 5px;
 		margin: 0 2vw 2vw 0;
@@ -357,18 +357,19 @@
 		line-height: 2vw;
 		height: 2vw;
 		padding: 1vw;
+		border: 1px black solid;
+	}
+
+	#genderopts {
+		border: none;
 	}
 	
-	#editform textarea.big {
+	#editform textarea.big, #addform textarea.big {
 		height:5vw;
 	}
 	
-	#editform textarea.bigger {
+	#editform textarea.bigger, #addform textarea.bigger {
 		height: 10vw;
-	}
-	
-	#adminedit {
-		padding-bottom: 15vw;
 	}
 
 	#editform span.timestamp-display {
@@ -388,11 +389,11 @@
 		margin-bottom: 15vw;
 	}
 
-	#adminedit {
+	#adminedit, #adminadd {
 		padding-bottom: 5vw;
 	}
 
-	#adminedit h3, #final-checks h3 {
+	#adminedit h3, #final-checks h3, #adminadd h3 {
 	  margin:2vw;
 	}
 

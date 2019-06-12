@@ -409,55 +409,56 @@ function editOrg(req, res){
     .catch(handleError);
 }
 
-// Submit and confirm record edits
+function parseForm(req){
+  organization_id = req.body.id;
+  organization_name = req.body.name;
+  website = (req.body.website).trim();
+  phone_number = req.body.phone_number;
+  org_address = req.body.org_address;
+  org_description = req.body.org_description;
+  schedule = req.body.schedule;
+  gender = req.body.gender;
+  timestamp = req.body.timestamp;
+  contact_name = req.body.contact_name;
+  contact_title = req.body.contact_title;
+  contact_email = req.body.contact_email;
+  contact_phone = req.body.contact_phone;
 
-app.put('/admin/editconfirmation', function (req, res) {
-  // Map form updates into SQL query for organization table
-  console.log('EDIT REQ.BODY', req.body);
-  let organization_id = req.body.id;
-  let organization_name = req.body.name;
-  let website = (req.body.website).trim();
-  let phone_number = req.body.phone_number;
-  let org_address = req.body.org_address;
-  let org_description = req.body.org_description;
-  let schedule = req.body.schedule;
-  let gender = req.body.gender;
-  let timestamp = req.body.timestamp;
-  let contact_name = req.body.contact_name;
-  let contact_title = req.body.contact_title;
-  let contact_email = req.body.contact_email;
-  let contact_phone = req.body.contact_phone;
-
-  let id_req;
   if(req.body.id_req === 't'){
     id_req='t'
   } else {
     id_req='f'
   }
 
-  let distribution;
   if(req.body.distribution === 't'){
     distribution='t'
   } else {
     distribution='f'
   }
+  distribution_email = req.body.distribution_email;
 
-  let distribution_email = req.body.distribution_email;
-
-  let sponsorship;
   if(req.body.sponsorship === 't'){
     sponsorship='t'
   } else {
     sponsorship='f'
   }
+  sponsorship_email = req.body.sponsorship_email;
 
-  let sponsorship_email = req.body.sponsorship_email;
-
-  let zipcode = req.body.zipcode;
-  if (zipcode === ''){
+  if (req.body.zipcode === '' || req.body.zipcode === undefined){
     zipcode = null
+  } else {
+    zipcode = req.body.zipcode
   }
-  console.log('zipcode datatype', typeof zipcode)
+
+}
+
+let organization_id, organization_name, website, phone_number, org_address, org_description, schedule, gender, timestamp, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode;
+// Submit and confirm record edits
+
+app.put('/admin/editconfirmation', function (req, res) {
+  // Map form updates into SQL query for organization table
+  console.log('EDIT REQ.BODY', req.body);
+  parseForm(req);
 
   let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp + '\', contact_name=\'' + contact_name + '\', contact_title=\'' + contact_title + '\', contact_email=\'' + contact_email + '\', contact_phone=\'' + contact_phone + '\', id_req=\'' + id_req + '\', distribution=\'' + distribution + '\', distribution_email=\'' + distribution_email + '\', sponsorship=\'' + sponsorship + '\', sponsorship_email=\'' + sponsorship_email + '\', zipcode=' + zipcode + ' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
 
@@ -570,3 +571,39 @@ app.post('/sessionLogout', (req, res) => {
       res.redirect('/login');
     });
 })
+
+app.get('/admin/addnew', function(req,res){
+  res.render('./pages/auth/addnew')
+})
+
+app.put('/admin/addconfirmation', function(req, res) {
+  // Map form updates into SQL query for organization table
+  console.log('ADD REQ.BODY', req.body);
+  parseForm(req);
+
+  let mainSQL = 'INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, active) VALUES(\'' + organization_name + '\', \'' + website + '\',\'' + phone_number + '\', \'' + org_address + '\', \'' + org_description + '\', \'' + schedule + '\', \'' + gender + '\', \'' + timestamp + '\', \'' + contact_name + '\', \'' + contact_title + '\', \'' + contact_email + '\', \'' + contact_phone + '\', \'' + id_req + '\', \'' + distribution + '\', \'' + distribution_email + '\', \'' + sponsorship_email + '\', \'' + sponsorship + '\', ' + zipcode + ', \'t\');';
+
+
+  // Create SQL query for adding categories
+  let cats = req.body.category;
+  console.log('categories ******', cats);
+  let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (';
+  let allCatsSQL = '';
+
+  cats.forEach(cat => {
+    catAddSQL = catAddSQL + '(SELECT organization_id FROM organization WHERE organization_name=\'' + organization_name + '\'), ' + cat + ', \'t\'); '
+    allCatsSQL = allCatsSQL + catAddSQL;
+    catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (';
+    console.log(allCatsSQL)
+  })
+
+  // Submit update/insert to database and render confirmation page
+  let completeSQL = mainSQL + allCatsSQL;
+  console.log('SQL FOR RECORD UPDATE***', completeSQL);
+  client.query(completeSQL)
+    .then(res.render('./pages/auth/add-confirmation'))
+    .catch(function(error){
+      console.log(error);
+    });
+})
+
