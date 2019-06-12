@@ -349,7 +349,7 @@
 		padding-left: 5vw;
 	}
 	
-	#editform textarea, #genderopts, #addform textarea {
+	#editform textarea, #genderopts, #addform textarea, .zip {
 		width: 73vw;
 		border-radius: 5px;
 		margin: 0 2vw 2vw 0;
@@ -357,6 +357,11 @@
 		line-height: 2vw;
 		height: 2vw;
 		padding: 1vw;
+		border: 1px black solid;
+	}
+
+	#genderopts {
+		border: none;
 	}
 	
 	#editform textarea.big, #addform textarea.big {

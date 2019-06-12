@@ -416,12 +416,13 @@ input#searchbar {
 	padding-left: 2vw;
 }
 
-#editform textarea, #genderopts, #addform textarea{
+#editform textarea, #genderopts, #addform textarea, .zip{
 	width: 63vw;
 	padding: 2vw;
 	border-radius: 5px;
 	margin: 0 2vw 2vw 0;
 	font-size: 3vw;
+	border: 1px black solid;
 }
 
 #genderopts input {
@@ -468,7 +469,7 @@ textarea.bigger {
 
 #tooltip-container {
 	width: 10vw;
-	margin: 4vw 4vw 4vw 90vw;
+	margin: 2vw 4vw 2vw 90vw;
 }
 
 /* Tooltip text */
@@ -516,4 +517,9 @@ p.script {
 span.emphasis {
 	font-style: italic;
 	padding: 0;
+}
+
+#new-org-button {
+	background-color: #df972d;
+	margin-top: 5vw;
 }

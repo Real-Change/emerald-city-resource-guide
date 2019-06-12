@@ -57,7 +57,7 @@
             <fieldset>
                     <label>
                         <span>Zip Code</span>
-                        <textarea name="zipcode" type="number" ></textarea>
+                        <textarea name="zipcode" pattern="[0-9]{5}" class="zip"></textarea>
                     </label>
             </fieldset>
             <p class="script hidden">What hours are you open for people to walk in?</p>
@@ -115,8 +115,7 @@
                     <label><input type="checkbox" name="category[16]" value="8">Drug and Alchohol Services</label> 
                     <label><input type="checkbox" name="category[17]" value="10">Family and Maternity Services</label> 
                     <label><input type="checkbox" name="category[29]" value="30">Womxn's Health Services</label>
-                    <label><input type="checkbox" name="category[18]" value="15"
-                        >General Health Services</label> 
+                    <label><input type="checkbox" name="category[18]" value="15">General Health Services</label> 
                     <label><input type="checkbox" name="category[19]" value="16">HIV/AIDS Services</label> 
                     <label><input type="checkbox" name="category[20]" value="22">Mental Health Services</label> 
                     <label><input type="checkbox" name="category[31]" value="32">Problem Gambling Resources</label>
