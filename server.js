@@ -574,3 +574,7 @@ app.post('/sessionLogout', (req, res) => {
 app.get('/admin/addnew', function(req,res){
   res.render('./pages/auth/addnew')
 })
+
+app.put('/addconfirmation', function(req, res) {
+  res.render('./pages/add-confirmation.ejs');
+})

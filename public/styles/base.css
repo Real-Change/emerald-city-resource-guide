@@ -454,7 +454,7 @@ textarea.bigger {
 	margin-bottom: 3vw
 }
 
-#editconfheader {
+#editconfheader, #addconfheader {
 	margin: 5vw auto;
 	width: 100vw;
 	text-align: center;

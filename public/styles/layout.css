@@ -366,10 +366,6 @@
 	#editform textarea.bigger, #addform textarea.bigger {
 		height: 10vw;
 	}
-	
-	#adminedit {
-		padding-bottom: 15vw;
-	}
 
 	#editform span.timestamp-display {
 		font-size: 1vw;
@@ -388,11 +384,11 @@
 		margin-bottom: 15vw;
 	}
 
-	#adminedit {
+	#adminedit, #adminadd {
 		padding-bottom: 5vw;
 	}
 
-	#adminedit h3, #final-checks h3 {
+	#adminedit h3, #final-checks h3, #adminadd h3 {
 	  margin:2vw;
 	}
 
