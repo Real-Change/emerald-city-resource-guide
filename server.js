@@ -244,6 +244,7 @@ app.post('/sessionLogin', (req, res) => {
     .then((decodedIdToken) => {
       let userEmail = decodedIdToken.email;
       let SQL = 'SELECT * FROM users WHERE email = \'' + userEmail + '\';';
+      console.log(userEmail);
 
       return(client.query(SQL))
         .then((results)=> {

@@ -82,3 +82,5 @@ function recaptcha_callback(){
   console.log('recaptcha callback triggered');
   $('.request-button').prop('disabled', false);
 }
+
+recaptcha_callback();
