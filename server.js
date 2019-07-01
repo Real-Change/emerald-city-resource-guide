@@ -162,7 +162,7 @@ function makeGenderQuery(gender) {
     genderQuery = '(gender=\'men only\' OR gender=\'no restrictions\')';
     break;
   default:
-    genderQuery = 'gender=\'no restrictions\'';
+    genderQuery = '(gender=\'no restrictions\' OR gender=\'men only\' OR gender=\'women only\')';
   }
   return genderQuery;
 }
