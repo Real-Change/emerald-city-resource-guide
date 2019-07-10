@@ -73,21 +73,17 @@ app.get('/contact', function(req, res) {
   res.render('./pages/contact.ejs');
 })
 
-// GET method route to render request confirmation page
-app.get('/confirmation', function(req, res) {
-  res.render('./pages/confirmation.ejs');
-})
 
 // GET method route to render login page
 app.get('/login', function(req, res) {
   res.render('./pages/auth/login.ejs');
 });
 
-// POST method for hardcopy request submission on contact page
-app.post('/confirmation', submitRequest);
+// POST method for feedback submission on contact page
+app.post('/feedbackconfirmation', submitFeedback);
 
-// method to submit copy requests
-function submitRequest(req, res) {
+// method to submit feedback
+function submitFeedback(req, res) {
   let mailOptions = {
     from: req.body.email,
     to: 'erineckerman@gmail.com',
@@ -96,13 +92,8 @@ function submitRequest(req, res) {
     text: ''
   };
 
-  if (req.body.feedbackfield) {
-    mailOptions.subject = 'Feedback on ECRG';
-    mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has submitted the following feedback via the ECRG site: ${req.body.feedbackfield}`;
-  } else {
-    mailOptions.subject = 'Request for copies of ECRG';
-    mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has requested ${req.body.number} resource guides. They would like to pick up the guides by ${req.body.date}.`;
-  }
+  mailOptions.subject = 'Feedback on ECRG';
+  mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has submitted the following feedback via the ECRG site: ${req.body.feedbackfield}`;
 
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -129,6 +120,19 @@ function submitRequest(req, res) {
     }
   })
   res.render('./pages/confirmation.ejs')
+}
+
+// POST method for copy request on contact page 
+app.post('/requestconfirmation', submitRequest);
+
+function submitRequest(req, res){
+  console.log(req.body);
+  let values = [req.body.organization, req.body.name, req.body.email, req.body.phone, req.body.number]
+  let SQL = 'INSERT INTO requests (organization_name, contact_name, email, phone, number) VALUES ($1, $2, $3, $4, $5);'
+  
+  return client.query(SQL, values)
+    .then(res.render('./pages/confirmation.ejs'))
+    .catch(handleError);
 }
 
 // catches

@@ -4,8 +4,8 @@
     <%- include('../layout/header') %>
     <main id="contact-page">
 				<div  id="copy-request">
-					<p class="contact">To request printed copies of the guide, please fill out the form below.</p>
-					<form action="/confirmation" method="POST" class="contact form">
+					<p class="contact">Fill out the form below to request physical copies of the Emerald City Resource Guide (available late summer 2019).</p>
+					<form action="/requestconfirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization">
 						
@@ -15,15 +15,11 @@
 						<label for="email">Email Address</label>
 						<input type="email" id="form-email" name="email">
 
+						<label for="phone">Phone Number</label>
+						<input type="text" id="form-phone" name="phone">
+
 						<label for="number">Number of Guides Requested</label>
 						<input type="number" id="form-number" name="number">
-
-						<label for="date">Desired Pick Up Date</label>
-						<input type="date" id="form-date" name="date">
-
-						<br>
-						<div class="g-recaptcha" data-sitekey="6LdHsaAUAAAAAFUNawihqVVNfdxrX5w__fq232H9" data-callback="recaptcha_callback"></div>
-						<br>
 
 						<button type="submit" class="request-button" disabled>Submit</button>
 
@@ -31,7 +27,7 @@
 				</div>
 				<div id="feedback">
 					<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource Guide, please fill out the form below.</p>
-					<form action="/confirmation" method="POST" class="contact form" id="feedback-form">
+					<form action="/feedbackconfirmation" method="POST" class="contact form" id="feedback-form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization">
 						
