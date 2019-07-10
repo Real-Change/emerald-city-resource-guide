@@ -31,9 +31,7 @@ $(document).ready(function() {
     localStorage.setItem('counter', 0);
     $('#desktop-nav form').toggleClass('hidden');
     $('#mobile-nav form').toggleClass('hidden');
-    $('#admin-search').toggleClass('hidden');
     $('#login').toggleClass('hidden');
-    $('#admin-search-desktop').toggleClass('hidden');
     $('#login-desktop').toggleClass('hidden');
     $('#desktop-nav a').addClass('admin-nav');
     $('#rclogoimg').attr('src', '/../images/RC_Logo_HigherRes.jpg')
@@ -64,11 +62,6 @@ $(document).ready(function() {
   // set timestamp for admin edit form
   let timestamp = (new Date()).getFullYear() + '-' + ((new Date()).getMonth()+1) + '-' + (new Date()).getDate() + ' ' + (new Date()).getHours() + ':' + (new Date()).getMinutes() +':00-07';
   $('#timestamp').attr('value', timestamp)
-
-  // show tooltip on admin search page
-  $('#tooltip-container').hover(function(){
-    $('span.tooltip').toggleClass('hidden')
-  })
 
   // toggle visibility of call script
   $('#script-button').on('click', function() {

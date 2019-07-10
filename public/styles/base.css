@@ -376,6 +376,10 @@ button.signout {
 	margin: 0 auto;
 }
 
+button.signout:hover {
+	background-color: grey;
+}
+
 #gearbox, #cred-check h3 {
 	text-align: center;
 	margin: 2vw auto;
@@ -461,30 +465,33 @@ textarea.bigger {
 	text-align: center;
 }
 
+#sidebar {
+	width: 100vw;
+	text-align: center;
+}
+
+#sidebar a {
+	text-decoration: none;
+}
+
+#sidebar li:hover {
+	background-color:grey
+}
+
+#sidebar a:visited {
+	color: white
+}
+
+#sidebar li {
+	padding: 1vw 0;
+	background-color: #df972d;
+	color:white
+}
+
 #admin-search-radio, #admin-search-date {
 	width: 70vw;
 	margin: 2vw auto;
 	text-align: center;
-}
-
-#tooltip-container {
-	width: 10vw;
-	margin: 2vw 4vw 2vw 90vw;
-}
-
-/* Tooltip text */
-.tooltip {
-	left: 50vw;
-	width: 40vw;
-	background-color: black;
-	color: #fff;
-	text-align: center;
-	padding: 2vw;
-	border-radius: 5px;
-	position: absolute;
-	z-index: 1;
-	font-size: 1.5vw;
-	line-height: 2.5vw;
 }
 
 #final-checks label {
