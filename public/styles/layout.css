@@ -436,4 +436,16 @@
 	#financial {
 		margin-bottom: 2vw;
 	}
+	.request-item {
+		display: flex;
+		margin-left: 5vw;
+		border-top: solid .25vw;
+		width: 90vw;
+	}
+	.request-headers {
+		width: 75vw;
+	}
+	.request-body {
+		margin-left: 2vw;
+	}
 }

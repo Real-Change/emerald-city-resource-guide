@@ -68,6 +68,15 @@ $(document).ready(function() {
     $('p.script').toggleClass('hidden');
     $(this).text($(this).text() === 'Show Call Script' ? 'Hide Call Script' : 'Show Call Script');
   })
+
+  // count # of guides still to be picked up
+  let sum = 0;
+  $('.guide-number').each(function () {
+    sum += parseInt($(this).html(), 10) || 0;
+  });
+
+  $('#guide-count').text(sum);
+
 })
 
 // enable contact form submit buttons when reCAPTCHA completed

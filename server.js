@@ -126,10 +126,9 @@ function submitFeedback(req, res) {
 app.post('/requestconfirmation', submitRequest);
 
 function submitRequest(req, res){
-  console.log(req.body);
   let values = [req.body.organization, req.body.name, req.body.email, req.body.phone, req.body.number]
-  let SQL = 'INSERT INTO requests (organization_name, contact_name, email, phone, number) VALUES ($1, $2, $3, $4, $5);'
-  
+  let SQL = 'INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up) VALUES ($1, $2, $3, $4, $5, \'f\');'
+
   return client.query(SQL, values)
     .then(res.render('./pages/confirmation.ejs'))
     .catch(handleError);
@@ -185,7 +184,6 @@ function makeSQL(requestType, category, gender) {
     // add all the query components  into a single SQL query
     SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') AND (orgs.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.id_req ORDER by orgs.organization_name;';
   }
-  console.log(SQL);
   return SQL;
 }
 
@@ -248,7 +246,6 @@ app.post('/sessionLogin', (req, res) => {
     .then((decodedIdToken) => {
       let userEmail = decodedIdToken.email;
       let SQL = 'SELECT * FROM users WHERE email = \'' + userEmail + '\';';
-      console.log(userEmail);
 
       return(client.query(SQL))
         .then((results)=> {
@@ -289,7 +286,6 @@ app.post('/sessionLogin', (req, res) => {
 
 app.get('/sessionConfirmation', (req, res) => {
   const sessionCookie = req.cookies.session || '';
-  console.log('your session cookie is:      \'' + sessionCookie + '\'');
   // Verify the session cookie. In this case an additional check is added to detect
   // if the user's Firebase session was revoked, user deleted/disabled, etc.
   admin.auth().verifySessionCookie(
@@ -336,11 +332,9 @@ app.post('/sessionLogout', (req, res) => {
 app.post('/admin/:searchTerm', returnAdminResults);
 
 function returnAdminResults(req, res){
-  console.log('Admin search results req:   ', req.body)
   let searchTerm = ((req.body.searchbar).trim()).split(' ');
   let radioChoice = req.body.adminradio;
   let updateDate = req.body.updatedate;
-  console.log('SEARCH TERM ****', searchTerm);
   let searchInput;
   let SQL;
   let nameInput;
@@ -397,7 +391,6 @@ function returnAdminResults(req, res){
       SQL = 'SELECT DISTINCT * FROM organization WHERE (' + nameInput + ') AND active=\'t\'' + dateInput + ' ORDER BY organization_name;';
     } 
   }
-  console.log(SQL);
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
     .catch(error => handleError(error, res));
@@ -462,7 +455,6 @@ let organization_id, organization_name, website, phone_number, org_address, org_
 
 app.put('/admin/editconfirmation', function (req, res) {
   // Map form updates into SQL query for organization table
-  console.log('EDIT REQ.BODY', req.body);
   parseForm(req);
 
   let mainSQL = 'UPDATE organization SET organization_name=\''+ organization_name + '\', website=\'' + website + '\', phone_number=\''+ phone_number +'\', org_address=\''+ org_address +'\', org_description=\'' + org_description + '\', schedule=\'' + schedule + '\', gender=\'' + gender + '\', last_update=\'' + timestamp + '\', contact_name=\'' + contact_name + '\', contact_title=\'' + contact_title + '\', contact_email=\'' + contact_email + '\', contact_phone=\'' + contact_phone + '\', id_req=\'' + id_req + '\', distribution=\'' + distribution + '\', distribution_email=\'' + distribution_email + '\', sponsorship=\'' + sponsorship + '\', sponsorship_email=\'' + sponsorship_email + '\', zipcode=' + zipcode + ' WHERE organization_id=' + organization_id + ' RETURNING organization_name;';
@@ -513,7 +505,6 @@ app.put('/admin/editconfirmation', function (req, res) {
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
-  console.log('SQL FOR RECORD UPDATE***', completeSQL);
   client.query(completeSQL)
     .then(res.render('./pages/auth/edit-confirmation'))
     .catch(function(error){
@@ -547,7 +538,6 @@ function compareCategories(req){
   }
 
   outputCats.push(catsToRemove);
-  console.log(outputCats);
   return outputCats;
 }
 
@@ -583,7 +573,6 @@ app.get('/admin/addnew', function(req,res){
 
 app.put('/admin/addconfirmation', function(req, res) {
   // Map form updates into SQL query for organization table
-  console.log('ADD REQ.BODY', req.body);
   parseForm(req);
 
   let mainSQL = 'INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, active) VALUES(\'' + organization_name + '\', \'' + website + '\',\'' + phone_number + '\', \'' + org_address + '\', \'' + org_description + '\', \'' + schedule + '\', \'' + gender + '\', \'' + timestamp + '\', \'' + contact_name + '\', \'' + contact_title + '\', \'' + contact_email + '\', \'' + contact_phone + '\', \'' + id_req + '\', \'' + distribution + '\', \'' + distribution_email + '\', \'' + sponsorship_email + '\', \'' + sponsorship + '\', ' + zipcode + ', \'t\');';
@@ -591,7 +580,6 @@ app.put('/admin/addconfirmation', function(req, res) {
 
   // Create SQL query for adding categories
   let cats = req.body.category;
-  console.log('categories ******', cats);
   let catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (';
   let allCatsSQL = '';
 
@@ -599,12 +587,10 @@ app.put('/admin/addconfirmation', function(req, res) {
     catAddSQL = catAddSQL + '(SELECT organization_id FROM organization WHERE organization_name=\'' + organization_name + '\'), ' + cat + ', \'t\'); '
     allCatsSQL = allCatsSQL + catAddSQL;
     catAddSQL = 'INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (';
-    console.log(allCatsSQL)
   })
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + allCatsSQL;
-  console.log('SQL FOR RECORD UPDATE***', completeSQL);
   client.query(completeSQL)
     .then(res.render('./pages/auth/add-confirmation'))
     .catch(function(error){
@@ -612,3 +598,21 @@ app.put('/admin/addconfirmation', function(req, res) {
     });
 })
 
+app.get('/admin/copyrequests', function(req, res){
+  let SQL = 'SELECT * FROM requests WHERE  picked_up=\'f\' ORDER BY LOWER(organization_name);';
+
+  return client.query(SQL)
+    .then(results => res.render('./pages/auth/copy-requests.ejs', {
+      requests: results.rows
+    }))
+})
+
+app.post('/admin/pickedup/guide', function(req,res){
+  
+  let values = [req.body.request_id];
+  let SQL =  'UPDATE requests SET picked_up=\'t\' WHERE request_id=$1;';
+  console.log(req.body);
+
+  return client.query(SQL, values)
+    .then(res.redirect('/admin/copyrequests'))
+})

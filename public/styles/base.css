@@ -530,3 +530,24 @@ span.emphasis {
 	background-color: #df972d;
 	margin-top: 5vw;
 }
+
+.request-headers {
+	color: black;
+}
+
+.request-body {
+	font-size: 1vw;
+}
+
+.guide-number {
+	color: red;
+}
+
+.request-item {
+	margin: 2vw;
+}
+
+#remaining-pickup {
+	margin: 1vw auto;
+	text-align: center;
+}
