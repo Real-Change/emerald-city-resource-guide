@@ -335,6 +335,7 @@
 	input#searchbar {
 		height: 3vw;
 		font-size: 2vw;
+		width: 80vw;
 	}
 
 	#editform h2, #addform h2 {
@@ -384,9 +385,23 @@
 
 	#genderopts input {
     margin: .5vw 2vw;
-}
-  button#admin-search-button {
+	}
+	
+  	button#admin-search-button {
 		margin-bottom: 15vw;
+	}
+
+	#admin-search {
+		width: 100vw;
+	}
+
+	#sidebar {
+		width: 100vw;
+		display:flex
+	}
+
+	#sidebar li  {
+		width: 33.3vw;
 	}
 
 	#adminedit, #adminadd {
@@ -420,5 +435,17 @@
 	}
 	#financial {
 		margin-bottom: 2vw;
+	}
+	.request-item {
+		display: flex;
+		margin-left: 5vw;
+		border-top: solid .25vw;
+		width: 90vw;
+	}
+	.request-headers {
+		width: 75vw;
+	}
+	.request-body {
+		margin-left: 2vw;
 	}
 }

@@ -2,10 +2,10 @@
 </head>
 <body>
 	<%- include('../../layout/header') %>
-    <div>
-		<button onclick="window.location.href = '/admin/addnew';" id="new-org-button">Add New Agency</button>
+    <div class="admin-main">
+		<%-include('../auth/sidebar.ejs') %>
 		<%- include('../auth/search-admin.ejs') %>
-		<%- include('../../layout/footer') %>
 	</div>
+	<%- include('../../layout/footer') %>
 </body>
 </html>
