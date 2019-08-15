@@ -253,6 +253,10 @@
 		padding: 2vw;
 	}
 
+	#confirmation p, #confirmation ul {
+		font-size: 2vw
+	}
+
   #contact-page {
 		display: flex;
 		flex-wrap: wrap;
@@ -448,4 +452,5 @@
 	.request-body {
 		margin-left: 2vw;
 	}
+
 }

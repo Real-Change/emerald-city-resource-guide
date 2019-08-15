@@ -550,3 +550,8 @@ span.emphasis {
 	margin: 1vw auto;
 	text-align: center;
 }
+
+#hours {
+	font-size: 4vw;
+    margin: 3vw
+}
