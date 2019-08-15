@@ -81,6 +81,7 @@ app.get('/login', function(req, res) {
 
 // POST method for feedback submission on contact page
 app.post('/feedbackconfirmation', submitFeedback);
+app.post('/requestconfirmation', )
 
 // method to submit feedback
 function submitFeedback(req, res) {
