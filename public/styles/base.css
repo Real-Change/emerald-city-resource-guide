@@ -299,7 +299,6 @@ p.contact {
 }
 
 #confirmation {
-	height: 100vw;
 	text-align: center;
 	padding: 1vw;
 	line-height: 6vw;
@@ -550,4 +549,9 @@ span.emphasis {
 #remaining-pickup {
 	margin: 1vw auto;
 	text-align: center;
+}
+
+#hours {
+	font-size: 4vw;
+    margin: 3vw
 }

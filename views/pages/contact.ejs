@@ -7,19 +7,19 @@
 					<p class="contact">Fill out the form below to request physical copies of the Emerald City Resource Guide (available late summer 2019).</p>
 					<form action="/requestconfirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
-						<input type="text" id="form-organization" name="organization">
+						<input type="text" id="form-organization" name="organization" required>
 						
 						<label for="name">Your Name</label>
-						<input type="text" id="form-name" name="name">
+						<input type="text" id="form-name" name="name" required>
 
 						<label for="email">Email Address</label>
-						<input type="email" id="form-email" name="email">
+						<input type="email" id="form-email" name="email" required>
 
 						<label for="phone">Phone Number</label>
-						<input type="text" id="form-phone" name="phone">
+						<input type="text" id="form-phone" name="phone" required>
 
 						<label for="number">Number of Guides Requested</label>
-						<input type="number" id="form-number" name="number">
+						<input type="number" id="form-number" name="number" required>
 
 						<button type="submit" class="request-button" disabled>Submit</button>
 
@@ -29,16 +29,16 @@
 					<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource Guide, please fill out the form below.</p>
 					<form action="/feedbackconfirmation" method="POST" class="contact form" id="feedback-form">
 						<label for="organization">Name of Organization</label>
-						<input type="text" id="form-organization" name="organization">
+						<input type="text" id="form-organization" name="organization" required>
 						
 						<label for="name">Your Name</label>
-						<input type="text" id="form-name" name="name">
+						<input type="text" id="form-name" name="name" required>
 
 						<label for="email">Email Address</label>
-						<input type="email" id="form-email" name="email">
+						<input type="email" id="form-email" name="email" required>
 
 						<label for="feedbackfield">Feedback, questions, or stories</label>
-						<textarea form="feedback-form" id="feedbackfield" name="feedbackfield" rows="5" cols="36" wrap="hard"></textarea>
+						<textarea form="feedback-form" id="feedbackfield" name="feedbackfield" rows="5" cols="36" wrap="hard" required></textarea>
 
 						<br>
 						<div class="g-recaptcha" data-sitekey="6LdHsaAUAAAAAFUNawihqVVNfdxrX5w__fq232H9" data-callback="recaptcha_callback"></div>

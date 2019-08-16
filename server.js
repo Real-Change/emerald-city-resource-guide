@@ -81,48 +81,51 @@ app.get('/login', function(req, res) {
 
 // POST method for feedback submission on contact page
 app.post('/feedbackconfirmation', submitFeedback);
+app.post('/requestconfirmation', submitFeedback);
 
 // method to submit feedback
 function submitFeedback(req, res) {
-  let mailOptions = {
-    from: req.body.email,
-    to: 'erineckerman@gmail.com',
-    cc: 'erineckerman@gmail.com',
-    subject: '',
-    text: ''
-  };
+  if (req.url.indexOf('feedback') > 0){
+    let mailOptions = {
+      from: req.body.email,
+      to: 'erineckerman@gmail.com',
+      cc: 'erineckerman@gmail.com',
+      subject: '',
+      text: ''
+    };
+    mailOptions.subject = 'Feedback on ECRG';
+    mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has submitted the following feedback via the ECRG site: ${req.body.feedbackfield}`;
 
-  mailOptions.subject = 'Feedback on ECRG';
-  mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has submitted the following feedback via the ECRG site: ${req.body.feedbackfield}`;
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      service: 'Gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      }
+    });
+    transporter.verify(function(err, success) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(success);
+      }
+    })
+    transporter.sendMail(mailOptions, function(err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    })
+  }
 
-  let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    service: 'Gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS
-    }
-  });
-  transporter.verify(function(err, success) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(success);
-    }
-  })
-  transporter.sendMail(mailOptions, function(err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(info);
-    }
-  })
   res.render('./pages/confirmation.ejs')
 }
 
-// POST method for copy request on contact page 
+// POST method for copy request on contact page
 app.post('/requestconfirmation', submitRequest);
 
 function submitRequest(req, res){
@@ -324,6 +327,7 @@ app.post('/sessionLogout', (req, res) => {
       res.redirect('/login');
     })
     .catch((error) => {
+      console.log(error);
       res.redirect('/login');
     });
 });
@@ -343,14 +347,14 @@ function returnAdminResults(req, res){
   if(updateDate){
     dateInput = 'AND (last_update<to_timestamp(\'' + updateDate + '\', \'YYYY-MM-DD HH:MI:SS\')) '
   }
-  
+
   if(radioChoice === 'includes'){
     if(searchTerm.length === 1){
       let cleanSearchTerm = searchTerm[0].split('\'');
       searchInput = '\'%' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
 
       SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND (upper(organization_name) LIKE '+ searchInput + ') ' + dateInput + 'ORDER BY organization_name;'
-      
+
     } else {
       let nameInput = '(upper(organization_name) LIKE ';
       searchTerm.forEach(function(el) {
@@ -373,7 +377,7 @@ function returnAdminResults(req, res){
       searchInput = '\'' + (cleanSearchTerm[0].toUpperCase()) + '%\'';
 
       SQL = 'SELECT DISTINCT * FROM organization WHERE active=\'t\' AND (upper(organization_name) LIKE '+ searchInput + ') ' + dateInput + ' ORDER BY organization_name;'
-      
+
     } else {
       nameInput = '(upper(organization_name)= ';
       searchTerm.forEach(function(el) {
@@ -389,7 +393,7 @@ function returnAdminResults(req, res){
         }
       });
       SQL = 'SELECT DISTINCT * FROM organization WHERE (' + nameInput + ') AND active=\'t\'' + dateInput + ' ORDER BY organization_name;';
-    } 
+    }
   }
   return client.query(SQL)
     .then(result => res.render('./pages/auth/search-admin-results', { results: result.rows }))
@@ -485,7 +489,7 @@ app.put('/admin/editconfirmation', function (req, res) {
     }
     catRemoveSQL = 'UPDATE organization_x_category SET active=\'false\' WHERE organization_id=' + organization_id + ' AND (' + category_remove_id + ');';
   }
-  
+
   if(catsToAdd.length <1){
     catAddSQL='';
   } else {
@@ -563,6 +567,7 @@ app.post('/sessionLogout', (req, res) => {
       res.redirect('/login');
     })
     .catch((error) => {
+      console.log(error);
       res.redirect('/login');
     });
 })
@@ -608,7 +613,7 @@ app.get('/admin/copyrequests', function(req, res){
 })
 
 app.post('/admin/pickedup/guide', function(req,res){
-  
+
   let values = [req.body.request_id];
   let SQL =  'UPDATE requests SET picked_up=\'t\' WHERE request_id=$1;';
   console.log(req.body);
