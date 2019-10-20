@@ -4,21 +4,26 @@
 		<%- include('../layout/header') %>	
 		<div id="index-container">
 		<div id ="forms-container">
+			<form action="/results" method="POST" id="keyword-search-form" class="form">
+				<p class="instructions">Search for a specific organizations:</p>
+				<input type="text" name="searchbar" id="searchbar" required placeholder="name or keyword">
+				<button type="submit" name="submitbutton" id="home-search-button" value="keyword"><i class="fas fa-search"></i> &nbsp; Search</button>
+			</form>
 			<form action="/results" method="POST" id="all-form" class="form">
-			<p class="instructions">Click on the button below to see the full contents of the Emerald City Resource Guide.</p>
-			<button type="submit" name="submitbutton" value="all"><i class="fas fa-book"></i> &nbsp See Full Guide</button>
-		</form>		
+				<p class="instructions">Click on the button below to see the full contents of the Emerald City Resource Guide.</p>
+				<button type="submit" name="submitbutton" value="all"><i class="fas fa-book"></i> &nbsp See Full Guide</button>
+			</form>		
 		<form action ="/results" method="POST" id="search-form" class="form">
 			<p class="instructions">Or, fill out the form below to receive a custom list of resources in the Seattle area.</p>
 			<div class="selectdiv">
 				<label for="gender"><h3>What is your gender identity?</h3></label>    
-					<select name="gender" id="gender" required>
-						<option disabled selected value>Select One</option>
-						<option value="no-restrictions">Rather not say</option>
-						<option value="female">Female</option>
-						<option value="male">Male</option>
-						<option value="no-restrictions">Other</option>
-					</select>
+				<select name="gender" id="gender" required>
+					<option disabled selected value>Select One</option>
+					<option value="no-restrictions">Rather not say</option>
+					<option value="female">Female</option>
+					<option value="male">Male</option>
+					<option value="no-restrictions">Other</option>
+				</select>
 			</div>
 			<div id="population">
 				<h3>What groups do you belong to? </h3>

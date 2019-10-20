@@ -73,9 +73,9 @@
 
 	.form {
 		display: flex;
-    width: 76vw;
-    flex-wrap: wrap;
-    padding-left: 2vw;
+		width: 100vw;
+		flex-wrap: wrap;
+		padding-left: 2vw;
 	}
 	
 	h4 {
@@ -133,16 +133,19 @@
 		cursor: pointer;
 	}
 
-	.instructions, #sponsorask {
+	#sponsorask {
+		font-size: 1vw;
+		line-height: 2vw;
+		width: 100vw;
+		margin: 1vw
+	}
+
+	.instructions {
 		font-size: 1vw;
     line-height: 1.5vw;
     margin: 1vw 0;
 	}
 	
-	#sponsorask {
-		width: 20vw;
-	}
-
 	#population {
 		height: 5vw;
     margin-left: 0;
@@ -184,25 +187,40 @@
 	}
 
 	#sponsors {
-		width: 20.25vw;
 		background:rgba(223,151,45, .15);
-    margin: 1vw 1vw 0 0;
+    	margin: 1vw 1vw 0 0;
 	}
 
 	#sponsors h2 {
 		font-weight: bold;
+		font-size: 1.5vw;
+		line-height: 2vw;
+		margin: 0;
 	}
 
 	#sponsors h3 {
-    padding-top: 1vw;
+    	padding-top: 1vw;
 	}
 
-	#presenting img, #sponsors h2, #sponsors h3, #visionary h3{
-		padding: 1vw;
-    width: 18vw;
-    font-size: 1vw;
-    line-height: 1.5vw;
-    margin: 0;
+	#visionary, #changemaker {
+		width: 50vw
+	}
+
+	#catalyst, #catalyst h3 {
+		width: 100vw;
+		font-size: 1.5vw
+	}
+
+	#catalyst ul{
+		display: flex;
+		flex-wrap: wrap
+	}
+
+	#presenting img, #changemaker h3, #visionary h3{
+		width: 50vw;
+		font-size: 1.5vw;
+		line-height: 2vw;
+		margin: 0;
 	}
 
 	#presenting img {
@@ -211,30 +229,26 @@
 	}
 	
 	#changemaker img {
-		margin: 1vw;
-    height: 5vw;
+		margin: .1vw;
+    	height: 10vw;
 	}
 	
 	#visionary img, #catalyst img {
-		width: 8vw;
-    margin: .5vw;
+		width: 16vw;
+    	margin: .5vw;
 	}
 	
   #evergreen, #jfs {
 		padding-top: .5vw;
 	}
 
-  #catalyst ul, #grassroots ul {
-		width: 20vw;
-	}
-
 	#grassroots img {
-		width: 4vw;
+		width: 10vw;
     margin: 1vw;
 	}
 	
 	#sponsorheader {
-		width: 20.75vw;
+		width: 100vw;
 		padding: 1vw 0 0 0;
 	}
 

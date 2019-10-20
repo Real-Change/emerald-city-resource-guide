@@ -174,11 +174,21 @@ function makeGenderQuery(gender) {
 }
 
 // method to generate SQL query
-function makeSQL(requestType, category, gender) {
+function makeSQL(requestType, category, gender, req) {
   let SQL;
+
+  // Return all orgs
   if (requestType === 'all') {
     SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active=\'t\' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.id_req ORDER by organization.organization_name;';
-  } else {
+  }
+
+  // Return orgs based on keyword search
+  else if (requestType === 'keyword'){
+    SQL = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_email, organization.contact_phone, organization.contact_title, organization.sponsorship, organization.sponsorship_email, organization.distribution, organization.distribution_email, organization.id_req ORDER BY organization_name;';
+  }
+
+  // Return orgs based on form
+  else {
     SQL = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ';
 
     let genderQuery = makeGenderQuery(gender);
@@ -187,6 +197,7 @@ function makeSQL(requestType, category, gender) {
     // add all the query components  into a single SQL query
     SQL = SQL + genderQuery + ' AND (' + categoryQuery + ') AND (organization_x_category.active=\'t\') AND (orgs.active=\'t\') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.id_req ORDER by orgs.organization_name;';
   }
+  console.log('SQL', SQL);
   return SQL;
 }
 
@@ -194,11 +205,24 @@ function makeSQL(requestType, category, gender) {
 function getOrgs(request, response) {
   let requestType = request.body.submitbutton;
   let {gender, category} = request.body;
+  let values = [];
+  if(request.body.searchbar){
+    let formattedSearch = '%('
 
-  let SQL = makeSQL(requestType, category, gender);
+    let searchTermArray = ((request.body.searchbar).trim().toUpperCase()).split(' ');
+    for (let i= 0; i < searchTermArray.length - 1; i++){
+      formattedSearch += searchTermArray[i] + '|';
+    }
+
+    formattedSearch += searchTermArray[searchTermArray.length - 1] + ')%';
+    values.push(formattedSearch);
+    console.log(values);
+  }
+
+  let SQL = makeSQL(requestType, category, gender, request);
 
   // pass SQL query and values from request to render results
-  return client.query(SQL)
+  return client.query(SQL, values)
     .then(results => response.render('./pages/results.ejs', {
       results: results.rows
     }))
