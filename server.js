@@ -207,15 +207,14 @@ function getOrgs(request, response) {
   let {gender, category} = request.body;
   let values = [];
   if(request.body.searchbar){
-    let formattedSearch = '%('
+    let formattedSearch = '('
 
     let searchTermArray = ((request.body.searchbar).trim().toUpperCase()).split(' ');
-    for (let i= 0; i < searchTermArray.length - 1; i++){
-      formattedSearch += searchTermArray[i] + '|';
+    for (let i= 0; i < searchTermArray.length; i++){
+      formattedSearch += '%' + searchTermArray[i] + '%';
     }
 
-    formattedSearch += searchTermArray[searchTermArray.length - 1] + ')%';
-    values.push(formattedSearch);
+    values.push(formattedSearch + ')');
     console.log(values);
   }
 
