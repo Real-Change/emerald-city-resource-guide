@@ -75,7 +75,11 @@
 		display: flex;
 		width: 100vw;
 		flex-wrap: wrap;
-		padding-left: 2vw;
+		padding-left: .5vw;
+	}
+
+	#search-form {
+		padding-left:  2vw;
 	}
 	
 	h4 {
@@ -85,7 +89,8 @@
 	}
 
 	input {
-		margin: 0 1vw;
+		margin: .5vw;
+		vertical-align: middle;
 	}
 
 	#services, #about-you {
@@ -138,6 +143,10 @@
 		line-height: 2vw;
 		width: 100vw;
 		margin: 1vw
+	}
+
+	#keyword-search-form p {
+		margin: 1.5vw 2vw;
 	}
 
 	.instructions {

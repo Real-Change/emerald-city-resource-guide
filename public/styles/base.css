@@ -133,6 +133,10 @@ h4 {
 	padding-bottom: 2vw;
 }
 
+#search-form p {
+	margin-left: 0;
+}
+
 .form p {
 	margin: 1.5vw 2vw;
 }
@@ -387,7 +391,7 @@ button.signout:hover {
 input#searchbar {
 	width: 80vw;
 	height: 10vw;
-	margin: 2vw 10vw;
+	margin: 1vw 10vw;
 	border-radius: 5px;
 }
 
