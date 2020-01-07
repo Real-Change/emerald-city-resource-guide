@@ -90,7 +90,6 @@ function submitFeedback(req, res) {
   return client.query(SQL, values)
     .then(res.render('./pages/confirmation.ejs'))
     .catch(handleError)
-  
 }
 
 // POST method for copy request on contact page
@@ -142,7 +141,7 @@ function makeGenderQuery(gender) {
 }
 
 // method to generate SQL query
-function makeSQL(requestType, category, gender, req) {
+function makeSQL(requestType, category, gender) {
   let SQL;
 
   // Return all orgs
