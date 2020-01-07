@@ -6,9 +6,7 @@ The Emerald City Resource Guide (ECRG, [http://www.emeraldcityresourceguide.org/
 To run this application on your local machine, you will need to set up a local relational database, install the necessary dependencies, and set up your own environmental variables file.
 
 ### Database
-This app was originally set up using Postgres with the following data model:
-![alt text](public/images/data_model.png "Data Model")
-
+### Local Set Up
 A static version of the data can be found in the following csv files for local testing:
 - [organization table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/organization.csv)
 - [category table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/category.csv)
@@ -19,13 +17,17 @@ These csv files can be used to populate your local database:
 2. Create schema - load table schema within the root file in the CLI with 'psql -d <database_name> -f guide.sql'
 3. Populate tables - load table contents with csv data from within the root file in the CLI using 'psql -d <database_name> -f load.sql'
 
+Depending on how you have set up Postgres on your machine, you may need to manually initialize the connection to Postgres when running your code locally using the following command in CLI: 'pg_ctl -D /usr/local/var/postgres start'.
+
+### Production
+To access the production database hosted by Heroku, run 'heroku pg:psql -—app emerald-city-guide' from within CLI and follow login prompts as directed (this is assuming that you have been added as a collaborator to the site on Heroku).
+
 ### Dependencies
 From within the CLI, install the following npms:
 
 - dotenv
 - ejs
 - express
-- nodemailer
 - nodemon
 - pg
 
@@ -33,22 +35,18 @@ From within the CLI, install the following npms:
 Within your .env file, you must declare the following variables:
 - DATABASE_URL - the url for your local database (e.g. postgres://localhost:5432/DATABASE_NAME)
 - PORT - the port you'll use to run the app locally (e.g. 8080)
-- GMAIL_USER - the email address that will send the emails using Nodemailer (e.g. NAME@gmail.com)
-- GMAIL_PASS - the password for the email address listed above
 
 ## Testing
 Local testing is conducted using mocha and chai.  The test file within this repo is intended to cover the server methods that transform the user inputs in the search form into a SQL query and then retrieves the corresponding records from the database.
 
 ## Upcoming Features
-- Print button to print search results to PDF (ETA 4/26/19)
-- Admin login to allow Real Change staff to update or delete records in the database (ETA 5/24/19)
+- Embedded Google Maps and location filtering
 
 ## Built With
 - Node.js
 - Express web application framework
 - Embedded JavaScript Templates (EJS)
 - Postgres database
-- Nodemailer server-side email management
 
 ## Author
 Erin Eckerman - [https://www.linkedin.com/in/erineckerman/](https://www.linkedin.com/in/erineckerman/)
