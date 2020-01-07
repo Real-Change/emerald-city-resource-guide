@@ -6,7 +6,7 @@ The Emerald City Resource Guide (ECRG, [http://www.emeraldcityresourceguide.org/
 To run this application on your local machine, you will need to set up a local relational database, install the necessary dependencies, and set up your own environmental variables file.
 
 ### Database
-**__Local Set Up__**
+*Local Set Up*  
 A static version of the data can be found in the following csv files for local testing:
 - [organization table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/organization.csv)
 - [category table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/category.csv)
@@ -19,7 +19,7 @@ These csv files can be used to populate your local database:
 
 Depending on how you have set up Postgres on your machine, you may need to manually initialize the connection to Postgres when running your code locally using the following command in CLI: 'pg_ctl -D /usr/local/var/postgres start'.
 
-**__Production__**
+*Production*  
 To access the production database hosted by Heroku, run 'heroku pg:psql -—app emerald-city-guide' from within CLI and follow login prompts as directed (this is assuming that you have been added as a collaborator to the site on Heroku).
 
 ### Dependencies
