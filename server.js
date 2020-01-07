@@ -5,7 +5,6 @@ require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 const methodOverride = require('method-override');
-const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 var firebase = require('firebase');
@@ -85,44 +84,13 @@ app.post('/requestconfirmation', submitRequest);
 
 // method to submit feedback
 function submitFeedback(req, res) {
-  if (req.url.indexOf('feedback') > 0){
-    let mailOptions = {
-      from: req.body.email,
-      to: 'erineckerman@gmail.com',
-      cc: 'erineckerman@gmail.com',
-      subject: '',
-      text: ''
-    };
-    mailOptions.subject = 'Feedback on ECRG';
-    mailOptions.text = `${req.body.name} (${req.body.email}) from ${req.body.organization} has submitted the following feedback via the ECRG site: ${req.body.feedbackfield}`;
+  let values = [req.body.organization, req.body.name, req.body.email, req.body.feedbackfield]
+  let SQL = 'INSERT INTO feedback (org_name, contact_name, contact_email, message, date) VALUES ($1, $2, $3, $4, NOW());'
 
-    let transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      service: 'Gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
-      }
-    });
-    transporter.verify(function(err, success) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(success);
-      }
-    })
-    transporter.sendMail(mailOptions, function(err, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
-      }
-    })
-  }
-
-  res.render('./pages/confirmation.ejs')
+  return client.query(SQL, values)
+    .then(res.render('./pages/confirmation.ejs'))
+    .catch(handleError)
+  
 }
 
 // POST method for copy request on contact page
