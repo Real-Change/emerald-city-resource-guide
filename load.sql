@@ -12,4 +12,3 @@ phone_number = REPLACE(phone_number, '\', ''),
 org_address = REPLACE(org_address, '\', ''),
 org_description = REPLACE(org_description, '\', ''),
 schedule = REPLACE(schedule, '\', '');
-
