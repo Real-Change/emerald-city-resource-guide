@@ -465,6 +465,7 @@
 	}
 	.request-item {
 		display: flex;
+        flex-direction: column;
 		margin-left: 5vw;
 		border-top: solid .25vw;
 		width: 90vw;
