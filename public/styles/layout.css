@@ -1,479 +1,504 @@
-@media only screen and (min-width:600px){
-	body{
-		font-size: 2vw; 
-		line-height: 2.5vw;
-	}
+@media only screen and (min-width: 600px) {
+  body {
+    font-size: 2vw;
+    line-height: 2.5vw;
+  }
 
-	#mobile-nav, i.menu {
-		display: none;
-	}
+  #mobile-nav,
+  i.menu {
+    display: none;
+  }
 
-	#desktop-nav, #desktop-nav ul {
-		display: flex;
-		width: 100%;
-		align-content: space-between;
-		background-color:#0e7dc2;
-		color: white;
-	}
+  #desktop-nav,
+  #desktop-nav ul {
+    display: flex;
+    width: 100%;
+    align-content: space-between;
+    background-color: #0e7dc2;
+    color: white;
+  }
 
-	#desktop-nav a {
-		width: 33.33%;
-		text-align: center;
-		text-decoration: none;
-		color: white;
-		padding: 1.2vw;
-	}
+  #desktop-nav a {
+    width: 33.33%;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    padding: 1.2vw;
+  }
 
-	#desktop-nav a:hover {
-		background-color: grey;
-	}
+  #desktop-nav a:hover {
+    background-color: grey;
+  }
 
   #desktop-nav li {
-		display: block;
+    display: block;
     font-size: 1.2vw;
     line-height: 1.5vw;
-	}
+  }
 
-	#rclogo img {
+  #rclogo img {
     width: 30vw;
     height: auto;
-		margin: 0 35vw;
-	}
+    margin: 0 35vw;
+  }
 
-	#banner {
-		padding-bottom: 0;
-	}
-	
-	#index-container {
-		display: flex;
-		flex-wrap: wrap;
-		margin-bottom: 15vw;
-	}
+  #banner {
+    padding-bottom: 0;
+  }
 
+  #index-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15vw;
+  }
 
-	h1 {
-		font-size: 3vw;
+  h1 {
+    font-size: 3vw;
     line-height: 4vw;
-		width: 100vw;
-		text-align: center;
+    width: 100vw;
+    text-align: center;
     margin: 2vw 0;
-    padding-top: .5vw;
-	}
+    padding-top: 0.5vw;
+  }
 
-	h3 {
-		font-size: 1.5vw;
+  h3 {
+    font-size: 1.5vw;
     line-height: 2vw;
     margin: 1vw 0;
-		width: 76vw;
-	}
- 
-	#organization-container h3 {
-		width: 100vw;
-	}
+    width: 76vw;
+  }
 
-	.form {
-		display: flex;
-		width: 100vw;
-		flex-wrap: wrap;
-		padding-left: .5vw;
-	}
+  #organization-container h3 {
+    width: 100vw;
+  }
 
-	#search-form {
-		padding-left:  2vw;
-	}
-	
-	h4 {
-		margin: .5vw;
+  .form {
+    display: flex;
+    width: 100vw;
+    flex-wrap: wrap;
+    padding-left: 0.5vw;
+  }
+
+  #search-form {
+    padding-left: 2vw;
+  }
+
+  h4 {
+    margin: 0.5vw;
     font-size: 1vw;
     line-height: 2vw;
-	}
+  }
 
-	input {
-		margin: .5vw;
-		vertical-align: middle;
-	}
+  input {
+    margin: 0.5vw;
+    vertical-align: middle;
+  }
 
-	#services, #about-you {
-		width: 100vw;
-	}
+  #services,
+  #about-you {
+    width: 100vw;
+  }
 
-	button, input[type="button"] {
-		font-size: 1.5vw;
+  button,
+  input[type="button"] {
+    font-size: 1.5vw;
     border-radius: 5px;
     padding: 1vw 1.5vw 1vw 1.5vw;
-		margin: 1vw auto;
-		height: 4vw;
-	}
+    margin: 1vw auto;
+    height: 4vw;
+  }
 
-	button:hover {
-		cursor: pointer;
-	}
-	
+  button:hover {
+    cursor: pointer;
+  }
+
   .selectdiv {
     padding: 0;
     margin: 0;
-	}
+  }
 
-	.selectdiv select {
-		width: 19vw;
-    margin: .5vw 0;
-	}
+  .selectdiv select {
+    width: 19vw;
+    margin: 0.5vw 0;
+  }
 
-	select {
-		font-size: 1vw;
-	}
+  select {
+    font-size: 1vw;
+  }
 
-	select:hover {
-		cursor: pointer;
-	}
-	
-  #services label, #population label {
-		font-size: .9vw;
-    margin: .2vw;
+  select:hover {
+    cursor: pointer;
+  }
+
+  #services label,
+  #population label {
+    font-size: 0.9vw;
+    margin: 0.2vw;
     line-height: 2vw;
     width: 18vw;
-	}
+  }
 
-  #services label:hover, #population label:hover {
-		cursor: pointer;
-	}
+  #services label:hover,
+  #population label:hover {
+    cursor: pointer;
+  }
 
-	#sponsorask {
-		font-size: 1vw;
-		line-height: 2vw;
-		width: 100vw;
-		margin: 1vw
-	}
+  #sponsorask {
+    font-size: 1vw;
+    line-height: 2vw;
+    width: 100vw;
+    margin: 1vw;
+  }
 
-	#keyword-search-form p {
-		margin: 1.5vw 2vw;
-	}
+  #keyword-search-form p {
+    margin: 1.5vw 2vw;
+  }
 
-	.instructions {
-		font-size: 1vw;
+  .instructions {
+    font-size: 1vw;
     line-height: 1.5vw;
     margin: 1vw 0;
-	}
-	
-	#population {
-		height: 5vw;
+  }
+
+  #population {
+    height: 5vw;
     margin-left: 0;
-		padding-left: 0;
-		margin-top: 0vw;
-	}
+    padding-left: 0;
+    margin-top: 0vw;
+  }
 
-	.a img {
-		width: 3vw;
+  .a img {
+    width: 3vw;
     height: 4vw;
-    margin: 2vw .5vw 2vw 35vw;
-	}
+    margin: 2vw 0.5vw 2vw 35vw;
+  }
 
-	#about-you, #services {
-		padding: 0vw;
+  #about-you,
+  #services {
+    padding: 0vw;
     margin: 0;
-	}
+  }
 
-	#count {
-		padding: 1vw;
-	}
-	
-	.label, .content, .desc {
-		font-size: 1.5vw;
-		line-height: 2.5vw;
-	}
+  #count {
+    padding: 1vw;
+  }
 
-	.label {
-		width: 15vw;
-	}
+  .label,
+  .content,
+  .desc {
+    font-size: 1.5vw;
+    line-height: 2.5vw;
+  }
 
-	.content {
-		padding: 0 0 0 1vw;
-		width: 80vw
-	}
-  
+  .label {
+    width: 15vw;
+  }
+
+  .content {
+    padding: 0 0 0 1vw;
+    width: 80vw;
+  }
+
   i:hover {
-		cursor: pointer;
-	}
+    cursor: pointer;
+  }
 
-	#sponsors {
-		background:rgba(223,151,45, .15);
-    	margin: 1vw 1vw 0 0;
-	}
+  #sponsors {
+    background: rgba(223, 151, 45, 0.15);
+    margin: 1vw 1vw 0 0;
+  }
 
-	#sponsors h2 {
-		font-weight: bold;
-		font-size: 1.5vw;
-		line-height: 2vw;
-		margin: 0;
-	}
+  #sponsors h2 {
+    font-weight: bold;
+    font-size: 1.5vw;
+    line-height: 2vw;
+    margin: 0;
+  }
 
-	#sponsors h3 {
-    	padding-top: 1vw;
-	}
+  #sponsors h3 {
+    padding-top: 1vw;
+  }
 
-	#visionary, #changemaker {
-		width: 50vw
-	}
+  #visionary,
+  #changemaker {
+    width: 50vw;
+  }
 
-	#catalyst, #catalyst h3 {
-		width: 100vw;
-		font-size: 1.5vw
-	}
+  #catalyst,
+  #catalyst h3 {
+    width: 100vw;
+    font-size: 1.5vw;
+  }
 
-	#catalyst ul{
-		display: flex;
-		flex-wrap: wrap
-	}
+  #catalyst ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-	#presenting img, #changemaker h3, #visionary h3{
-		width: 50vw;
-		font-size: 1.5vw;
-		line-height: 2vw;
-		margin: 0;
-	}
+  #presenting img,
+  #changemaker h3,
+  #visionary h3 {
+    width: 50vw;
+    font-size: 1.5vw;
+    line-height: 2vw;
+    margin: 0;
+  }
 
-	#presenting img {
-		width: 17vw;
-    padding-left: 1.5vw; 
-	}
-	
-	#changemaker img {
-		margin: .1vw;
-    	height: 10vw;
-	}
-	
-	#visionary img, #catalyst img {
-		width: 16vw;
-    	margin: .5vw;
-	}
-	
-  #evergreen, #jfs {
-		padding-top: .5vw;
-	}
+  #presenting img {
+    width: 17vw;
+    padding-left: 1.5vw;
+  }
 
-	#grassroots img {
-		width: 10vw;
+  #changemaker img {
+    margin: 0.1vw;
+    height: 10vw;
+  }
+
+  #visionary img,
+  #catalyst img {
+    width: 16vw;
+    margin: 0.5vw;
+  }
+
+  #evergreen,
+  #jfs {
+    padding-top: 0.5vw;
+  }
+
+  #grassroots img {
+    width: 10vw;
     margin: 1vw;
-	}
-	
-	#sponsorheader {
-		width: 100vw;
-		padding: 1vw 0 0 0;
-	}
+  }
 
-	p.contact {
-		font-size: 1.5vw;
-		line-height: 2.5vw;
-		width: 40vw;
-		margin: 1vw 5vw;
-	}
+  #sponsorheader {
+    width: 100vw;
+    padding: 1vw 0 0 0;
+  }
 
-	#emailcopy {
-		font-size: 3vw;
-	}
+  p.contact {
+    font-size: 1.4vw;
+    line-height: 2.5vw;
+    width: 90vw;
+    margin: 1vw 5vw;
+  }
 
-	#confirmation {
-		padding: 2vw;
-	}
+  #emailcopy {
+    font-size: 3vw;
+  }
 
-	#confirmation p, #confirmation ul {
-		font-size: 2vw
-	}
+  #confirmation {
+    padding: 2vw;
+  }
+
+  #confirmation p,
+  #confirmation ul {
+    font-size: 2vw;
+  }
 
   #contact-page {
-		display: flex;
-		flex-wrap: wrap;
-		height: 101.5vw;
-	}
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-	#copy-request, #feedback {
-		width: 49.9vw;
-	}
+  #copy-request,
+  #feedback {
+    width: 100vw;
+  }
 
-	#feedback {
-		border-left: .2vw dotted #0e7dc2;
-	}
+  #feedback {
+    border-top: 0.2vw dotted #0e7dc2;
+  }
   form.contact {
-		width:40vw;
-		margin: 2vw 5vw;
-		padding: 1vw;
-	}
-	
-	form.contact label, form.contact input{
-		padding: 1vw;
-		font-size: 1.5vw;
-	}
-	
-	form.contact input {
-		height: 2vw;
-		border-radius: 5px;
-		width: 35vw;
-	}
-  #filter-label-container {
-		display: flex;
-	}
-	#clear-filter {
-		margin: 0;
-    font-size: 1.5vw;
-    padding: .3vw 1.5vw;
-	}
-
-	#filters {
-		width: 30vw;
-		height: 3vw;
-    margin: 0vw 4vw 0vw 2vw;
-	}
-
-	#filter-label-container {
-		padding-left: 14vw;
-	}
-
-	.d {
-		height: 10vw;
-	}
-
-	#feedbackfield {
-		font-size: 1.5vw;
-		width: 35vw;
+    width: 40vw;
+    margin: auto;
     padding: 1vw;
-	}
+  }
 
-	#all-form {
-		margin-bottom: 0;
+  form.contact label,
+  form.contact input {
+    padding: 1vw;
+    font-size: 1.5vw;
+  }
+
+  form.contact input {
+    height: 2vw;
+    border-radius: 5px;
+    width: 35vw;
+  }
+  #filter-label-container {
+    display: flex;
+  }
+  #clear-filter {
+    margin: 0;
+    font-size: 1.5vw;
+    padding: 0.3vw 1.5vw;
+  }
+
+  #filters {
+    width: 30vw;
+    height: 3vw;
+    margin: 0vw 4vw 0vw 2vw;
+  }
+
+  #filter-label-container {
+    padding-left: 14vw;
+  }
+
+  .d {
+    height: 10vw;
+  }
+
+  #feedbackfield {
+    font-size: 1.5vw;
+    width: 35vw;
+    padding: 1vw;
+  }
+
+  #all-form {
+    margin-bottom: 0;
     padding: 0;
-	}
+  }
 
-	#print-button {
-		display: block;
-	}
+  #print-button {
+    display: block;
+  }
 
-	button.signout {
-		border: none;
-		margin: 0 auto;
-		width: 20vw;
-		font-size: 1.2vw;
+  button.signout {
+    border: none;
+    margin: 0 auto;
+    width: 20vw;
+    font-size: 1.2vw;
     line-height: 1.5vw;
-	}
+  }
 
-	a.admin-nav {
-		width: 20vw;
-		vertical-align: baseline
-	}
-	input#searchbar {
-		height: 3vw;
-		font-size: 2vw;
-		width: 80vw;
-	}
+  a.admin-nav {
+    width: 20vw;
+    vertical-align: baseline;
+  }
+  input#searchbar {
+    height: 3vw;
+    font-size: 2vw;
+    width: 80vw;
+  }
 
-	#editform h2, #addform h2 {
-		border: none;
-	}
-	
-	#editform span, #addform span {
-		width: 15vw;
-		font-size: 2vw;
-		padding-top: 1vw;
-		line-height: 3vw;
-		padding-left: 5vw;
-	}
-	
-	#editform textarea, #genderopts, #addform textarea, .zip {
-		width: 73vw;
-		border-radius: 5px;
-		margin: 0 2vw 2vw 0;
-		font-size: 1vw;
-		line-height: 2vw;
-		height: 2vw;
-		padding: 1vw;
-		border: 1px black solid;
-	}
+  #editform h2,
+  #addform h2 {
+    border: none;
+  }
 
-	#genderopts {
-		border: none;
-	}
-	
-	#editform textarea.big, #addform textarea.big {
-		height:5vw;
-	}
-	
-	#editform textarea.bigger, #addform textarea.bigger {
-		height: 10vw;
-	}
+  #editform span,
+  #addform span {
+    width: 15vw;
+    font-size: 2vw;
+    padding-top: 1vw;
+    line-height: 3vw;
+    padding-left: 5vw;
+  }
 
-	#editform span.timestamp-display {
-		font-size: 1vw;
-		line-height: 2vw;
-	}
+  #editform textarea,
+  #genderopts,
+  #addform textarea,
+  .zip {
+    width: 73vw;
+    border-radius: 5px;
+    margin: 0 2vw 2vw 0;
+    font-size: 1vw;
+    line-height: 2vw;
+    height: 2vw;
+    padding: 1vw;
+    border: 1px black solid;
+  }
 
-	#editform span#timestamp-data {
-		width: 60vw;
-		padding-left: 0;
-	}
+  #genderopts {
+    border: none;
+  }
 
-	#genderopts input {
-    margin: .5vw 2vw;
-	}
-	
-  	button#admin-search-button {
-		margin-bottom: 15vw;
-	}
+  #editform textarea.big,
+  #addform textarea.big {
+    height: 5vw;
+  }
 
-	#admin-search {
-		width: 100vw;
-	}
+  #editform textarea.bigger,
+  #addform textarea.bigger {
+    height: 10vw;
+  }
 
-	#sidebar {
-		width: 100vw;
-		display:flex
-	}
+  #editform span.timestamp-display {
+    font-size: 1vw;
+    line-height: 2vw;
+  }
 
-	#sidebar li  {
-		width: 33.3vw;
-	}
+  #editform span#timestamp-data {
+    width: 60vw;
+    padding-left: 0;
+  }
 
-	#adminedit, #adminadd {
-		padding-bottom: 5vw;
-	}
+  #genderopts input {
+    margin: 0.5vw 2vw;
+  }
 
-	#adminedit h3, #final-checks h3, #adminadd h3 {
-	  margin:2vw;
-	}
+  button#admin-search-button {
+    margin-bottom: 15vw;
+  }
 
-	#final-checks label {
-		font-size: 1.5vw;
-	}
+  #admin-search {
+    width: 100vw;
+  }
 
-	#final-checks textarea {
-		width: 50vw;
-		height: 2vw;
+  #sidebar {
+    width: 100vw;
+    display: flex;
+  }
+
+  #sidebar li {
+    width: 33.3vw;
+  }
+
+  #adminedit,
+  #adminadd {
+    padding-bottom: 5vw;
+  }
+
+  #adminedit h3,
+  #final-checks h3,
+  #adminadd h3 {
+    margin: 2vw;
+  }
+
+  #final-checks label {
+    font-size: 1.5vw;
+  }
+
+  #final-checks textarea {
+    width: 50vw;
+    height: 2vw;
     padding-left: 1vw;
-	}
-	
-	label.checks-email {
-		margin: 0 2vw;
-	}
+  }
 
-	#final-checks span {
-		vertical-align: top;
-	}
+  label.checks-email {
+    margin: 0 2vw;
+  }
 
-	#editform span.emphasis {
-		font-size: 1.5vw;
-	}
-	#financial {
-		margin-bottom: 2vw;
-	}
-	.request-item {
-		display: flex;
-		margin-left: 5vw;
-		border-top: solid .25vw;
-		width: 90vw;
-	}
-	.request-headers {
-		width: 75vw;
-	}
-	.request-body {
-		margin-left: 2vw;
-	}
+  #final-checks span {
+    vertical-align: top;
+  }
 
+  #editform span.emphasis {
+    font-size: 1.5vw;
+  }
+  #financial {
+    margin-bottom: 2vw;
+  }
+  .request-item {
+    display: flex;
+    margin-left: 5vw;
+    border-top: solid 0.25vw;
+    width: 90vw;
+  }
+  .request-headers {
+    width: 75vw;
+  }
+  .request-body {
+    margin-left: 2vw;
+  }
 }
