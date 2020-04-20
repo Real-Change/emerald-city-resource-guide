@@ -17,8 +17,8 @@
 	}
 
 	#desktop-nav a {
-		width: 33.33%;
-        text-align: center;
+		width: 33.33%;		
+		text-align: center;
 		text-decoration: none;
 		color: white;
 		padding: 1.2vw;
@@ -465,7 +465,7 @@
 	}
 	.request-item {
 		display: flex;
-        flex-direction: column;
+		flex-direction: column;
 		margin-left: 5vw;
 		border-top: solid .25vw;
 		width: 90vw;
