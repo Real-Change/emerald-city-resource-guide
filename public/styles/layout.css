@@ -473,36 +473,11 @@
     width: 50vw;
     height: 2vw;
     padding-left: 1vw;
-	}
-	
-	label.checks-email {
-		margin: 0 2vw;
-	}
+  }
 
-	#final-checks span {
-		vertical-align: top;
-	}
-
-	#editform span.emphasis {
-		font-size: 1.5vw;
-	}
-	#financial {
-		margin-bottom: 2vw;
-	}
-	.request-item {
-		display: flex;
-		flex-direction: column;
-		margin-left: 5vw;
-		border-top: solid .25vw;
-		width: 90vw;
-	}
-	.request-headers {
-		width: 75vw;
-	}
-	.request-body {
-		margin-left: 2vw;
-	}
-
+  label.checks-email {
+    margin: 0 2vw;
+  }
 
   #final-checks span {
     vertical-align: top;
@@ -516,9 +491,10 @@
   }
   .request-item {
     display: flex;
+    flex-direction: column;
     margin-left: 5vw;
-    border-top: solid 0.25vw;
-    width: 90vw;
+    border-top: solid .25vw;
+   width: 90vw;
   }
   .request-headers {
     width: 75vw;
