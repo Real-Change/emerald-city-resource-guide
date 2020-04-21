@@ -494,7 +494,7 @@
     flex-direction: column;
     margin-left: 5vw;
     border-top: solid .25vw;
-   width: 90vw;
+    width: 90vw;
   }
   .request-headers {
     width: 75vw;
