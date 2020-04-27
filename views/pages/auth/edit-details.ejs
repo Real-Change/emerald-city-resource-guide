@@ -68,6 +68,12 @@
             </label>
         </fieldset>
         <fieldset>
+            <label>
+                <span>Address (Spanish)</span>
+                <textarea name="org_address_es" type="text" class="big"><%= organization.org_address_es %></textarea>
+            </label>
+        </fieldset>
+        <fieldset>
                 <label>
                     <span>Zip Code</span>
                     <input name="zipcode" type="text" class="zip" pattern="[0-9]{5}" value=<%= organization.zipcode %> ></input>
@@ -80,11 +86,23 @@
                 <textarea name="schedule" type="text" class="big"><%= organization.schedule %></textarea>
             </label>
         </fieldset>
+        <fieldset>
+            <label>
+                <span>Hours (Spanish)</span>
+                <textarea name="schedule_es" type="text" class="big"><%= organization.schedule_es %></textarea>
+            </label>
+        </fieldset>
         <p class="script hidden">Your agency description should be a brief, simple summary of the services someone can access when they come to your agency.  Do not list services that are not available for homeless and low-income individuals.  I will read your agency description, and then you can let me know if anything needs to be updated or changed. <br><span class="emphasis">Read description and category options below.</span><br></p>
         <fieldset>
             <label>
                 <span>Description</span>
                 <textarea name="org_description" type="text" class="bigger"><%= organization.org_description %></textarea>
+            </label>
+        </fieldset>
+        <fieldset>
+            <label>
+                <span>Description (Spanish)</span>
+                <textarea name="org_description_es" type="text" class="bigger"><%= organization.org_description_es %></textarea>
             </label>
         </fieldset>
         <fieldset>
