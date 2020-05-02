@@ -491,10 +491,10 @@
   }
   .request-item {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     margin-left: 5vw;
     border-top: solid .25vw;
-    width: 90vw;
+    width: 96vw;
   }
   .request-headers {
     width: 75vw;
