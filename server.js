@@ -7,10 +7,10 @@ const pg = require("pg");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-var firebase = require('firebase');
-require('firebase-app');
-require('firebase-auth');
-const admin = require('firebase-admin');
+var firebase = require("firebase");
+require("firebase-app");
+require("firebase-auth");
+const admin = require("firebase-admin");
 
 const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
@@ -18,7 +18,7 @@ const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 firebase.initializeApp(process.env.FIREBASE_CONFIG);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://emerald-city-resource-guide.firebaseio.com'
+  databaseURL: "https://emerald-city-resource-guide.firebaseio.com",
 });
 
 // application setup
@@ -29,23 +29,23 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static("./public"));
 app.use(
   express.urlencoded({
-    extended: true
+    extended: true,
   })
 );
 app.use(cookieParser());
 app.use(
   cookieSession({
     name: "session",
-    keys: ["key1", "key2"]
+    keys: ["key1", "key2"],
   })
 );
 
 const client = new pg.Client(process.env.DATABASE_URL);
-client.connect().catch(e => console.error("connection error", e.stack));
-client.on("error", err => console.log(err));
+client.connect().catch((e) => console.error("connection error", e.stack));
+client.on("error", (err) => console.log(err));
 
 app.use(
-  methodOverride(request => {
+  methodOverride((request) => {
     if (
       request.body &&
       typeof request.body === "object" &&
@@ -63,17 +63,17 @@ app.set("view engine", "ejs");
 app.post("/results", getOrgs);
 
 // GET method route to render form page
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.render("./pages/index.ejs");
 });
 
 // GET method route to render contact page
-app.get("/contact", function(req, res) {
+app.get("/contact", function (req, res) {
   res.render("./pages/contact.ejs");
 });
 
 // GET method route to render login page
-app.get("/login", function(req, res) {
+app.get("/login", function (req, res) {
   res.render("./pages/auth/login.ejs");
 });
 
@@ -87,7 +87,7 @@ function submitFeedback(req, res) {
     req.body.organization,
     req.body.name,
     req.body.email,
-    req.body.feedbackfield
+    req.body.feedbackfield,
   ];
   let SQL =
     "INSERT INTO feedback (org_name, contact_name, contact_email, message, date) VALUES ($1, $2, $3, $4, NOW());";
@@ -107,7 +107,7 @@ function submitRequest(req, res) {
     req.body.name,
     req.body.email,
     req.body.phone,
-    req.body.number
+    req.body.number,
   ];
   let SQL =
     "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up) VALUES ($1, $2, $3, $4, $5, 'f');";
@@ -125,7 +125,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 function makeCategoryQuery(category) {
   // add category selection to SQL query and terminate the query with the last category in the array
   let categoryQuery = "";
-  category.forEach(function(el) {
+  category.forEach(function (el) {
     let i = category.length - 1;
     if (el === category[i]) {
       categoryQuery =
@@ -218,9 +218,9 @@ function getOrgs(request, response) {
   // pass SQL query and values from request to render results
   return client
     .query(SQL, values)
-    .then(results =>
+    .then((results) =>
       response.render("./pages/results.ejs", {
-        results: results.rows
+        results: results.rows,
       })
     )
     .catch(handleError);
@@ -236,7 +236,7 @@ function handleError(err, res) {
 module.exports = {
   makeCategoryQuery: makeCategoryQuery,
   makeGenderQuery: makeGenderQuery,
-  makeSQL: makeSQL
+  makeSQL: makeSQL,
 };
 
 // Function to call in every admin page to verify permissions
@@ -245,7 +245,7 @@ function verifyPerms(req, res, page) {
   let SQL = "SELECT * FROM users WHERE email='" + userEmail + "';";
   return client
     .query(SQL)
-    .then(results => {
+    .then((results) => {
       if (results.rowCount > 0) {
         res.render(page);
       } else {
@@ -269,34 +269,34 @@ app.post("/sessionLogin", (req, res) => {
   admin
     .auth()
     .verifyIdToken(idToken)
-    .then(decodedIdToken => {
+    .then((decodedIdToken) => {
       let userEmail = decodedIdToken.email;
       let SQL = "SELECT * FROM users WHERE email = '" + userEmail + "';";
 
-      return client.query(SQL).then(results => {
+      return client.query(SQL).then((results) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.
           admin
             .auth()
             .createSessionCookie(idToken, {
-              expiresIn
+              expiresIn,
             })
-            .then(sessionCookie => {
+            .then((sessionCookie) => {
               // Set cookie policy for session cookie.
               const options = {
                 maxAge: expiresIn,
                 httpOnly: true,
-                secure: false
+                secure: false,
               };
               res.cookie("session", sessionCookie, options);
               res.cookie("user", userEmail, options);
               res.end(
                 JSON.stringify({
-                  status: "success"
+                  status: "success",
                 })
               );
             })
-            .catch(error => {
+            .catch((error) => {
               res.status(401).send("UNAUTHORIZED REQUEST!", error);
             });
         } else {
@@ -304,7 +304,7 @@ app.post("/sessionLogin", (req, res) => {
         }
       });
     })
-    .catch(error => {
+    .catch((error) => {
       res.status(401).send(error);
     });
 });
@@ -321,7 +321,7 @@ app.get("/sessionConfirmation", (req, res) => {
     .then(() => {
       res.redirect("/admin/account");
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("verification error", error);
       // Session cookie is unavailable or invalid. Force user to login.
       res.redirect("/login");
@@ -347,13 +347,13 @@ app.post("/sessionLogout", (req, res) => {
   admin
     .auth()
     .verifySessionCookie(sessionCookie)
-    .then(decodedClaims => {
+    .then((decodedClaims) => {
       return admin.auth().revokeRefreshTokens(decodedClaims.sub);
     })
     .then(() => {
       res.redirect("/login");
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
       res.redirect("/login");
     });
@@ -390,7 +390,7 @@ function returnAdminResults(req, res) {
         "ORDER BY organization_name;";
     } else {
       let nameInput = "(upper(organization_name) LIKE ";
-      searchTerm.forEach(function(el) {
+      searchTerm.forEach(function (el) {
         let i = searchTerm.indexOf(el);
         let cleanSearchTerm = searchTerm[i].split("'");
         searchInput = "'%" + cleanSearchTerm[0].toUpperCase() + "%'";
@@ -427,7 +427,7 @@ function returnAdminResults(req, res) {
         " ORDER BY organization_name;";
     } else {
       nameInput = "(upper(organization_name)= ";
-      searchTerm.forEach(function(el) {
+      searchTerm.forEach(function (el) {
         let i = searchTerm.indexOf(el);
         let cleanSearchTerm = searchTerm[i].split("'");
         searchInput = "'" + cleanSearchTerm[0].toUpperCase() + "%'";
@@ -454,10 +454,10 @@ function returnAdminResults(req, res) {
   }
   return client
     .query(SQL)
-    .then(result =>
+    .then((result) =>
       res.render("./pages/auth/search-admin-results", { results: result.rows })
     )
-    .catch(error => handleError(error, res));
+    .catch((error) => handleError(error, res));
 }
 
 app.post("/admin/update/:orgId", editOrg);
@@ -471,7 +471,7 @@ function editOrg(req, res) {
 
   client
     .query(SQL)
-    .then(result =>
+    .then((result) =>
       res.render("./pages/auth/org-edit", { results: result.rows[0] })
     )
     .catch(handleError);
@@ -540,7 +540,7 @@ let organization_id,
   zipcode;
 // Submit and confirm record edits
 
-app.put("/admin/editconfirmation", function(req, res) {
+app.put("/admin/editconfirmation", function (req, res) {
   // Map form updates into SQL query for organization table
   parseForm(req);
 
@@ -670,7 +670,7 @@ app.put("/admin/editconfirmation", function(req, res) {
   client
     .query(completeSQL)
     .then(res.render("./pages/auth/edit-confirmation"))
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
 });
@@ -704,7 +704,7 @@ function compareCategories(req) {
   return outputCats;
 }
 
-app.get("/credentialcheck", function(req, res) {
+app.get("/credentialcheck", function (req, res) {
   // Listen for session cookie creation
   let sessionCookie = req.cookies.session || "";
   if (sessionCookie !== "") {
@@ -721,23 +721,23 @@ app.post("/sessionLogout", (req, res) => {
   admin
     .auth()
     .verifySessionCookie(sessionCookie)
-    .then(decodedClaims => {
+    .then((decodedClaims) => {
       return admin.auth().revokeRefreshTokens(decodedClaims.sub);
     })
     .then(() => {
       res.redirect("/login");
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
       res.redirect("/login");
     });
 });
 
-app.get("/admin/addnew", function(req, res) {
+app.get("/admin/addnew", function (req, res) {
   res.render("./pages/auth/addnew");
 });
 
-app.put("/admin/addconfirmation", function(req, res) {
+app.put("/admin/addconfirmation", function (req, res) {
   // Map form updates into SQL query for organization table
   parseForm(req);
 
@@ -786,7 +786,7 @@ app.put("/admin/addconfirmation", function(req, res) {
     "INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (";
   let allCatsSQL = "";
 
-  cats.forEach(cat => {
+  cats.forEach((cat) => {
     catAddSQL =
       catAddSQL +
       "(SELECT organization_id FROM organization WHERE organization_name='" +
@@ -804,23 +804,23 @@ app.put("/admin/addconfirmation", function(req, res) {
   client
     .query(completeSQL)
     .then(res.render("./pages/auth/add-confirmation"))
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
 });
 
-app.get("/admin/copyrequests", function(req, res) {
+app.get("/admin/copyrequests", function (req, res) {
   let SQL =
     "SELECT * FROM requests WHERE  picked_up='f' ORDER BY LOWER(organization_name);";
 
-  return client.query(SQL).then(results =>
+  return client.query(SQL).then((results) =>
     res.render("./pages/auth/copy-requests.ejs", {
-      requests: results.rows
+      requests: results.rows,
     })
   );
 });
 
-app.post("/admin/pickedup/guide", function(req, res) {
+app.post("/admin/pickedup/guide", function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
   console.log(req.body);
