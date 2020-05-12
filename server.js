@@ -74,7 +74,17 @@ app.get("/contact", function (req, res) {
 
 // GET method route to render login page
 app.get("/login", function (req, res) {
-  res.render("./pages/auth/login.ejs");
+  const sessionCookie = req.cookies.session || "";
+  // Verify the session cookie and redirect to admin if already logged in
+  admin
+    .auth()
+    .verifySessionCookie(sessionCookie, true /** checkRevoked */)
+    .then(() => {
+      res.redirect("/admin/account");
+    })
+    .catch(() => {
+      res.render("./pages/auth/login.ejs");
+    });
 });
 
 // POST method for feedback submission on contact page
