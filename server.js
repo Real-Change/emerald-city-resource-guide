@@ -40,6 +40,11 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.locals.user = req.cookies.user;
+  next();
+});
+
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect().catch((e) => console.error("connection error", e.stack));
 client.on("error", (err) => console.log(err));

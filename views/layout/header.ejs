@@ -1,33 +1,53 @@
 <header>
-	<i class="fas fa-bars menu fa-2x" aria-label="Open Menu"></i>
-	<i class="fas fa-times menu hidden fa-2x" aria-label="Close Menu"></i>
-	<nav id="mobile-nav" class="hidden">
-		<ul>
-				<a href="/" id="home"><li>New Search</li></a>
-				<a href="https://51573.thankyou4caring.org/emerald-city-resource-guide"><li>Become a Sponsor</li></a>
-				<a href="https://www.realchangenews.org/"><li>Real Change</li></a>
-				<a href="/contact"><li>Contact</li></a>	
-				<a href = "/login" id="login"><li><i class="fas fa-key"></i>&nbsp Login</li></a>
-				<li><form class="hidden" action="/sessionLogout" method="POST"><button class="signout"><i class="fas fa-sign-out-alt"></i> &nbsp Sign Out</button></form></li>
-				
-		</ul>
-	</nav>
-	<div class="a">
-		<div id="banner">
-		  <a href="/" id="rclogo"> <img id="rclogoimg" src="images/RC_Logo_HigherRes.jpg"></a>
-		  <h1>Emerald City Resource Guide</h1>
-		</div>
-		<nav id="desktop-nav" class="hidden">
-			<ul>
-				<a href="/" id="home-desktop"><li>New Search</li></a>
-				<a href="https://51573.thankyou4caring.org/emerald-city-resource-guide"><li>Become a Sponsor</li></a>
-				<a href="https://www.realchangenews.org/"><li>Real Change</li></a>
-				<a href="/contact"><li>Contact</li></a>	
-				<a href = "/login" id="login-desktop"><li><i class="fas fa-key"></i>&nbsp Login</li></a>
-				<form class="hidden" action="/sessionLogout" method="POST"><button class="signout"><i class="fas fa-sign-out-alt"></i> &nbsp Sign Out</button></form>
-			</ul>
-		</nav>
-	</div>
+  <i class="fas fa-bars menu fa-2x" aria-label="Open Menu"></i>
+  <i class="fas fa-times menu hidden fa-2x" aria-label="Close Menu"></i>
+  <nav id="mobile-nav" class="hidden">
+    <ul>
+      <a href="/" id="home"><li>New Search</li></a>
+      <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide"
+        ><li>Become a Sponsor</li></a
+      >
+      <a href="https://www.realchangenews.org/"><li>Real Change</li></a>
+      <a href="/contact"><li>Contact</li></a>
+      <a href="/login" id="login"
+        ><li><i class="fas fa-key"></i>&nbsp Login</li></a
+      >
+      <li>
+        <form class="hidden" action="/sessionLogout" method="POST">
+          <button class="signout">
+            <i class="fas fa-sign-out-alt"></i> &nbsp Sign Out
+          </button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+  <div class="a">
+    <div id="banner">
+      <a href="/" id="rclogo">
+        <img id="rclogoimg" src="images/RC_Logo_HigherRes.jpg"
+      /></a>
+      <h1>Emerald City Resource Guide</h1>
+    </div>
+    <nav id="desktop-nav" class="hidden">
+      <ul>
+        <a href="/" id="home-desktop"><li>New Search</li></a>
+        <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide"
+          ><li>Become a Sponsor</li></a
+        >
+        <a href="https://www.realchangenews.org/"><li>Real Change</li></a>
+        <a href="/contact"><li>Contact</li></a>
+        <a href="/login" id="login-desktop">
+          <li>
+            <%if (user) { %> Admin <% } else { %>
+            <i class="fas fa-key"></i>&nbsp Login <% } %>
+          </li>
+        </a>
+        <form class="hidden" action="/sessionLogout" method="POST">
+          <button class="signout">
+            <i class="fas fa-sign-out-alt"></i> &nbsp Sign Out
+          </button>
+        </form>
+      </ul>
+    </nav>
+  </div>
 </header>
-
-
