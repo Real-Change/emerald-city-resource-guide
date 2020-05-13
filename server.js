@@ -40,6 +40,11 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.locals.user = req.cookies.user;
+  next();
+});
+
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect().catch((e) => console.error("connection error", e.stack));
 client.on("error", (err) => console.log(err));
@@ -74,7 +79,17 @@ app.get("/contact", function (req, res) {
 
 // GET method route to render login page
 app.get("/login", function (req, res) {
-  res.render("./pages/auth/login.ejs");
+  const sessionCookie = req.cookies.session || "";
+  // Verify the session cookie and redirect to admin if already logged in
+  admin
+    .auth()
+    .verifySessionCookie(sessionCookie, true /** checkRevoked */)
+    .then(() => {
+      res.redirect("/admin/account");
+    })
+    .catch(() => {
+      res.render("./pages/auth/login.ejs");
+    });
 });
 
 // POST method for feedback submission on contact page
