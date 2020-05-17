@@ -494,10 +494,10 @@ function editOrg(req, res) {
 
 function parseForm(req) {
     
-    // replace apostrophe with curly quote to prevent SQL errors
-    function replaceChar(str){
-        return str.replace(/'/g, '’');
-    }
+  // Escape single quote to prevent SQL errors
+  function replaceChar(str){
+      return str.replace(/'/g, "''");
+  }
   organization_id = req.body.id;
   organization_name = replaceChar(req.body.name);
   website = req.body.website.trim();
