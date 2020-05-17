@@ -493,19 +493,24 @@ function editOrg(req, res) {
 }
 
 function parseForm(req) {
+    
+  // Escape single quote to prevent SQL errors
+  function replaceChar(str){
+      return str.replace(/'/g, "''");
+  }
   organization_id = req.body.id;
-  organization_name = req.body.name;
+  organization_name = replaceChar(req.body.name);
   website = req.body.website.trim();
-  phone_number = req.body.phone_number;
-  org_address = req.body.org_address;
-  org_description = req.body.org_description;
+  phone_number = replaceChar(req.body.phone_number);
+  org_address = replaceChar(req.body.org_address);
+  org_description = replaceChar(req.body.org_description);
   schedule = req.body.schedule;
   gender = req.body.gender;
   timestamp = req.body.timestamp;
-  contact_name = req.body.contact_name;
-  contact_title = req.body.contact_title;
-  contact_email = req.body.contact_email;
-  contact_phone = req.body.contact_phone;
+  contact_name = replaceChar(req.body.contact_name);
+  contact_title = replaceChar(req.body.contact_title);
+  contact_email = replaceChar(req.body.contact_email);
+  contact_phone = replaceChar(req.body.contact_phone);
 
   if (req.body.id_req === "t") {
     id_req = "t";
