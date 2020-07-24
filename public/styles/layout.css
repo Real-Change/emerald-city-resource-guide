@@ -221,7 +221,7 @@
 
   #visionary,
   #changemaker {
-    width: 50vw;
+    width: 100vw;
   }
 
   #catalyst,
@@ -238,7 +238,6 @@
   #presenting img,
   #changemaker h3,
   #visionary h3 {
-    width: 50vw;
     font-size: 1.5vw;
     line-height: 2vw;
     margin: 0;
