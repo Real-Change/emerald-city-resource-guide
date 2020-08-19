@@ -7,15 +7,11 @@ To run this application on your local machine, you will need to set up a local r
 
 ### Database
 *Local Set Up*  
-A static version of the data can be found in the following csv files for local testing:
-- [organization table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/organization.csv)
-- [category table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/category.csv)
-- [organization_x_category table](https://github.com/eckermania/emerald-city-resource-guide/blob/master/organization_x_category.csv)
 
-These csv files can be used to populate your local database:
 1. Create your database - within Postgres: 'CREATE <database_name>;'
-2. Create schema - load table schema within the root file in the CLI with 'psql -d <database_name> -f guide.sql'
-3. Populate tables - load table contents with csv data from within the root file in the CLI using 'psql -d <database_name> -f load.sql'
+2. Populate `DATABASE_URL` in `.env` file with the url for your local database (e.g. postgres://localhost:5432/DATABASE_NAME)
+3. Create schema - `npx knex migrate:latest`
+4. Populate tables - `npx knex seed:run` 
 
 Depending on how you have set up Postgres on your machine, you may need to manually initialize the connection to Postgres when running your code locally using the following command in CLI: 'pg_ctl -D /usr/local/var/postgres start'.
 
