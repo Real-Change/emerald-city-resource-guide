@@ -819,7 +819,6 @@ app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
 app.post("/admin/pickedup/guide", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
-  console.log(req.body);
 
   return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
 });
