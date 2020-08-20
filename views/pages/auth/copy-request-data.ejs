@@ -1,20 +1,21 @@
 <div class="copy-request-container">
-        <ul>
-            <% requests.forEach(request => { %>
-                <form class="request-item admin" data-id="<%= request.request_id %>" method="POST" action='/admin/pickedup/guide'>
-                    <textarea class="hidden id" name="request_id">
+  <ul>
+    <% requests.forEach(request => { %>
+    <form class="request-item admin" data-id="<%= request.request_id %>" method="POST" action='/admin/pickedup/guide'>
+      <textarea class="hidden id" name="request_id">
                         <%= request.request_id %>
                     </textarea>
-                    <div class='request-body'>
-                        <h3 class="request-headers"><%= request.organization_name %>: <span class='guide-number'> <%= request.number %> </span>copies</h3>
-                        <ul>
-                            <li><%= request.contact_name %></li>
-                            <li><%= request.email %></li>
-                            <li><%= request.phone %></li>
-                        </ul>
-                    </div>
-                    <button type="submit" data-id="<%= request.request_id %>">Picked Up</button>
-                </form>
-                <% })%>
+      <div class='request-body'>
+        <h3 class="request-headers"><%= request.organization_name %>: <span class='guide-number'>
+            <%= request.number %> </span>copies</h3>
+        <ul>
+          <li><%= request.contact_name %></li>
+          <li><%= request.email %></li>
+          <li><%= request.phone %></li>
         </ul>
+      </div>
+      <button type="submit" data-id="<%= request.request_id %>">Picked Up</button>
+    </form>
+    <% })%>
+  </ul>
 </div>

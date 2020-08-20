@@ -1,44 +1,43 @@
-
 <div class="organization-container">
 
-    <ul>
-						<% organizations.forEach(organization => { %>
-                <li class="organization-item">
-                <h3><%= organization.organization_name %></h3>
-								<% if(organization.website != ""){ %>
-										<div class="label">Website |</div>
-										<a target="_blank" href=<%= organization.website %> target="_blank">
-										<div class="content"><%= organization.website %></div>
-										</a>
-								<% } %>
-								<% if(organization.phone_number != ""){ %>
-									<div class="label">Phone |</div>
-									<div class="content">
-                    <%= organization.phone_number %>
-									</div>
-								<% } %>
-								<% if(organization.org_address != ""){ %>
-									<div class="label">Address |</div>
-                	<div class="content">
-										<%= organization.org_address %>
-									</div>
-								<% } %>
-								<div class="label">Hours |</div>
-								<div class="content">
-                    <%= organization.schedule %>
-								</div>
-								<div class="label">Description |</div>
-								<div class="content" id="last-content">
-									<i class="fas fa-chevron-circle-down desc-button desc-button-on fa-lg" aria-hidden="true" title="Show description"></i>
-									<p class="desc hidden">
-											<%= organization.org_description %>
-									</p>
-								</div>
-								<p class="cat hidden">
-		              <%= organization.array_agg %>
-								</p>
-						    <% })%>
-								</li>
-    </ul>
-	</div>
-
+	<ul>
+		<% organizations.forEach(organization => { %>
+		<li class="organization-item">
+			<h3><%= organization.organization_name %></h3>
+			<% if(organization.website != ""){ %>
+			<div class="label">Website |</div>
+			<a target="_blank" href=<%= organization.website %> target="_blank">
+				<div class="content"><%= organization.website %></div>
+			</a>
+			<% } %>
+			<% if(organization.phone_number != ""){ %>
+			<div class="label">Phone |</div>
+			<div class="content">
+				<%= organization.phone_number %>
+			</div>
+			<% } %>
+			<% if(organization.org_address != ""){ %>
+			<div class="label">Address |</div>
+			<div class="content">
+				<%= organization.org_address %>
+			</div>
+			<% } %>
+			<div class="label">Hours |</div>
+			<div class="content">
+				<%= organization.schedule %>
+			</div>
+			<div class="label">Description |</div>
+			<div class="content" id="last-content">
+				<i class="fas fa-chevron-circle-down desc-button desc-button-on fa-lg" aria-hidden="true"
+					title="Show description"></i>
+				<p class="desc hidden">
+					<%= organization.org_description %>
+				</p>
+			</div>
+			<p class="cat hidden">
+				<%= organization.array_agg %>
+			</p>
+			<% })%>
+		</li>
+	</ul>
+</div>
