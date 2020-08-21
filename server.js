@@ -807,7 +807,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 
 app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   let SQL =
-    "SELECT * FROM requests WHERE  picked_up='f' ORDER BY LOWER(organization_name);";
+    "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
 
   return client.query(SQL).then((results) =>
     res.render("./pages/auth/copy-requests.ejs", {
@@ -816,9 +816,16 @@ app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   );
 });
 
-app.post("/admin/pickedup/guide", isAuthenticated, function (req, res) {
+app.post("/admin/request/pickup", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
+
+  return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
+});
+
+app.post("/admin/request/delete", isAuthenticated, function (req, res) {
+  let values = [req.body.request_id];
+  let SQL = "UPDATE requests SET deleted='t' WHERE request_id=$1;";
 
   return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
 });

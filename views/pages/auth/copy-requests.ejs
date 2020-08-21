@@ -7,8 +7,64 @@
 	<div>
 		<%- include('../auth/sidebar.ejs') %>
 		<h2 id="remaining-pickup">Remaining Number of Guides to be Picked Up: <span id="guide-count"></span></h2>
-		<%- include('../auth/copy-request-data.ejs') %>
+		<div class="copy-request-container">
+			<ul>
+				<% requests.forEach(request => { %>
+				<div class="request-item admin">
+					<div class="request-body">
+						<h3 class="request-headers">
+							<%= request.organization_name %>:
+							<span class="guide-number">
+								<%= request.number %>
+							</span>
+							copies
+						</h3>
+						<ul>
+							<li><%= request.contact_name %></li>
+							<li><%= request.email %></li>
+							<li><%= request.phone %></li>
+						</ul>
+					</div>
+					<div>
+						<button type="submit" class="pick-up-button" data-id="<%= request.request_id %>">Picked Up</button>
+						<button type="submit" class="delete-button" data-id="<%= request.request_id %>">Delete</button>
+					</div>
+				</div>
+				<% })%>
+			</ul>
+		</div>		
 		<%- include('../../layout/footer') %>
+		<script>
+			// count # of guides still to be picked up
+			let sum = 0;
+			$(".guide-number").each(function () {
+				sum += parseInt($(this).html(), 10) || 0;
+			});
+
+			$("#guide-count").text(sum);
+
+			$('.pick-up-button').on('click', function(e) {
+				$.post('/admin/request/pickup',
+       		{ request_id: $(this).data('id') },
+       		function(data, status, jqXHR) {
+						if(status === 'success') {
+							location.reload();		
+						}
+					}
+				)
+			})
+
+			$('.delete-button').on('click', function(e) {
+				$.post('/admin/request/delete',
+       		{ request_id: $(this).data('id') },
+       		function(data, status, jqXHR) {
+						if(status === 'success') {
+							location.reload();		
+						}
+					}
+				)
+			})
+		</script>
 	</div>
 </body>
 
