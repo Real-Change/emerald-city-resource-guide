@@ -816,6 +816,46 @@ app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   );
 });
 
+app.get("/admin/copyrequest/:requestId/edit", isAuthenticated, function (req, res) {
+  let values = [req.params.requestId];
+  let SQL = "SELECT * from requests WHERE request_id=$1";
+
+  client
+    .query(SQL, values)
+    .then((result) => {
+      res.render("./pages/auth/copy-request-edit", { request: result.rows[0] })
+    })
+    .catch(handleError);
+});
+
+app.put("/admin/copyrequest/update", isAuthenticated, function (req, res) {
+  let {
+    id,
+    organization_name,
+    contact_name,
+    email,
+    phone,
+    number
+  } = req.body;
+
+  let SQL =
+    "UPDATE requests SET organization_name='" +
+    organization_name +
+    "', contact_name='" +
+    contact_name +
+    "', email='" +
+    email +
+    "', phone='" +
+    phone +
+    "', number=" +
+    number +
+    " WHERE request_id=" +
+    id +
+    ";";
+
+  return client.query(SQL).then(res.redirect("/admin/copyrequests"));
+});
+
 app.post("/admin/request/pickup", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
