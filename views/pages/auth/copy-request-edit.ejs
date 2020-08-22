@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../layout/head') %>
+<%- include('../../layout/header') %>
+<body>
+  <main>
+    <div id="editform">
+      <h2>Edit Request</h2>
+      <form action="/admin/copyrequest/update" id="adminedit" method="POST">
+  
+        <input name="_method" class="hidden" value="PUT">
+        <input name="id" class="hidden" value=<%= request.request_id %>>
+        <fieldset>
+          <label>
+            <span>Organization</span>
+            <textarea name="organization_name" type="text"><%= request.organization_name %></textarea>
+          </label>
+        </fieldset>
+        <fieldset>
+          <label>
+            <span>Contact</span>
+            <textarea name="contact_name" type="text"><%= request.contact_name %></textarea>
+          </label>
+        </fieldset>
+        <fieldset>
+          <label>
+            <span>Email</span>
+            <textarea name="email" type="text"><%= request.email %></textarea>
+          </label>
+        </fieldset>
+        <fieldset>
+          <label>
+            <span>Phone</span>
+            <textarea name="phone" type="text"><%= request.phone %></textarea>
+          </label>
+        </fieldset>
+        <fieldset>
+          <label>
+            <span>Number</span>
+            <textarea name="number" type="text"><%= request.number %></textarea>
+          </label>
+        </fieldset>
+        <button type="submit">Submit</button>
+      </form>
+     </div>
+    </main>
+   
+    </div>
+    <%- include('../../layout/footer') %>
+    </div>
+</body>
+</html>
