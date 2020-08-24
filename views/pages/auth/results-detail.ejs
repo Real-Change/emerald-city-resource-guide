@@ -1,31 +1,32 @@
 <div id="organization-container">
-    <ul>
-		<% organizations.forEach(organization => { %>
-            <form class="request-item admin" data-id="<%= organization.organization_id %>" method="POST" action='/admin/update/<%= organization.organization_id %>'>
-                <div class="hidden id">
-                    <%= organization.organization_id %>
-                </div>
-                <h3><%= organization.organization_name %></h3>
-                    <% if(organization.website != ""){ %>
-                        <div class="label">Website |</div>
-                            <a target="_blank" href=<%= organization.website %> target="_blank">
-                        <div class="content"><%= organization.website %></div>
-                            </a>
-                    <% } %>
-                    <% if(organization.phone_number != ""){ %>
-                        <div class="label">Phone |</div>
-                            <div class="content">
-                                <%= organization.phone_number %>
-                            </div>
-                    <% } %>
-                    <% if(organization.org_address != ""){ %>
-                        <div class="label">Address |</div>
-                        <div class="content">
-                            <%= organization.org_address %>
-                        </div>
-                    <% } %>
-                    <button type="submit" class="edit" data-id="<%= organization.organization_id %>">Edit</button>
-            </form>
-            <% })%>
-    </ul>
+  <ul>
+    <% organizations.forEach(organization => { %>
+    <form class="request-item admin" data-id="<%= organization.organization_id %>" method="POST"
+      action='/admin/update/<%= organization.organization_id %>'>
+      <div class="hidden id">
+        <%= organization.organization_id %>
+      </div>
+      <h3><%= organization.organization_name %></h3>
+      <% if(organization.website != ""){ %>
+      <div class="label">Website |</div>
+      <a target="_blank" href=<%= organization.website %> target="_blank">
+        <div class="content"><%= organization.website %></div>
+      </a>
+      <% } %>
+      <% if(organization.phone_number != ""){ %>
+      <div class="label">Phone |</div>
+      <div class="content">
+        <%= organization.phone_number %>
+      </div>
+      <% } %>
+      <% if(organization.org_address != ""){ %>
+      <div class="label">Address |</div>
+      <div class="content">
+        <%= organization.org_address %>
+      </div>
+      <% } %>
+      <button type="submit" class="edit" data-id="<%= organization.organization_id %>">Edit</button>
+    </form>
+    <% })%>
+  </ul>
 </div>

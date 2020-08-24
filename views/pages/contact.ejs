@@ -1,32 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
 <%- include('../layout/head') %>
-</head>
-<body>
-    <%- include('../layout/header') %>
-    <main id="contact-page">
-				<div  id="copy-request">
-					<p class="contact">
-						Thank you for your interest in the Emerald City Resource Guide.
-						<br />
-						<br />
-						Distribution of the third edition is now closed. We plan to begin accepting orders for the fourth edition in summer of
-						2020.
-						<br />
-						<br />
-						To make this vital tool possible, please consider joining as a sponsor. Sponsorship allows us to keep this resource
-						up-to-date and accurate. You’ll receive benefits like your logo on the back of the guide, ads in the Real Change
-						newspaper, and much more. 
-						<br />
-						<a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">Learn more and sign on here.</a>
-						<br />
-						<br />
-						If you plan to request 500 or more copies of the fourth edition, your agency will be required to support the project at
-						any level.
-						<br />	
-						<br />
-						Thank you for making this project possible!
-					</p>
 
-					<!-- <form action="/requestconfirmation" method="POST" class="contact form">
+<body>
+	<%- include('../layout/header') %>
+	<main id="contact-page">
+		<div id="copy-request">
+			<p class="contact">
+				Thank you for your interest in the Emerald City Resource Guide.
+				<br />
+				<br />
+				Distribution of the third edition is now closed. We plan to begin accepting orders for the fourth edition in
+				summer of
+				2020.
+				<br />
+				<br />
+				To make this vital tool possible, please consider joining as a sponsor. Sponsorship allows us to keep this
+				resource
+				up-to-date and accurate. You’ll receive benefits like your logo on the back of the guide, ads in the Real Change
+				newspaper, and much more.
+				<br />
+				<a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">Learn more and sign on here.</a>
+				<br />
+				<br />
+				If you plan to request 500 or more copies of the fourth edition, your agency will be required to support the
+				project at
+				any level.
+				<br />
+				<br />
+				Thank you for making this project possible!
+			</p>
+
+			<!-- <form action="/requestconfirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization" required>
 						
@@ -45,29 +50,32 @@
 						<button type="submit" class="request-button" disabled>Submit</button>
 
 					</form> -->
-				</div>
-				<div id="feedback">
-					<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource Guide, please fill out the form below.</p>
-					<form action="/feedbackconfirmation" method="POST" class="contact form" id="feedback-form">
-						<label for="organization">Name of Organization</label>
-						<input type="text" id="form-organization" name="organization" required>
-						
-						<label for="name">Your Name</label>
-						<input type="text" id="form-name" name="name" required>
+		</div>
+		<div id="feedback">
+			<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource
+				Guide, please fill out the form below.</p>
+			<form action="/feedbackconfirmation" method="POST" class="contact form" id="feedback-form">
+				<label for="organization">Name of Organization</label>
+				<input type="text" id="form-organization" name="organization" required>
 
-						<label for="email">Email Address</label>
-						<input type="email" id="form-email" name="email" required>
+				<label for="name">Your Name</label>
+				<input type="text" id="form-name" name="name" required>
 
-						<label for="feedbackfield">Feedback, questions, or stories</label>
-						<textarea form="feedback-form" id="feedbackfield" name="feedbackfield" rows="5" cols="36" wrap="hard" required></textarea>
+				<label for="email">Email Address</label>
+				<input type="email" id="form-email" name="email" required>
 
-						<button type="submit" class="request-button" disabled >Submit</button>
+				<label for="feedbackfield">Feedback, questions, or stories</label>
+				<textarea form="feedback-form" id="feedbackfield" name="feedbackfield" rows="5" cols="36" wrap="hard"
+					required></textarea>
 
-					</form>
-				</div>
-    </main>
-    </div>
-    <%- include('../layout/footer') %>
-    </div>
+				<button type="submit" class="request-button" disabled>Submit</button>
+
+			</form>
+		</div>
+	</main>
+	</div>
+	<%- include('../layout/footer') %>
+	</div>
 </body>
+
 </html>

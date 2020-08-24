@@ -255,16 +255,15 @@ module.exports = {
 };
 
 // Function to call in every admin page to verify permissions
-function verifyPerms(req, res, page) {
+function isAuthenticated(req, res, next) {
   let userEmail = req.cookies.user || "";
   let SQL = "SELECT * FROM users WHERE email='" + userEmail + "';";
   return client
     .query(SQL)
     .then((results) => {
       if (results.rowCount > 0) {
-        res.render(page);
+        next();
       } else {
-        alert("You do not have permission to view this page.");
         res.redirect("/login");
       }
     })
@@ -344,13 +343,13 @@ app.get("/sessionConfirmation", (req, res) => {
     });
 });
 
-// Render account page if authorized
-
-app.get("/admin/account", (req, res) => {
-  if (req.cookies.session !== undefined) {
-    verifyPerms(req, res, "./pages/auth/account.ejs");
+app.get("/credentialcheck", function (req, res) {
+  // Listen for session cookie creation
+  let sessionCookie = req.cookies.session || "";
+  if (sessionCookie !== "") {
+    res.redirect("/admin/account");
   } else {
-    res.redirect("/login");
+    res.render("./pages/auth/credential-check");
   }
 });
 
@@ -374,7 +373,13 @@ app.post("/sessionLogout", (req, res) => {
     });
 });
 
-app.post("/admin/:searchTerm", returnAdminResults);
+// Render account page if authorized
+
+app.get("/admin/account", isAuthenticated, (req, res) => {
+  res.render("./pages/auth/account.ejs");
+});
+
+app.post("/admin/:searchTerm", isAuthenticated, returnAdminResults);
 
 function returnAdminResults(req, res) {
   let searchTerm = req.body.searchbar.trim().split(" ");
@@ -475,7 +480,7 @@ function returnAdminResults(req, res) {
     .catch((error) => handleError(error, res));
 }
 
-app.post("/admin/update/:orgId", editOrg);
+app.post("/admin/update/:orgId", isAuthenticated, editOrg);
 
 function editOrg(req, res) {
   let orgId = req.params.orgId;
@@ -492,8 +497,56 @@ function editOrg(req, res) {
     .catch(handleError);
 }
 
+let organization_id,
+organization_name,
+website,
+phone_number,
+org_address,
+org_description,
+schedule,
+gender,
+timestamp,
+contact_name,
+contact_title,
+contact_email,
+contact_phone,
+id_req,
+distribution,
+distribution_email,
+sponsorship_email,
+sponsorship,
+zipcode;
+
+// Identify which categories should be removed to the org to category mapping and which should be added
+function compareCategories(req) {
+  let newCats = req.body.category;
+  let priorCats = req.body.prior_cats.split(",");
+  priorCats[0] = priorCats[0].trim();
+  priorCats[priorCats.length - 1] = priorCats[priorCats.length - 1].trim();
+
+  let catsToRemove = [];
+  let catsToAdd = [];
+  let outputCats = [];
+
+  for (let i = 0; i < newCats.length; i++) {
+    if (priorCats.indexOf(newCats[i]) === -1) {
+      catsToAdd.push(newCats[i]);
+    }
+  }
+
+  outputCats.push(catsToAdd);
+
+  for (let i = 0; i < priorCats.length; i++) {
+    if (newCats.indexOf(priorCats[i]) === -1) {
+      catsToRemove.push(priorCats[i]);
+    }
+  }
+
+  outputCats.push(catsToRemove);
+  return outputCats;
+}
+
 function parseForm(req) {
-    
   // Escape single quote to prevent SQL errors
   function replaceChar(str){
       return str.replace(/'/g, "''");
@@ -539,28 +592,9 @@ function parseForm(req) {
   }
 }
 
-let organization_id,
-  organization_name,
-  website,
-  phone_number,
-  org_address,
-  org_description,
-  schedule,
-  gender,
-  timestamp,
-  contact_name,
-  contact_title,
-  contact_email,
-  contact_phone,
-  id_req,
-  distribution,
-  distribution_email,
-  sponsorship_email,
-  sponsorship,
-  zipcode;
 // Submit and confirm record edits
 
-app.put("/admin/editconfirmation", function (req, res) {
+app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
   // Map form updates into SQL query for organization table
   parseForm(req);
 
@@ -695,69 +729,11 @@ app.put("/admin/editconfirmation", function (req, res) {
     });
 });
 
-// Identify which categories should be removed to the org to category mapping and which should be added
-function compareCategories(req) {
-  let newCats = req.body.category;
-  let priorCats = req.body.prior_cats.split(",");
-  priorCats[0] = priorCats[0].trim();
-  priorCats[priorCats.length - 1] = priorCats[priorCats.length - 1].trim();
-
-  let catsToRemove = [];
-  let catsToAdd = [];
-  let outputCats = [];
-
-  for (let i = 0; i < newCats.length; i++) {
-    if (priorCats.indexOf(newCats[i]) === -1) {
-      catsToAdd.push(newCats[i]);
-    }
-  }
-
-  outputCats.push(catsToAdd);
-
-  for (let i = 0; i < priorCats.length; i++) {
-    if (newCats.indexOf(priorCats[i]) === -1) {
-      catsToRemove.push(priorCats[i]);
-    }
-  }
-
-  outputCats.push(catsToRemove);
-  return outputCats;
-}
-
-app.get("/credentialcheck", function (req, res) {
-  // Listen for session cookie creation
-  let sessionCookie = req.cookies.session || "";
-  if (sessionCookie !== "") {
-    res.redirect("/admin/account");
-  } else {
-    res.render("./pages/auth/credential-check");
-  }
-});
-
-app.post("/sessionLogout", (req, res) => {
-  const sessionCookie = res.cookies.session || "";
-  res.clearCookie("user");
-  res.clearCookie("session");
-  admin
-    .auth()
-    .verifySessionCookie(sessionCookie)
-    .then((decodedClaims) => {
-      return admin.auth().revokeRefreshTokens(decodedClaims.sub);
-    })
-    .then(() => {
-      res.redirect("/login");
-    })
-    .catch((error) => {
-      console.log(error);
-      res.redirect("/login");
-    });
-});
-
-app.get("/admin/addnew", function (req, res) {
+app.get("/admin/addnew", isAuthenticated, function (req, res) {
   res.render("./pages/auth/addnew");
 });
 
-app.put("/admin/addconfirmation", function (req, res) {
+app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
   // Map form updates into SQL query for organization table
   parseForm(req);
 
@@ -829,9 +805,9 @@ app.put("/admin/addconfirmation", function (req, res) {
     });
 });
 
-app.get("/admin/copyrequests", function (req, res) {
+app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   let SQL =
-    "SELECT * FROM requests WHERE  picked_up='f' ORDER BY LOWER(organization_name);";
+    "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
 
   return client.query(SQL).then((results) =>
     res.render("./pages/auth/copy-requests.ejs", {
@@ -840,10 +816,56 @@ app.get("/admin/copyrequests", function (req, res) {
   );
 });
 
-app.post("/admin/pickedup/guide", function (req, res) {
+app.get("/admin/copyrequest/:requestId/edit", isAuthenticated, function (req, res) {
+  let values = [req.params.requestId];
+  let SQL = "SELECT * from requests WHERE request_id=$1";
+
+  client
+    .query(SQL, values)
+    .then((result) => {
+      res.render("./pages/auth/copy-request-edit", { request: result.rows[0] })
+    })
+    .catch(handleError);
+});
+
+app.put("/admin/copyrequest/update", isAuthenticated, function (req, res) {
+  let {
+    id,
+    organization_name,
+    contact_name,
+    email,
+    phone,
+    number
+  } = req.body;
+
+  let SQL =
+    "UPDATE requests SET organization_name='" +
+    organization_name +
+    "', contact_name='" +
+    contact_name +
+    "', email='" +
+    email +
+    "', phone='" +
+    phone +
+    "', number=" +
+    number +
+    " WHERE request_id=" +
+    id +
+    ";";
+
+  return client.query(SQL).then(res.redirect("/admin/copyrequests"));
+});
+
+app.post("/admin/request/pickup", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
-  console.log(req.body);
+
+  return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
+});
+
+app.post("/admin/request/delete", isAuthenticated, function (req, res) {
+  let values = [req.body.request_id];
+  let SQL = "UPDATE requests SET deleted='t' WHERE request_id=$1;";
 
   return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
 });
