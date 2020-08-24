@@ -6,6 +6,8 @@ COPY organization_x_category(organization_id, category_id, active) FROM '/Users/
 
 COPY users(lastname, firstname, email) FROM '/Users/erineckerman/projects/emerald-city-resource-guide/users.csv' DELIMITER ',' CSV HEADER;
 
+COPY requests(request_id, organization_name, contact_name, email, phone, number, picked_up) from 'requests.csv' DELIMITER ',' CSV HEADER;
+
 UPDATE organization
 SET organization_name = REPLACE(organization_name, '\', ''),
 phone_number = REPLACE(phone_number, '\', ''),

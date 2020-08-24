@@ -1,348 +1,256 @@
 <main>
-    <div id="editform">
-        <h2>Edit Agency</h2>
+  <div id="editform">
+    <h2>Edit Agency</h2>
+    <fieldset>
+      <label>
+        <span class="timestamp-display">Last Updated</span>
+        <span class="timestamp-display" id="timestamp-data"><%= organization.last_update %></span>
+      </label>
+    </fieldset>
+    <button id="script-button">Show Call Script</button>
+    <form action="/admin/editconfirmation" id="adminedit" method="POST">
+
+      <input name="_method" class="hidden" value="PUT">
+      <input name="id" class="hidden" value=<%= organization.organization_id %>>
+      <p class="script hidden">Hello, my name is __________ and I am a volunteer for Real Change. Your services are
+        listed in the Emerald City Resource Guide. We are gearing up to print the third edition and need to verify your
+        services. <br>Do you have a moment to confirm what we have in the guide is still correct or update your listing?
+        <br><span class="emphasis">If yes, proceed. If no, ask for a good call back time or contact phone number.</span>
+      </p>
+      <p class="script hidden">What is your name and role at the agency so we can follow up with any questions? <br>
+        <span class="emphasis">Enter contact information below.</span></p>
+      <h3>Main Contact</h3>
+      <fieldset>
+        <label>
+          <span>Name</span>
+          <textarea name="contact_name" type="text"><%= organization.contact_name %></textarea>
+        </label>
+      </fieldset>
+      <fieldset>
+        <label>
+          <span>Title</span>
+          <textarea name="contact_title" type="text"><%= organization.contact_title %></textarea>
+        </label>
+      </fieldset>
+      <fieldset>
+        <label>
+          <span>Phone</span>
+          <textarea name="contact_phone" type="text"><%= organization.contact_phone %></textarea>
+        </label>
         <fieldset>
+          <fieldset>
             <label>
-                <span class="timestamp-display">Last Updated</span>
-                <span class="timestamp-display" id="timestamp-data"><%= organization.last_update %></span>
+              <span>Email</span>
+              <textarea name="contact_email" type="text"><%= organization.contact_email %></textarea>
             </label>
-        </fieldset>
-        <button id="script-button">Show Call Script</button>
-    <form action="/admin/editconfirmation" id="adminedit" method="POST" >
-        
-        <input name="_method" class="hidden" value="PUT">
-        <input name="id" class="hidden" value=<%= organization.organization_id %> >
-        <p class="script hidden">Hello, my name is __________ and I am a volunteer for Real Change.  Your services are listed in the Emerald City Resource Guide.  We are gearing up to print the third edition and need to verify your services. <br>Do you have a moment to confirm what we have in the guide is still correct or update your listing? <br><span class="emphasis">If yes, proceed.  If no, ask for a good call back time or contact phone number.</span></p>
-        <p class="script hidden">What is your name and role at the agency so we can follow up with any questions? <br> <span class="emphasis">Enter contact information below.</span></p>
-        <h3>Main Contact</h3>
-        <fieldset>
+          </fieldset>
+          <h3>Agency</h3>
+          <p class="script hidden"><span class="emphasis">Read the agency name below aloud.</span> Is this the correct
+            title of your agency?</p>
+          <fieldset>
             <label>
-            <span>Name</span>
-            <textarea name="contact_name" type="text"><%= organization.contact_name %></textarea>
-          </label>
-        </fieldset>
-        <fieldset>
-            <label>
-            <span>Title</span>
-            <textarea name="contact_title" type="text"><%= organization.contact_title %></textarea>
+              <span>Name</span>
+              <textarea name="name" type="text" required><%= organization.organization_name %></textarea>
             </label>
-        </fieldset>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-            <span>Phone</span>
-            <textarea name="contact_phone" type="text"><%= organization.contact_phone %></textarea>
+              <span>Website</span>
+              <textarea name="website" type="text"><%= organization.website %></textarea>
             </label>
-        <fieldset>
-        <fieldset>
+          </fieldset>
+          <p class="script hidden">The phone number listed in the guidebook will be called by individuals seeking
+            services. Is this the correct phone number? <br><span class="emphasis">Read phone number below aloud.</span>
+          </p>
+          <fieldset>
             <label>
-            <span>Email</span>
-            <textarea name="contact_email" type="text"><%= organization.contact_email %></textarea>
+              <span>Phone</span>
+              <textarea name="phone_number" type="text" class="big"><%= organization.phone_number %></textarea>
             </label>
-        </fieldset>
-        <h3>Agency</h3>
-        <p class="script hidden"><span class="emphasis">Read the agency name below aloud.</span> Is this the correct title of your agency?</p>
-        <fieldset>
-            <label >
-                <span>Name</span>
-                <textarea name="name" type="text" required><%= organization.organization_name %></textarea>
-            </label> 
-        </fieldset>
-        <fieldset>
+          </fieldset>
+          <p class="script hidden">Is this address correct for people walking in during business hours to find services?
+            <br><span class="emphasis">Read address below aloud.</span></p>
+          <fieldset>
             <label>
-                <span>Website</span>
-                <textarea name="website" type="text"><%= organization.website %></textarea>
+              <span>Address</span>
+              <textarea name="org_address" type="text" class="big"><%= organization.org_address %></textarea>
             </label>
-        </fieldset>
-        <p class="script hidden">The phone number listed in the guidebook will be called by individuals seeking services.  Is this the correct phone number? <br><span class="emphasis">Read phone number below aloud.</span></p>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-                <span>Phone</span>
-                <textarea name="phone_number" type="text" class="big"><%= organization.phone_number %></textarea>
+              <span>Address (Spanish)</span>
+              <textarea name="org_address_es" type="text" class="big"><%= organization.org_address_es %></textarea>
             </label>
-        </fieldset>
-        <p class="script hidden">Is this address correct for people walking in during business hours to find services? <br><span class="emphasis">Read address below aloud.</span></p>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-                <span>Address</span>
-                <textarea name="org_address" type="text" class="big"><%= organization.org_address %></textarea>
+              <span>Zip Code</span>
+              <input name="zipcode" type="text" class="zip" pattern="[0-9]{5}"
+                value=<%= organization.zipcode %>></input>
             </label>
-        </fieldset>
-        <fieldset>
+          </fieldset>
+          <p class="script hidden">What hours are you open for people to walk in?</p>
+          <fieldset>
             <label>
-                <span>Address (Spanish)</span>
-                <textarea name="org_address_es" type="text" class="big"><%= organization.org_address_es %></textarea>
+              <span>Hours</span>
+              <textarea name="schedule" type="text" class="big"><%= organization.schedule %></textarea>
             </label>
-        </fieldset>
-        <fieldset>
-                <label>
-                    <span>Zip Code</span>
-                    <input name="zipcode" type="text" class="zip" pattern="[0-9]{5}" value=<%= organization.zipcode %> ></input>
-                </label>
-        </fieldset>
-        <p class="script hidden">What hours are you open for people to walk in?</p>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-                <span>Hours</span>
-                <textarea name="schedule" type="text" class="big"><%= organization.schedule %></textarea>
+              <span>Hours (Spanish)</span>
+              <textarea name="schedule_es" type="text" class="big"><%= organization.schedule_es %></textarea>
             </label>
-        </fieldset>
-        <fieldset>
+          </fieldset>
+          <p class="script hidden">Your agency description should be a brief, simple summary of the services someone can
+            access when they come to your agency. Do not list services that are not available for homeless and
+            low-income individuals. I will read your agency description, and then you can let me know if anything needs
+            to be updated or changed. <br><span class="emphasis">Read description and category options below.</span><br>
+          </p>
+          <fieldset>
             <label>
-                <span>Hours (Spanish)</span>
-                <textarea name="schedule_es" type="text" class="big"><%= organization.schedule_es %></textarea>
+              <span>Description</span>
+              <textarea name="org_description" type="text" class="bigger"><%= organization.org_description %></textarea>
             </label>
-        </fieldset>
-        <p class="script hidden">Your agency description should be a brief, simple summary of the services someone can access when they come to your agency.  Do not list services that are not available for homeless and low-income individuals.  I will read your agency description, and then you can let me know if anything needs to be updated or changed. <br><span class="emphasis">Read description and category options below.</span><br></p>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-                <span>Description</span>
-                <textarea name="org_description" type="text" class="bigger"><%= organization.org_description %></textarea>
+              <span>Description (Spanish)</span>
+              <textarea name="org_description_es" type="text"
+                class="bigger"><%= organization.org_description_es %></textarea>
             </label>
-        </fieldset>
-        <fieldset>
+          </fieldset>
+          <fieldset>
             <label>
-                <span>Description (Spanish)</span>
-                <textarea name="org_description_es" type="text" class="bigger"><%= organization.org_description_es %></textarea>
-            </label>
-        </fieldset>
-        <fieldset>
-            <label>
-                <span>Genders Served</span>
-                <div id="genderopts">
+              <span>Genders Served</span>
+              <div id="genderopts">
                 <label><input name="gender" type="radio" value="men only"
-                <% if (organization.gender === 'men only') { %>
-                    checked
-                <% } %>
-                >Men Only</label>
+                    <% if (organization.gender === 'men only') { %> checked <% } %>>Men Only</label>
                 <label><input name="gender" type="radio" value="women only"
-                <% if (organization.gender === 'women only') { %>
-                    checked
-                <% } %>
-                >Women Only</label>
+                    <% if (organization.gender === 'women only') { %> checked <% } %>>Women Only</label>
                 <label><input name="gender" type="radio" value="no restrictions"
-                <% if (organization.gender === 'no restrictions') { %>
-                    checked
-                <% } %>
-                >No Restrictions </label>
-                </div>
+                    <% if (organization.gender === 'no restrictions') { %> checked <% } %>>No Restrictions </label>
+              </div>
             </label>
-        </fieldset>
-        </div>
-        <div id="allcats">
-        <div id="population">
-            <h3>Target Populations </h3>
-            <label><input type="checkbox" name="category[4]" value="24"
-                <% if (organization.array_agg.indexOf(24) >= 0){ %>
-                    checked
-                <% } %>
-                >Senior Citizens</label> 
-            <label><input type="checkbox" name="category[5]" value="18"
-                <% if (organization.array_agg.indexOf(18) >= 0){ %>
-                    checked
-                <% } %>
-                >Immigrants or Refugees</label> 
-            <label><input type="checkbox" name="category[6]" value="27"
-                <% if (organization.array_agg.indexOf(27) >= 0){ %>
-                    checked
-                <% } %>
-                >Survivors of Violence</label> 
-            <label><input type="checkbox" name="category[0]" value="14" 
-                <% if (organization.array_agg.indexOf(14) >= 0){ %>
-                    checked
-                <% } %>
-                >People of Color</label> 
-            <label><input type="checkbox" name="category[1]" value="13"
-                <% if (organization.array_agg.indexOf(13) >= 0){ %>
-                    checked
-                <% } %>
-                >Native & Indigenous People</label> 
-            <label><input type="checkbox" name="category[2]" value="20"
-                <% if (organization.array_agg.indexOf(20) >= 0){ %>
-                    checked
-                <% } %>
-                >LGBTQIA+</label> 
-            <label><input type="checkbox" name="category[3]" value="29"
-                <% if (organization.array_agg.indexOf(29) >= 0){ %>
-                    checked
-                <% } %>
-                >Veterans</label> 
-            </div>
-        <div id="services">
-            <h3>Services Offered</h3>
-            <section id="basic-needs">
-                <h4>Basic Needs</h4>
-                <label><input type="checkbox" name="category[7]" value="1"
-                    <% if (organization.array_agg.indexOf(1) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Emergency and Crisis Lines</label>
-                <label><input type="checkbox" name="category[8]" value="3"
-                    <% if (organization.array_agg.indexOf(3) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Hygiene Services</label>
-                <label><input type="checkbox" name="category[9]" value="4"
-                    <% if (organization.array_agg.indexOf(4) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Encampments</label> 
-                <label><input type="checkbox" name="category[10]" value="6"
-                    <% if (organization.array_agg.indexOf(6) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Day Centers</label> 
-                <label><input type="checkbox" name="category[11]" value="12"
-                    <% if (organization.array_agg.indexOf(12) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Food Assistance</label> 
-                <label><input type="checkbox" name="category[12]" value="17"
-                    <% if (organization.array_agg.indexOf(17) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Housing Services</label> 
-                <label><input type="checkbox" name="category[13]" value="25"
-                    <% if (organization.array_agg.indexOf(25) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Shelters</label> 
-                <label><input type="checkbox" name="category[14]" value="5"
-                    <% if (organization.array_agg.indexOf(5) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Clothing Services</label> 
-            </section>
-            <section id="health">
-                <h4>Health</h4>
-                <label><input type="checkbox" name="category[15]" value="7"
-                    <% if (organization.array_agg.indexOf(7) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Dental and Vision Services </label> 
-                <label><input type="checkbox" name="category[16]" value="8"
-                    <% if (organization.array_agg.indexOf(8) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Drug and Alchohol Services</label> 
-                <label><input type="checkbox" name="category[17]" value="10"
-                    <% if (organization.array_agg.indexOf(10) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Family and Maternity Services</label> 
-                <label><input type="checkbox" name="category[29]" value="30"
-                    <% if (organization.array_agg.indexOf(30) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Womxn's Health Services</label>
-                <label><input type="checkbox" name="category[18]" value="15"
-                    <% if (organization.array_agg.indexOf(15) >= 0){ %>
-                        checked
-                    <% } %>
-                    >General Health Services</label> 
-                <label><input type="checkbox" name="category[19]" value="16"
-                    <% if (organization.array_agg.indexOf(16) >= 0){ %>
-                        checked
-                    <% } %>
-                    > HIV/AIDS Services</label> 
-                <label><input type="checkbox" name="category[20]" value="22"
-                    <% if (organization.array_agg.indexOf(22) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Mental Health Services</label> 
-                <label><input type="checkbox" name="category[31]" value="32"
-                    <% if (organization.array_agg.indexOf(32) >= 0) { %>
-                        checked
-                    <% } %>
-                    >Problem Gambling Resources</label>
-                <label><input type="checkbox" name="category[32]" value="31"
-                    <% if (organization.array_agg.indexOf(31) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Pets and Service Animals</label>
-            </section>
-            <section id="financial">
-                <h4>Financial, Legal, and Employment</h4>
-                <label><input type="checkbox" name="category[21]" value="2"
-                    <% if (organization.array_agg.indexOf(2) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Identification Services</label> 
-                <label><input type="checkbox" name="category[22]" value="9"
-                    <% if (organization.array_agg.indexOf(9) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Employment and Training Services</label> 
-                <label><input type="checkbox" name="category[23]" value="11"
-                    <% if (organization.array_agg.indexOf(11) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Financial Assistance</label> 
-                <label><input type="checkbox" name="category[24]" value="19"
-                    <% if (organization.array_agg.indexOf(19) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Legal Services</label> 
-                <label><input type="checkbox" name="category[25]" value="21"
-                    <% if (organization.array_agg.indexOf(21) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Mail Services</label> 
-                <label><input type="checkbox" name="category[26]" value="26"
-                    <% if (organization.array_agg.indexOf(26) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Storage Services</label> 
-                <label><input type="checkbox" name="category[27]" value="23"
-                    <% if (organization.array_agg.indexOf(23) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Re-entry Assistance</label> 
-                <label><input type="checkbox" name="category[28]" value="28"
-                    <% if (organization.array_agg.indexOf(28) >= 0){ %>
-                        checked
-                    <% } %>
-                    >Transportation Services</label> 
-            </section>
-        </div>
-        </div>
-        <p class="script hidden">Do you need an ID or any specific documents to access services? <br><span class="emphasis">Make a note at the end of the description field above if any specifics about required documents are given.</span></p>
-        <div id="final-checks">
-            <h3>Additional Information</h3>
-            <fieldset>
-                <label>
-                <input type="checkbox" value="t" name="id_req"
-                    <% if (organization.id_req){ %>
-                        checked
-                    <% } %>
-                > ID or specific documents are required to access services</label>
-            </fieldset>
-            <p class="script hidden">Would your agency be interested in supporting the publication of the Resource Guide with a Sponsorship? Your logo would be printed on the back of the guidebook in addition to other benefits.  We have a number of different options and pricing and we could have staff follow up with you directly.<br><span>If yes, please make a note of their email address below.</span></p>
-            <fieldset>
-                <label>
-                <input type="checkbox" value="t" name="sponsorship"
-                    <% if (organization.sponsorship){ %>
-                        checked
-                    <% } %>
-                >This organization is interested in sponsorship</label>
-                <label class="checks-email"><span>Email address for follow up regarding sponsorship:</span>
-                <textarea type="text" name="sponsorship_email"><%= organization.sponsorship_email %></textarea></label>
-            </fieldset>
-            <p class="script hidden">Would you like to be on our list for distribution when the new guide is out in the late Fall? <br><span class="emphasis">If yes, please make a note of their email address below.</span></p>
-            <fieldset>
-                <label>
-                <input type="checkbox" value="t" name="distribution"
-                    <% if (organization.distribution) { %>
-                        checked
-                    <% } %>
-                >This organization is interested in distribution</label>
-                <label class="checks-email"><span>Email address to follow up regarding distribution:</span>
-                <textarea type="text" name="distribution_email"><%= organization.distribution_email %></textarea>
-            </label>
-            </fieldset>
-        </div>
-        <textarea class="hidden" name="prior_cats"> <%= organization.array_agg %> </textarea>
-        <input class="hidden" name="timestamp" id="timestamp">
-        <p class="script hidden"><span class="emphasis">Even if no updates were made to this organization's information, hit the submit button below so it is noted that this record has been checked.</span></p>
-        <button type="submit">Submit</button>
-      </form>
+          </fieldset>
+  </div>
+  <div id="allcats">
+    <div id="population">
+      <h3>Target Populations </h3>
+      <label><input type="checkbox" name="category[4]" value="24" <% if (organization.array_agg.indexOf(24) >= 0){ %>
+          checked <% } %>>Senior Citizens</label>
+      <label><input type="checkbox" name="category[5]" value="18" <% if (organization.array_agg.indexOf(18) >= 0){ %>
+          checked <% } %>>Immigrants or Refugees</label>
+      <label><input type="checkbox" name="category[6]" value="27" <% if (organization.array_agg.indexOf(27) >= 0){ %>
+          checked <% } %>>Survivors of Violence</label>
+      <label><input type="checkbox" name="category[0]" value="14" <% if (organization.array_agg.indexOf(14) >= 0){ %>
+          checked <% } %>>People of Color</label>
+      <label><input type="checkbox" name="category[1]" value="13" <% if (organization.array_agg.indexOf(13) >= 0){ %>
+          checked <% } %>>Native & Indigenous People</label>
+      <label><input type="checkbox" name="category[2]" value="20" <% if (organization.array_agg.indexOf(20) >= 0){ %>
+          checked <% } %>>LGBTQIA+</label>
+      <label><input type="checkbox" name="category[3]" value="29" <% if (organization.array_agg.indexOf(29) >= 0){ %>
+          checked <% } %>>Veterans</label>
+    </div>
+    <div id="services">
+      <h3>Services Offered</h3>
+      <section id="basic-needs">
+        <h4>Basic Needs</h4>
+        <label><input type="checkbox" name="category[7]" value="1" <% if (organization.array_agg.indexOf(1) >= 0){ %>
+            checked <% } %>>Emergency and Crisis Lines</label>
+        <label><input type="checkbox" name="category[8]" value="3" <% if (organization.array_agg.indexOf(3) >= 0){ %>
+            checked <% } %>>Hygiene Services</label>
+        <label><input type="checkbox" name="category[9]" value="4" <% if (organization.array_agg.indexOf(4) >= 0){ %>
+            checked <% } %>>Encampments</label>
+        <label><input type="checkbox" name="category[10]" value="6" <% if (organization.array_agg.indexOf(6) >= 0){ %>
+            checked <% } %>>Day Centers</label>
+        <label><input type="checkbox" name="category[11]" value="12" <% if (organization.array_agg.indexOf(12) >= 0){ %>
+            checked <% } %>>Food Assistance</label>
+        <label><input type="checkbox" name="category[12]" value="17" <% if (organization.array_agg.indexOf(17) >= 0){ %>
+            checked <% } %>>Housing Services</label>
+        <label><input type="checkbox" name="category[13]" value="25" <% if (organization.array_agg.indexOf(25) >= 0){ %>
+            checked <% } %>>Shelters</label>
+        <label><input type="checkbox" name="category[14]" value="5" <% if (organization.array_agg.indexOf(5) >= 0){ %>
+            checked <% } %>>Clothing Services</label>
+      </section>
+      <section id="health">
+        <h4>Health</h4>
+        <label><input type="checkbox" name="category[15]" value="7" <% if (organization.array_agg.indexOf(7) >= 0){ %>
+            checked <% } %>>Dental and Vision Services </label>
+        <label><input type="checkbox" name="category[16]" value="8" <% if (organization.array_agg.indexOf(8) >= 0){ %>
+            checked <% } %>>Drug and Alchohol Services</label>
+        <label><input type="checkbox" name="category[17]" value="10" <% if (organization.array_agg.indexOf(10) >= 0){ %>
+            checked <% } %>>Family and Maternity Services</label>
+        <label><input type="checkbox" name="category[29]" value="30" <% if (organization.array_agg.indexOf(30) >= 0){ %>
+            checked <% } %>>Womxn's Health Services</label>
+        <label><input type="checkbox" name="category[18]" value="15" <% if (organization.array_agg.indexOf(15) >= 0){ %>
+            checked <% } %>>General Health Services</label>
+        <label><input type="checkbox" name="category[19]" value="16" <% if (organization.array_agg.indexOf(16) >= 0){ %>
+            checked <% } %>> HIV/AIDS Services</label>
+        <label><input type="checkbox" name="category[20]" value="22" <% if (organization.array_agg.indexOf(22) >= 0){ %>
+            checked <% } %>>Mental Health Services</label>
+        <label><input type="checkbox" name="category[31]" value="32"
+            <% if (organization.array_agg.indexOf(32) >= 0) { %> checked <% } %>>Problem Gambling Resources</label>
+        <label><input type="checkbox" name="category[32]" value="31" <% if (organization.array_agg.indexOf(31) >= 0){ %>
+            checked <% } %>>Pets and Service Animals</label>
+      </section>
+      <section id="financial">
+        <h4>Financial, Legal, and Employment</h4>
+        <label><input type="checkbox" name="category[21]" value="2" <% if (organization.array_agg.indexOf(2) >= 0){ %>
+            checked <% } %>>Identification Services</label>
+        <label><input type="checkbox" name="category[22]" value="9" <% if (organization.array_agg.indexOf(9) >= 0){ %>
+            checked <% } %>>Employment and Training Services</label>
+        <label><input type="checkbox" name="category[23]" value="11" <% if (organization.array_agg.indexOf(11) >= 0){ %>
+            checked <% } %>>Financial Assistance</label>
+        <label><input type="checkbox" name="category[24]" value="19" <% if (organization.array_agg.indexOf(19) >= 0){ %>
+            checked <% } %>>Legal Services</label>
+        <label><input type="checkbox" name="category[25]" value="21" <% if (organization.array_agg.indexOf(21) >= 0){ %>
+            checked <% } %>>Mail Services</label>
+        <label><input type="checkbox" name="category[26]" value="26" <% if (organization.array_agg.indexOf(26) >= 0){ %>
+            checked <% } %>>Storage Services</label>
+        <label><input type="checkbox" name="category[27]" value="23" <% if (organization.array_agg.indexOf(23) >= 0){ %>
+            checked <% } %>>Re-entry Assistance</label>
+        <label><input type="checkbox" name="category[28]" value="28" <% if (organization.array_agg.indexOf(28) >= 0){ %>
+            checked <% } %>>Transportation Services</label>
+      </section>
+    </div>
+  </div>
+  <p class="script hidden">Do you need an ID or any specific documents to access services? <br><span
+      class="emphasis">Make a note at the end of the description field above if any specifics about required documents
+      are given.</span></p>
+  <div id="final-checks">
+    <h3>Additional Information</h3>
+    <fieldset>
+      <label>
+        <input type="checkbox" value="t" name="id_req" <% if (organization.id_req){ %> checked <% } %>> ID or specific
+        documents are required to access services</label>
+    </fieldset>
+    <p class="script hidden">Would your agency be interested in supporting the publication of the Resource Guide with a
+      Sponsorship? Your logo would be printed on the back of the guidebook in addition to other benefits. We have a
+      number of different options and pricing and we could have staff follow up with you directly.<br><span>If yes,
+        please make a note of their email address below.</span></p>
+    <fieldset>
+      <label>
+        <input type="checkbox" value="t" name="sponsorship" <% if (organization.sponsorship){ %> checked <% } %>>This
+        organization is interested in sponsorship</label>
+      <label class="checks-email"><span>Email address for follow up regarding sponsorship:</span>
+        <textarea type="text" name="sponsorship_email"><%= organization.sponsorship_email %></textarea></label>
+    </fieldset>
+    <p class="script hidden">Would you like to be on our list for distribution when the new guide is out in the late
+      Fall? <br><span class="emphasis">If yes, please make a note of their email address below.</span></p>
+    <fieldset>
+      <label>
+        <input type="checkbox" value="t" name="distribution" <% if (organization.distribution) { %> checked <% } %>>This
+        organization is interested in distribution</label>
+      <label class="checks-email"><span>Email address to follow up regarding distribution:</span>
+        <textarea type="text" name="distribution_email"><%= organization.distribution_email %></textarea>
+      </label>
+    </fieldset>
+  </div>
+  <textarea class="hidden" name="prior_cats"> <%= organization.array_agg %> </textarea>
+  <input class="hidden" name="timestamp" id="timestamp">
+  <p class="script hidden"><span class="emphasis">Even if no updates were made to this organization's information, hit
+      the submit button below so it is noted that this record has been checked.</span></p>
+  <button type="submit">Submit</button>
+  </form>
 </main>

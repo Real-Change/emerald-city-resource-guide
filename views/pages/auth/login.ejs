@@ -1,12 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
 <%- include('../../layout/head') %>
-<%- include('../../layout/head-auth') %>
-</head>
+
 <body>
 	<%- include('../../layout/header') %>
-<div>
-	<div id="firebaseui-auth-container"></div>
+	<div>
+		<div id="firebaseui-auth-container"></div>
 
-	<%- include('../../layout/footer') %>
+		<%- include('../../layout/footer') %>
 	</div>
+	<script type="text/javascript">
+		// FirebaseUI config.
+		var uiConfig = {
+			signInSuccessUrl: '/credentialcheck',
+			signInOptions: [
+				firebase.auth.EmailAuthProvider.PROVIDER_ID
+			],
+			credentialHelper: firebaseui.auth.CredentialHelper.NONE
+		};
+		// Initialize the FirebaseUI Widget using Firebase.
+		var ui = new firebaseui.auth.AuthUI(firebase.auth());
+		// The start method will wait until the DOM is loaded.
+		ui.start('#firebaseui-auth-container', uiConfig);
+	</script>
 </body>
+
 </html>
