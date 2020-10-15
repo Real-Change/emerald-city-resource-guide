@@ -9,7 +9,7 @@ $(document).ready(function(){
             'width': '30vw',
             'border': '1px solid black'
         });
-        //$(this).append(mapDiv);
+        $(this).append(mapDiv);
         let mymap = L.map(mapDiv).setView([47.620422, -122.349358], 13);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', 
             {
