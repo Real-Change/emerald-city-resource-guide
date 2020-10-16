@@ -27,13 +27,18 @@
 				<%= organization.schedule %>
 			</div>
 			<div class="label">Description |</div>
-			<div class="content" id="last-content">
+			<div class="content">
 				<i class="fas fa-chevron-circle-down desc-button desc-button-on fa-lg" aria-hidden="true"
 					title="Show description"></i>
 				<p class="desc hidden">
 					<%= organization.org_description %>
 				</p>
 			</div>
+            <div class="label">Map |</div>
+            <div class="content" id="last-content">
+                <a class="mapLink">Show map</a>
+                <div class="mapDiv"></div>
+            </div>
 			<p class="cat hidden">
 				<%= organization.array_agg %>
 			</p>
