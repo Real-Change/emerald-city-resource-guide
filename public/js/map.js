@@ -1,4 +1,11 @@
+//~ import L from 'leaflet';
+//~ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+
 $(document).ready(function(){
+    
+    const L = require('leaflet');
+    const provider = new OpenStreetMapProvider();
+    
     function initMap(container){
         let myMap = L.map(container).setView([47.620422, -122.349358], 13);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', 
@@ -12,17 +19,17 @@ $(document).ready(function(){
             }).addTo(myMap);
         let marker = L.marker([47.620422, -122.349358]).addTo(myMap);
     }
+    
     $('.organization-item').each(function(){
-        //~ if ($(':nth-child(6)', this).text().startsWith('Address')){
-            //~ console.log('Address found!');
-        //~ }
         
         //capture local mapLink (JQ object) and mapDiv (non-JQ object)
+        // (Leaflet needs a non-JQ object)
         const mapDiv = this.getElementsByClassName('mapDiv')[0],
                 $mapLink = $('.mapLink', this);
         
         //prevents errors from re-initializing the same map
-        let mapExist = false;
+        let mapExist = false,
+            address;
         
         $(mapDiv).css({
             'height': '20vw',
@@ -30,6 +37,12 @@ $(document).ready(function(){
             'border': '1px solid black',
             'display': 'none'
         });
+        
+        if ($(':nth-child(6)', this).text().startsWith('Address')){
+            console.log('Address found!');
+            address = $(':nth-child(6)', this).next().text();
+            console.log('Address is ' + address);
+        }
         
         $mapLink.click(function(){
             $(mapDiv).toggle('slow');
