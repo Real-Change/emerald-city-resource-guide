@@ -8,7 +8,7 @@
 			<div class="label">Website |</div>
 			<% const hasHttp = new RegExp("^(http|https)://", "i");
 			   if (!hasHttp.test(organization.website)) {
-			     organization.website = 'http://' + organization.website;
+			     organization.website = "http://" + organization.website;
 			   }
 			 %>
 			<a target="_blank" href=<%= organization.website %> target="_blank">
