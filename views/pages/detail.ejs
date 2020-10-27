@@ -6,8 +6,8 @@
 			<h3><%= organization.organization_name %></h3>
 			<% if(organization.website != ""){ %>
 			<div class="label">Website |</div>
-			<% const uriTest = new RegExp("^(http|https)://", "i");
-			   if (!uriTest.test(organization.website)) {
+			<% const hasHttp = new RegExp("^(http|https)://", "i");
+			   if (!hasHttp.test(organization.website)) {
 			     organization.website = 'http://' + organization.website;
 			   }
 			 %>
