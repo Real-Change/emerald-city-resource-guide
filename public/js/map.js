@@ -1,9 +1,9 @@
-//~ import L from 'leaflet';
-//~ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import L from 'leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 $(document).ready(function(){
     
-    const L = require('leaflet');
+    //const L = require('leaflet');
     const provider = new OpenStreetMapProvider();
     
     function initMap(container){
