@@ -167,7 +167,6 @@ button, input[type="button"] {
 	background-size: contain;
 }
 
-
 .desc-button {
 	margin: 1vw 0 2vw;
 }
@@ -557,5 +556,25 @@ span.emphasis {
 
 #hours {
 	font-size: 4vw;
-    margin: 3vw
+	margin: 3vw
+}
+
+  /* Footer */
+  
+footer {
+	width: 100%;
+}
+
+footer nav {
+	padding: 1vw;
+	text-align: center;
+}
+
+#login-desktop {
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+#login-desktop:hover {
+	text-decoration: underline;
 }
