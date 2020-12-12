@@ -5,6 +5,7 @@ $(document).ready(function(){
     
     //const L = require('leaflet');
     const provider = new OpenStreetMapProvider();
+    mapboxKey = process.env.MAPBOX_KEY;
     
     function initMap(container){
         let myMap = L.map(container).setView([47.620422, -122.349358], 13);
@@ -15,7 +16,7 @@ $(document).ready(function(){
                 id: 'mapbox/streets-v11',
                 tileSize: 512,
                 zoomOffset: -1,
-                accessToken: 'pk.eyJ1IjoidmVyZGhhcm8iLCJhIjoiY2tnNXRzaHE3MHh2ODJxcnVobWNoZjBnaiJ9.lIuTPk6WEWRNbpxLxxXZIA'
+                accessToken: mapboxKey
             }).addTo(myMap);
         let marker = L.marker([47.620422, -122.349358]).addTo(myMap);
     }
