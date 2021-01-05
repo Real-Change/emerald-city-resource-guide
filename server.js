@@ -515,7 +515,9 @@ distribution,
 distribution_email,
 sponsorship_email,
 sponsorship,
-zipcode;
+zipcode,
+tempcovid
+;
 
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req) {
