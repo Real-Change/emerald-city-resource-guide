@@ -179,13 +179,13 @@ function makeSQL(requestType, category, gender) {
   // Return all orgs
   if (requestType === "all") {
     SQL =
-      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active='t' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.id_req ORDER by organization.organization_name;";
+      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active='t' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.tempcovid, organization.id_req ORDER by organization.organization_name;";
   }
 
   // Return orgs based on keyword search
   else if (requestType === "keyword") {
     SQL =
-      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_email, organization.contact_phone, organization.contact_title, organization.sponsorship, organization.sponsorship_email, organization.distribution, organization.distribution_email, organization.id_req ORDER BY organization_name;";
+      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_email, organization.contact_phone, organization.contact_title, organization.sponsorship, organization.sponsorship_email, organization.distribution, organization.distribution_email, organization.tempcovid, organization.id_req ORDER BY organization_name;";
   }
 
   // Return orgs based on form
@@ -202,7 +202,7 @@ function makeSQL(requestType, category, gender) {
       genderQuery +
       " AND (" +
       categoryQuery +
-      ") AND (organization_x_category.active='t') AND (orgs.active='t') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.id_req ORDER by orgs.organization_name;";
+      ") AND (organization_x_category.active='t') AND (orgs.active='t') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.tempcovid, orgs.id_req ORDER by orgs.organization_name;";
   }
   console.log("SQL", SQL);
   return SQL;
@@ -487,7 +487,7 @@ function editOrg(req, res) {
   let SQL =
     "SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=" +
     orgId +
-    " AND organization_x_category.active='t') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.id_req ORDER by organization.organization_name;";
+    " AND organization_x_category.active='t') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.tempcovid, organization.id_req ORDER by organization.organization_name;";
 
   client
     .query(SQL)
@@ -515,7 +515,9 @@ distribution,
 distribution_email,
 sponsorship_email,
 sponsorship,
-zipcode;
+zipcode,
+tempcovid
+;
 
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req) {
@@ -557,6 +559,7 @@ function parseForm(req) {
   phone_number = replaceChar(req.body.phone_number);
   org_address = replaceChar(req.body.org_address);
   org_description = replaceChar(req.body.org_description);
+  tempcovid = replaceChar(req.body.tempcovid);
   schedule = req.body.schedule;
   gender = req.body.gender;
   timestamp = req.body.timestamp;
@@ -635,7 +638,9 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
     sponsorship_email +
     "', zipcode=" +
     zipcode +
-    " WHERE organization_id=" +
+    ", tempcovid='" +
+    tempcovid +
+    "' WHERE organization_id=" +
     organization_id +
     " RETURNING organization_name;";
 
@@ -738,7 +743,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
   parseForm(req);
 
   let mainSQL =
-    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, active) VALUES('" +
+    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, tempcovid, active) VALUES('" +
     organization_name +
     "', '" +
     website +
@@ -774,7 +779,9 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
     sponsorship +
     "', " +
     zipcode +
-    ", 't');";
+    ", '" +
+    tempcovid +
+    "', 't');";
 
   // Create SQL query for adding categories
   let cats = req.body.category;
