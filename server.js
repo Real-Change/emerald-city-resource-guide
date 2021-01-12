@@ -743,7 +743,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
   parseForm(req);
 
   let mainSQL =
-    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, active) VALUES('" +
+    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, tempcovid, active) VALUES('" +
     organization_name +
     "', '" +
     website +
@@ -779,7 +779,9 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
     sponsorship +
     "', " +
     zipcode +
-    ", 't');";
+    ", '" +
+    tempcovid +
+    "', 't');";
 
   // Create SQL query for adding categories
   let cats = req.body.category;
