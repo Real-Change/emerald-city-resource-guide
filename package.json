@@ -9,6 +9,7 @@
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch ./test ./",
+    "preinstall": "node preinstall.js",
     "start": "node server.js"
   },
   "repository": {
