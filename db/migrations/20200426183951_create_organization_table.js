@@ -20,7 +20,8 @@ exports.up = function(knex) {
     distribution BOOLEAN,
     id_req BOOLEAN,
     sponsorship_email VARCHAR(255),
-    distribution_email VARCHAR(255)
+    distribution_email VARCHAR(255),
+    tempcovid VARCHAR(255)
   )`
   return knex.raw(createQuery)
 };
