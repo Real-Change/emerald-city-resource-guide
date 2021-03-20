@@ -287,9 +287,13 @@ app.post("/sessionLogin", (req, res) => {
       let userEmail = decodedIdToken.email;
       let SQL = "SELECT * FROM users WHERE email = '" + userEmail + "';";
 
+      console.log("Looking up user");
+
       return client.query(SQL).then((results) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.
+
+          console.log("Found user creating cookie");
           admin
             .auth()
             .createSessionCookie(idToken, {
@@ -297,6 +301,7 @@ app.post("/sessionLogin", (req, res) => {
             })
             .then((sessionCookie) => {
               // Set cookie policy for session cookie.
+              console.log("Setting cookie");
               const options = {
                 maxAge: expiresIn,
                 httpOnly: true,
@@ -498,26 +503,25 @@ function editOrg(req, res) {
 }
 
 let organization_id,
-organization_name,
-website,
-phone_number,
-org_address,
-org_description,
-schedule,
-gender,
-timestamp,
-contact_name,
-contact_title,
-contact_email,
-contact_phone,
-id_req,
-distribution,
-distribution_email,
-sponsorship_email,
-sponsorship,
-zipcode,
-tempcovid
-;
+  organization_name,
+  website,
+  phone_number,
+  org_address,
+  org_description,
+  schedule,
+  gender,
+  timestamp,
+  contact_name,
+  contact_title,
+  contact_email,
+  contact_phone,
+  id_req,
+  distribution,
+  distribution_email,
+  sponsorship_email,
+  sponsorship,
+  zipcode,
+  tempcovid;
 
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req) {
@@ -550,8 +554,8 @@ function compareCategories(req) {
 
 function parseForm(req) {
   // Escape single quote to prevent SQL errors
-  function replaceChar(str){
-      return str.replace(/'/g, "''");
+  function replaceChar(str) {
+    return str.replace(/'/g, "''");
   }
   organization_id = req.body.id;
   organization_name = replaceChar(req.body.name);
@@ -823,27 +827,26 @@ app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   );
 });
 
-app.get("/admin/copyrequest/:requestId/edit", isAuthenticated, function (req, res) {
-  let values = [req.params.requestId];
-  let SQL = "SELECT * from requests WHERE request_id=$1";
+app.get(
+  "/admin/copyrequest/:requestId/edit",
+  isAuthenticated,
+  function (req, res) {
+    let values = [req.params.requestId];
+    let SQL = "SELECT * from requests WHERE request_id=$1";
 
-  client
-    .query(SQL, values)
-    .then((result) => {
-      res.render("./pages/auth/copy-request-edit", { request: result.rows[0] })
-    })
-    .catch(handleError);
-});
+    client
+      .query(SQL, values)
+      .then((result) => {
+        res.render("./pages/auth/copy-request-edit", {
+          request: result.rows[0],
+        });
+      })
+      .catch(handleError);
+  }
+);
 
 app.put("/admin/copyrequest/update", isAuthenticated, function (req, res) {
-  let {
-    id,
-    organization_name,
-    contact_name,
-    email,
-    phone,
-    number
-  } = req.body;
+  let { id, organization_name, contact_name, email, phone, number } = req.body;
 
   let SQL =
     "UPDATE requests SET organization_name='" +
