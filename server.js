@@ -45,6 +45,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+pg.defaults.ssl = true;
 const client = new pg.Client(process.env.DATABASE_URL);
 client.connect().catch((e) => console.error("connection error", e.stack));
 client.on("error", (err) => console.log(err));
@@ -287,13 +288,10 @@ app.post("/sessionLogin", (req, res) => {
       let userEmail = decodedIdToken.email;
       let SQL = "SELECT * FROM users WHERE email = '" + userEmail + "';";
 
-      console.log("Looking up user");
-
       return client.query(SQL).then((results) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.
 
-          console.log("Found user creating cookie");
           admin
             .auth()
             .createSessionCookie(idToken, {
@@ -301,7 +299,6 @@ app.post("/sessionLogin", (req, res) => {
             })
             .then((sessionCookie) => {
               // Set cookie policy for session cookie.
-              console.log("Setting cookie");
               const options = {
                 maxAge: expiresIn,
                 httpOnly: true,
