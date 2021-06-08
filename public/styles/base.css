@@ -286,11 +286,6 @@ select::-ms-expand {
 	padding: 2vw 0;
 }
 
-p.contact {
-	text-align: center;
-	padding: 1vw;
-}
-
 #emaillink {
 	font-weight: bold;
 	color: #df972d;
