@@ -6,7 +6,35 @@
 	<%- include('../layout/header') %>
 	<main id="contact-page">
 		<div id="copy-request">
+			<h2 class="contact">
+				Emerald City Resource Guide - 4th Edition
+			</h2>
+			<h2 class="contact">
+				Reserve your copies today by placing an order below.
+			</h2>
+			<p class="contact-center">This project is made possible by sponsors like those listed below. Please <a href="https://51573.thankyou4caring.org/emerald-city-resource-guide">join us</a> to put the Resource Guide into the hands of those who need it.
+			</p>
+			<p class="contact">To cover the costs of updating information and printing, please note:
+			</p>
+			<ul class="contact">
+				<li class="contact">
+					Agencies requesting 500 or more Resource Guides to make a gift of any size
+				</li>
+				<li class="contact">
+					Agencies requesting 1,000 or more Resource Guides are required to become a sponsor at any level
+				</li>
+				<li class="contact">
+					All agencies will be limited to no more than 5,000 Resource Guides per organization.
+				</li>
+				<li class="contact">
+					Please coordinate with other staff in your office to make sure your agency is only placing one order.
+				</li>
+			</ul>
 			<p class="contact">
+				Thank you for distributing this important resource to your community!
+			</p>
+
+			<!-- <p class="contact">
 				The Fourth Edition of the Emerald City Resource Guide is almost ready! Reserve your copies today by placing an order below.
 			</p>
 			<p class="contact">When the guides are ready to be picked up, we'll send a reminder.
@@ -16,13 +44,13 @@
 			<p class="contact">To cover the costs of updating information and printing, we ask all agencies requesting 250 or more Resource Guides to make a gift of any size.
 			</p>
 			<p class="contact">Please coordinate with other staff in your office to make sure your agency is only placing one order.
-			</p>
-			
+			</p> -->
+
 
 			<form action="/requestconfirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization" required>
-						
+
 						<label for="name">Your Name</label>
 						<input type="text" id="form-name" name="name" required>
 
@@ -33,7 +61,7 @@
 						<input type="text" id="form-phone" name="phone" required>
  -->
 						<label for="number">Number of Guides Requested</label>
-						<input type="number" id="form-number" name="number" required>
+						<input type="number" id="form-number" name="number" min="0" max="5000" required>
 
 						<button type="submit" class="request-button" disabled>Submit</button>
 

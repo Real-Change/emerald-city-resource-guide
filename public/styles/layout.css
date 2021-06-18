@@ -281,6 +281,34 @@
     margin: 1vw 5vw;
   }
 
+  p.contact-center {
+    font-size: 1.4vw;
+    line-height: 2.5vw;
+    width: 90vw;
+    margin: 1vw 5vw;
+    text-align: center;
+  }
+
+  p.h2 {
+    font-size: 2vw;
+    line-height: 3vw;
+    width: 90vw;
+    margin: 1vw 5vw;
+    text-align: center;
+  }
+
+  ul.contact {
+    list-style-type: disc;
+    margin: 1vw 5vw;
+  }
+
+  li.contact {
+    font-size: 1.4vw;
+    line-height: 2.5vw;
+    width: 90vw;
+    margin: 1vw 5vw;
+  }
+
   #emailcopy {
     font-size: 3vw;
   }
