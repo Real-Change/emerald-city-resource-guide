@@ -7,7 +7,7 @@
   <div>
     <%- include('../auth/sidebar.ejs') %>
 <!--     <h2 id="remaining-pickup">Remaining Number of Guides to be Picked Up: <span id="guide-count"></span></h2> -->
-    <h2 id="remaining-pickup">Number of copies available: <span id="guide-count"></span></h2>
+    <h2 id="remaining-pickup">Number of copies available: <span id="guide-count"><%- 50000 - total %></span></h2>
     <div class="copy-request-container">
       <ul>
         <% requests.forEach(request => { %>
@@ -40,13 +40,13 @@
     <%- include('../../layout/footer') %>
     <script>
       // count # of guides still to be picked up
-      let sum = 0;
+/*       let sum = 0;
       const numberOfCopies = 50000;
       $(".guide-number").each(function () {
         sum += parseInt($(this).html(), 10) || 0;
       });
 
-      $("#guide-count").text(numberOfCopies - sum);
+      $("#guide-count").text(numberOfCopies - sum); */
 
       $('.pick-up-button').on('click', function(e) {
         $.post('/admin/request/pickup',
