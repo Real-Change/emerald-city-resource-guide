@@ -816,18 +816,19 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   let SQL =
     "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
-  let copyRequests = "SELECT SUM(number) FROM requests WHERE deleted='f';"
-  let requests;
+  let copyRequests = "SELECT SUM(number) AS total FROM requests WHERE deleted='f';"
+  let pendingRequests;
 
   return client.query(SQL)
   .then(function(results) {
-    requests = results;
-    console.log("Requests are: ", requests);
+    pendingRequests = results;
+    console.log("Requests are: ", pendingRequests);
     return client.query(copyRequests).then(function(results) {
       console.log("The total is" , results);
+      console.log("Results sent back are ", results.rows);
       res.render("./pages/auth/copy-requests.ejs", {
-        requests: requests.rows,
-        total: results.rows
+        requests: pendingRequests.rows,
+        total: results.rows[0].total
      });
     });
   });
