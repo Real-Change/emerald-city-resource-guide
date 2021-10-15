@@ -11,6 +11,9 @@ var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
 const admin = require("firebase-admin");
+var Stream = require('stream');
+const { stdout } = require("process");
+const { RSA_NO_PADDING } = require("constants");
 
 const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
@@ -883,3 +886,17 @@ app.post("/admin/request/delete", isAuthenticated, function (req, res) {
 
   return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
 });
+
+app.get("/admin/request/download-requests", 
+  isAuthenticated, 
+  function (req, res) {
+    let SQL = 'SELECT * FROM requests';
+
+    client
+      .query(SQL)
+      .then(function(dbQueryResult) {
+          res.status(200).send(dbQueryResult.rows);
+      })
+      .catch(handleError);
+  }
+);
