@@ -890,7 +890,7 @@ app.post("/admin/request/delete", isAuthenticated, function (req, res) {
 app.get("/admin/request/download-requests", 
   isAuthenticated, 
   function (req, res) {
-    let SQL = 'SELECT * FROM requests';
+    let SQL = 'SELECT * FROM requests ORDER BY request_id ASC';
 
     client
       .query(SQL)
