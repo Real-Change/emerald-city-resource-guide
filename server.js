@@ -11,9 +11,6 @@ var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
 const admin = require("firebase-admin");
-var Stream = require('stream');
-const { stdout } = require("process");
-const { RSA_NO_PADDING } = require("constants");
 
 const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
