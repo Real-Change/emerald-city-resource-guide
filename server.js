@@ -895,7 +895,7 @@ app.get("/admin/request/download-requests",
     client
       .query(SQL)
       .then(function(dbQueryResult) {
-        res.json(dbQueryResult.rows);
+          res.send(dbQueryResult.rows);
       })
       .catch(handleError);
   }
