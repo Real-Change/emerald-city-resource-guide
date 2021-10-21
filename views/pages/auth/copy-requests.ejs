@@ -9,11 +9,6 @@
 <!--     <h2 id="remaining-pickup">Remaining Number of Guides to be Picked Up: <span id="guide-count"></span></h2> -->
     <h2 id="remaining-pickup">Number of copies available: <span id="guide-count"><%- 50000 - total %></span></h2>
     <div class="copy-request-container">
-
-    <div id="download-requests-container">
-       <button type="submit" class="download-requests-button" >Download Requests</button>
-    </div>
-
       <ul>
         <% requests.forEach(request => { %>
         <div class="request-item admin">
@@ -74,43 +69,6 @@
           }
         )
       })
-
-      $('.download-requests-button').on('click', function(e) {
-        $.get('/admin/request/download-requests',
-            function(dbResult, status, jqXHR) {
-              if (status === 'success') {
-                let csvData = "request_id,organization_name,contact_name,email,phone,number,picked_up,deleted\n";
-                const COMMA = ",";
-                const NEWLINE = "\n";
-                const DASH = "-";
-                const today = new Date();
-
-                let dbRows = JSON.parse(JSON.stringify(dbResult));
-                dbRows.forEach(row => {
-                    csvData += row.request_id + COMMA
-                      + row.organization_name + COMMA
-                      + row.contact_name + COMMA
-                      + row.email + COMMA
-                      + row.phone + COMMA
-                      + row.number + COMMA
-                      + row.picked_up + COMMA
-                      + row.deleted + NEWLINE;   
-                });
-
-                const blob = new Blob([csvData]);
-                let link = document.createElement('a');
-                const objUrl = URL.createObjectURL(blob);  
-                link.href = objUrl;
-                link.download = 'guideRequests' + DASH + 
-                                (today.getMonth() + 1) + DASH + 
-                                today.getDate() + DASH + 
-                                today.getFullYear() + ".csv";
-                link.click();
-              }
-            }
-          ) 
-        })
-
     </script>
   </div>
 </body>
