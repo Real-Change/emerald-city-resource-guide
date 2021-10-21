@@ -8,9 +8,12 @@
     <%- include('../auth/sidebar.ejs') %>
 <!--     <h2 id="remaining-pickup">Remaining Number of Guides to be Picked Up: <span id="guide-count"></span></h2> -->
     <h2 id="remaining-pickup">Number of copies available: <span id="guide-count"><%- 50000 - total %></span></h2>
-    <button type="submit" class="download-requests-button" >Download Requests</button>
-
     <div class="copy-request-container">
+
+    <div id="download-requests-container">
+       <button type="submit" class="download-requests-button" >Download Requests</button>
+    </div>
+
       <ul>
         <% requests.forEach(request => { %>
         <div class="request-item admin">
@@ -79,6 +82,8 @@
                 let csvData = "request_id,organization_name,contact_name,email,phone,number,picked_up,deleted\n";
                 const COMMA = ",";
                 const NEWLINE = "\n";
+                const DASH = "-";
+                const today = new Date();
 
                 let dbRows = JSON.parse(JSON.stringify(dbResult));
                 dbRows.forEach(row => {
@@ -96,11 +101,9 @@
                 let link = document.createElement('a');
                 const objUrl = URL.createObjectURL(blob);  
                 link.href = objUrl;
-
-                const today = new Date();
-                link.download = 'guideRequests' + "-" + 
-                                (today.getMonth() + 1) + "-" + 
-                                today.getDate() + "-" + 
+                link.download = 'guideRequests' + DASH + 
+                                (today.getMonth() + 1) + DASH + 
+                                today.getDate() + DASH + 
                                 today.getFullYear() + ".csv";
                 link.click();
               }
