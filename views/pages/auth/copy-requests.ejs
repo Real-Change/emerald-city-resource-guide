@@ -8,6 +8,8 @@
     <%- include('../auth/sidebar.ejs') %>
 <!--     <h2 id="remaining-pickup">Remaining Number of Guides to be Picked Up: <span id="guide-count"></span></h2> -->
     <h2 id="remaining-pickup">Number of copies available: <span id="guide-count"><%- 50000 - total %></span></h2>
+    <button type="submit" class="download-requests-button" >Download Requests</button>
+
     <div class="copy-request-container">
       <ul>
         <% requests.forEach(request => { %>
@@ -69,6 +71,42 @@
           }
         )
       })
+
+      $('.download-requests-button').on('click', function(e) {
+        $.get('/admin/request/download-requests',
+            function(dbRows, status, jqXHR) {
+              if (status === 'success') {
+                let csvData = "request_id,organization_name,contact_name,email,phone,number,picked_up,deleted\n";
+                const COMMA = ",";
+                const NEWLINE = "\n";
+
+                dbRows.forEach(row => {
+                    csvData += row.request_id + COMMA
+                      + row.organization_name + COMMA
+                      + row.contact_name + COMMA
+                      + row.email + COMMA
+                      + row.phone + COMMA
+                      + row.number + COMMA
+                      + row.picked_up + COMMA
+                      + row.deleted + NEWLINE;   
+                });
+
+                const blob = new Blob([csvData]);
+                let link = document.createElement('a');
+                const objUrl = URL.createObjectURL(blob);  
+                link.href = objUrl;
+
+                const today = new Date();
+                link.download = 'guideRequests' + "-" + 
+                                (today.getMonth() + 1) + "-" + 
+                                today.getDate() + "-" + 
+                                today.getFullYear() + ".csv";
+                link.click();
+              }
+            }
+          ) 
+      })
+
     </script>
   </div>
 </body>
