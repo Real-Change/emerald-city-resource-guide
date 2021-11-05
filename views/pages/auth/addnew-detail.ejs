@@ -177,6 +177,54 @@
       </section>
     </div>
   </div>
+
+  <div id="printselection">
+    <h3>Print Chapter</h3>
+    <section id="printDropDown"> 
+      <h4>Chapter to Print this Organization Under in the Physical Guide. You must select some Categories above for this menu to be populated. Pleases select a max of 2 print chapters</h4>
+        
+      <label for="selectedPrintOptions">Print in Chapters:</label>
+      <select multiple="multiple" name="print_locations[]" id="selectedPrintOptions">
+          <option  selected value="default" >None Selected</option>
+          <option  hidden value="24">Senior Citizens</option>
+          <option  hidden value="18">Immigrants or Refugees</option>
+          <option  hidden value="27">Survivors of Violence</option>
+          <option  hidden value="14">People of Color</option>
+          <option  hidden value="13">Native & Indigenous People</option>
+          <option  hidden value="20">LGBTQIA+</option>
+          <option  hidden value="29">Veterans</option>
+          
+          <option  hidden value="1">Emergency and Crisis Lines</option>
+          <option  hidden value="3">Hygiene Services</option>
+          <option  hidden value="4">Encampments</option>
+          <option  hidden value="6">Day Centers</option>
+          <option  hidden value="12">Food Assistance</option>
+          <option  hidden value="17">Housing Services</option>
+          <option  hidden value="25">Shelters</option>
+          <option  hidden value="5">Clothing Services</option>
+
+          <option  hidden value="7">Dental and Vision Services</option>
+          <option  hidden value="8">Drug and Alchohol Services</option>
+          <option  hidden value="10">Family and Maternity Services</option>
+          <option  hidden value="30">Womxn's Health Services</option>
+          <option  hidden value="15">General Health Services</option>
+          <option  hidden value="16">HIV/AIDS Services</option>
+          <option  hidden value="22">Mental Health Services</option>
+          <option  hidden value="32">Problem Gambling Resources</option>
+          <option  hidden value="31">Pets and Service Animals</option>
+
+          <option  hidden value="2">Identification Services</option>
+          <option  hidden value="9">Employment and Training Services</option>
+          <option  hidden value="11">Financial Assistance</option>
+          <option  hidden value="19">Legal Services</option>
+          <option  hidden value="21">Mail Services</option>
+          <option  hidden value="26">Storage Services</option>
+          <option  hidden value="23">Re-entry Assistance</option>
+          <option  hidden value="28">Transportation Services</option>
+      </select>
+    </section>
+  </div>
+
   <div id="final-checks">
     <h3>Additional Information</h3>
     <fieldset>
@@ -203,3 +251,4 @@
   <button type="submit" id="submit-button">Submit</button>
   </form>
 </main>
+

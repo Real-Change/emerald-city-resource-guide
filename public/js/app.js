@@ -105,6 +105,42 @@ $(document).ready(function () {
     $('#order-confirmation').addClass('hidden')
   }
 
+  // updates the print menu based on checkbox just selected or deselected
+  $('#allcats :checkbox').change(function() {    // if a checkbox has just been selected or deselected 
+    var selectedId = $(this).val();               // get the ID of the checkbox
+
+    // if box was just Unchecked  And it was a currently selected print option we needs to deselect it 
+    if ((! $(this).is(":checked"))  && ($("#selectedPrintOptions option:selected").prop("value") === selectedId)) {
+         $("#selectedPrintOptions option[value=" + selectedId + "]").prop('selected', false);  // unselect from menu
+    }
+    $("#selectedPrintOptions option[value=" + selectedId + "]").toggle();  // toggle between hiding and showing in print menu
+
+    if ( $('#selectedPrintOptions :selected').length === 0 ) {
+      $('#selectedPrintOptions option[value="default"]').prop('selected', true);
+    }
+  });
+
+  // enforce that they can never select more than 2 print locations
+  // if select 3rd choice deselect all as there is no way to know what one they just added.
+  $('#selectedPrintOptions').change(function() {
+    var count = $('#selectedPrintOptions :selected').length;
+    if ( (count > 2) ||
+       ( (count === 2) && ($('#selectedPrintOptions option[value="default"]').is(':selected') ) ))  {
+        if (count > 2) {
+          alert("No more than 2 print chapters can be selected. Please reselect print chapters");
+        } else {
+          alert('When selecting Multiple Print Chapters, "None Selected" is not a valid option. Please reselect print chapters');
+        }
+
+        // deselect all print options and select "None Selected"
+        $('#selectedPrintOptions option:selected').each(function() {
+          $("#selectedPrintOptions option[value=" + $(this).prop("value") + "]").prop('selected', false);  // unselect from menu
+        });
+        $('#selectedPrintOptions option[value="default"]').prop('selected', true);
+       }
+       
+  });
+
 });
 
 

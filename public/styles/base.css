@@ -456,6 +456,23 @@ textarea.bigger {
 	margin-bottom: 3vw
 }
 
+#printselection,
+#printselection select {
+	margin: 1vw;
+	color: black;
+}
+
+#printselection select option:checked {
+	color: white;
+	background-color: rgb(130, 130, 130);
+}
+
+#printselection label {
+	vertical-align:top;
+	padding-left: 3vw;
+	font-size: 1.4vw;
+}
+
 #editconfheader, #addconfheader {
 	margin: 5vw auto;
 	width: 100vw;
