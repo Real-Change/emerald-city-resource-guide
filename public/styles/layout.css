@@ -322,7 +322,7 @@
     font-size: 2vw;
   }
 
-  #confirmation #confirmation-paragraphs {
+  #confirmation .confirmation-paragraph {
     text-align: left;
     line-height: 2.5vw;
     margin-bottom: 2vw;
