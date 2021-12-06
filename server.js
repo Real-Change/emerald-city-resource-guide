@@ -126,7 +126,7 @@ function submitRequest(req, res) {
     req.body.number,
   ];
   let SQL =
-    "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up) VALUES ($1, $2, $3, $4, $5, 'f');";
+    "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up, date) VALUES ($1, $2, $3, $4, $5, 'f', CURRENT_TIMESTAMP);";
 
   return client
     .query(SQL, values)
