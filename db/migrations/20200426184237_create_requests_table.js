@@ -6,7 +6,8 @@ exports.up = function(knex) {
     email VARCHAR(255),
     phone VARCHAR(255),
     number INT,
-    picked_up BOOLEAN
+    picked_up BOOLEAN,
+    date TIMESTAMP
   )`
   return knex.raw(createQuery)
 };
