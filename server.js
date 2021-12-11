@@ -487,15 +487,28 @@ app.post("/admin/update/:orgId", isAuthenticated, editOrg);
 function editOrg(req, res) {
   let orgId = req.params.orgId;
   let SQL =
-    "SELECT DISTINCT organization.*, array_agg(DISTINCT(category.category_id)) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (organization.organization_id=" +
-    orgId +
-    " AND organization_x_category.active='t') GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.tempcovid, organization.id_req ORDER by organization.organization_name;";
+    "SELECT o.*, join1.categories, join2.print_locations " +
+    "FROM organization o " +
+    "INNER JOIN ( " +
+      "SELECT oxc1.organization_id, oxc1.active, array_agg(category_id) AS categories " +
+      "FROM organization_x_category oxc1 " +
+      "GROUP BY oxc1.organization_id, oxc1.active " +
+    ") join1 ON ((o.organization_id = join1.organization_id) AND join1.active='t') " +
+    "LEFT OUTER JOIN ( " +
+      "SELECT  oxc2.organization_id, oxc2.active, oxc2.print_location, array_agg(category_id) AS print_locations " +
+      "FROM organization_x_category oxc2 " +
+      "GROUP BY oxc2.organization_id, oxc2.active, oxc2.print_location " +
+    ") join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t') " +
+    "WHERE (o.organization_id=" + orgId + ");";
 
   client
     .query(SQL)
-    .then((result) =>
-      res.render("./pages/auth/org-edit", { results: result.rows[0] })
-    )
+    .then((result) => {
+      if (result.rows[0].print_locations === null) {
+        result.rows[0].print_locations = [-1];  //default case
+      }
+      return res.render("./pages/auth/org-edit", { results: result.rows[0] })
+    })
     .catch(handleError);
 }
 
@@ -518,14 +531,19 @@ let organization_id,
   sponsorship_email,
   sponsorship,
   zipcode,
-  tempcovid;
+  tempcovid,
+  print_locations;
 
 // Identify which categories should be removed to the org to category mapping and which should be added
 function compareCategories(req) {
   let newCats = req.body.category;
   let priorCats = req.body.prior_cats.split(",");
+  let priorPrints = req.body.prior_prints.split(",");
+  let newPrints = req.body.print_locations;
   priorCats[0] = priorCats[0].trim();
   priorCats[priorCats.length - 1] = priorCats[priorCats.length - 1].trim();
+  priorPrints[0] = priorPrints[0].trim();
+  priorPrints[priorPrints.length - 1] = priorPrints[priorPrints.length - 1].trim();
 
   let catsToRemove = [];
   let catsToAdd = [];
@@ -537,14 +555,20 @@ function compareCategories(req) {
     }
   }
 
-  outputCats.push(catsToAdd);
-
   for (let i = 0; i < priorCats.length; i++) {
     if (newCats.indexOf(priorCats[i]) === -1) {
       catsToRemove.push(priorCats[i]);
+    } else {
+      // category checked  before and checked  now, need to check if printLocation changed for it
+      if ( ((priorPrints.indexOf(priorCats[i]) === -1) && (newPrints.indexOf(priorCats[i]) !== -1)) ||
+           ((priorPrints.indexOf(priorCats[i]) !== -1) && (newPrints.indexOf(priorCats[i]) === -1))  ) { 
+        catsToRemove.push(priorCats[i])
+        catsToAdd.push(priorCats[i])
+      } 
     }
   }
 
+  outputCats.push(catsToAdd);
   outputCats.push(catsToRemove);
   return outputCats;
 }
@@ -568,7 +592,8 @@ function parseForm(req) {
   contact_title = replaceChar(req.body.contact_title);
   contact_email = replaceChar(req.body.contact_email);
   contact_phone = replaceChar(req.body.contact_phone);
-
+  print_locations = req.body.print_locations;
+ 
   if (req.body.id_req === "t") {
     id_req = "t";
   } else {
@@ -683,6 +708,15 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
     catAddSQL = "";
   } else {
     for (let i = 0; i < catsToAdd.length; i++) {
+      // check if this category is one selected for printing in physical catalog
+      var print = 'false';
+      for (let j = 0; j <print_locations.length; j++) {
+        if (catsToAdd[i] === print_locations[j]) {
+          print = 'true';
+          break;
+        }
+      }
+
       if (catsToAdd.length === 1) {
         category_add_id =
           category_add_id +
@@ -690,7 +724,9 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
           "," +
           catsToAdd[i] +
           "," +
-          "true)";
+          "true" +
+          ", '" +
+          print + "')";
       } else if (i === 0) {
         category_add_id =
           category_add_id +
@@ -698,7 +734,9 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
           "," +
           catsToAdd[i] +
           "," +
-          "true), ";
+          "true" +
+          ", '" +
+          print + "'), ";
       } else if (i === catsToAdd.length - 1) {
         category_add_id =
           category_add_id +
@@ -707,7 +745,9 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
           "," +
           catsToAdd[i] +
           "," +
-          "true)";
+          "true" +
+          ", '" + 
+          print + "')";
       } else {
         category_add_id =
           category_add_id +
@@ -716,17 +756,19 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
           "," +
           catsToAdd[i] +
           "," +
-          "true), ";
+          "true" +
+          ", '" +
+          print + "'), ";
       }
     }
     catAddSQL =
-      "INSERT INTO organization_x_category (organization_id, category_id, active) VALUES " +
+      "INSERT INTO organization_x_category (organization_id, category_id, active, print_location) VALUES " +
       category_add_id +
       ";";
   }
 
   // Submit update/insert to database and render confirmation page
-  let completeSQL = mainSQL + catAddSQL + catRemoveSQL;
+  let completeSQL = mainSQL + catRemoveSQL + catAddSQL;
   client
     .query(completeSQL)
     .then(res.render("./pages/auth/edit-confirmation"))
@@ -787,20 +829,29 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
   // Create SQL query for adding categories
   let cats = req.body.category;
   let catAddSQL =
-    "INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (";
+    "INSERT INTO organization_x_category (organization_id, category_id, active, print_location) VALUES (";
   let allCatsSQL = "";
 
   cats.forEach((cat) => {
+    var print = 'f';
+    for (let i = 0; i <print_locations.length; i++) {
+      if (cat === print_locations[i]) {
+        print = 't';
+        break;
+      }
+    }
+
     catAddSQL =
       catAddSQL +
       "(SELECT organization_id FROM organization WHERE organization_name='" +
       organization_name +
       "'), " +
       cat +
-      ", 't'); ";
+      ", 't', '" + 
+      print + "'); ";
     allCatsSQL = allCatsSQL + catAddSQL;
     catAddSQL =
-      "INSERT INTO organization_x_category (organization_id, category_id, active) VALUES (";
+      "INSERT INTO organization_x_category (organization_id, category_id, active, print_location) VALUES (";
   });
 
   // Submit update/insert to database and render confirmation page
