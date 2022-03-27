@@ -180,13 +180,37 @@ function makeSQL(requestType, category, gender) {
   // Return all orgs
   if (requestType === "all") {
     SQL =
-      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE organization.active='t' GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_title, organization.contact_phone, organization.contact_email, organization.distribution, organization.distribution_email, organization.sponsorship, organization.sponsorship_email, organization.tempcovid, organization.id_req ORDER by organization.organization_name;";
-  }
+      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
+      "FROM organization o " +
+      "INNER JOIN ( " +
+        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
+        "FROM organization_x_category oxc1 " +
+        "INNER JOIN ( " +
+          "SELECT c.category_id, c.category_name " +
+          "FROM category c " + 
+        ") join2 ON (oxc1.category_id=join2.category_id) " +
+        "GROUP BY oxc1.organization_id, oxc1.active " +
+      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
+      "WHERE o.active='t' " +
+      "ORDER BY o.organization_name; ";
+}
 
   // Return orgs based on keyword search
   else if (requestType === "keyword") {
     SQL =
-      "SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids, organization.last_update, organization.active, organization.zipcode, organization.contact_name, organization.contact_email, organization.contact_phone, organization.contact_title, organization.sponsorship, organization.sponsorship_email, organization.distribution, organization.distribution_email, organization.tempcovid, organization.id_req ORDER BY organization_name;";
+      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
+      "FROM organization o " +
+      "INNER JOIN ( " +
+        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
+        "FROM organization_x_category oxc1 " +
+        "INNER JOIN ( " +
+          "SELECT c.category_id, c.category_name " +
+          "FROM category c " + 
+        ") join2 ON (oxc1.category_id=join2.category_id) " +
+        "GROUP BY oxc1.organization_id, oxc1.active " +
+      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
+      "WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) " +
+      "ORDER BY o.organization_name; ";
   }
 
   // Return orgs based on form

@@ -5,7 +5,7 @@
 			<option disabled selected value="default">Select One</option>
 			<% let catsArr = []; %>
 			<% organizations.forEach(organization => { %>
-			<% organization.array_agg.forEach(category => { %>
+			<% organization.category_names.forEach(category => { %>
 			<% let newCat = organization.category_name; %>
 			<% if(catsArr.includes(category)) { %>
 			<%		return; %>
