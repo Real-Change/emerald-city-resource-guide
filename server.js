@@ -215,19 +215,25 @@ function makeSQL(requestType, category, gender) {
 
   // Return orgs based on form
   else {
-    SQL =
-      "SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE ";
-
+   
     let genderQuery = makeGenderQuery(gender);
     let categoryQuery = makeCategoryQuery(category);
 
-    // add all the query components  into a single SQL query
-    SQL =
-      SQL +
-      genderQuery +
-      " AND (" +
-      categoryQuery +
-      ") AND (organization_x_category.active='t') AND (orgs.active='t') GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids, orgs.last_update, orgs.active, orgs.zipcode, orgs.contact_name, orgs.contact_email, orgs.contact_phone, orgs.contact_title, orgs.sponsorship, orgs.sponsorship_email, orgs.distribution, orgs.distribution_email, orgs.tempcovid, orgs.id_req ORDER by orgs.organization_name;";
+   SQL =
+      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
+      "FROM organization o " +
+      "INNER JOIN organization_x_category ON organization_x_category.organization_id = o.organization_id AND (" + categoryQuery + ") " +
+      "INNER JOIN ( " +
+        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
+        "FROM organization_x_category oxc1 " +
+        "INNER JOIN ( " +
+          "SELECT c.category_id, c.category_name " +
+          "FROM category c " + 
+        ") join2 ON (oxc1.category_id=join2.category_id) " +
+        "GROUP BY oxc1.organization_id, oxc1.active " +
+      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
+      "WHERE " + genderQuery + " " +
+      "ORDER BY o.organization_name; ";
   }
   console.log("SQL", SQL);
   return SQL;
