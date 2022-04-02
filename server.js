@@ -134,6 +134,23 @@ function submitRequest(req, res) {
     .catch(handleError);
 }
 
+// POST method for email list sign up page
+app.post("/mailinglistconfirmation", submitToMailingList);
+
+function submitToMailingList(req, res) {
+  let values = [
+    req.body.organization_name,
+    req.body.contact_name,
+    req.body.email,
+  ];
+  let SQL = "INSERT INTO mailing_list (organization_name, contact_name, email, date) VALUES ($1, $2, $3, CURRENT_TIMESTAMP);";
+
+  return client
+    .query(SQL, values)
+    .then(res.render("./pages/confirmation.ejs"))
+    .catch(handleError);
+}
+
 // catches
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
