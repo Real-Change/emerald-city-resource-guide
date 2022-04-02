@@ -9,6 +9,8 @@
 			<h2 class="contact">
 				Emerald City Resource Guide - 4th Edition
 			</h2>
+
+			<!--
 			<h2 class="contact">
 				Reserve your copies today by placing an order below.
 			</h2>
@@ -36,6 +38,7 @@
 			<p class="contact" style="font-weight:bold">
 				**At this point we have very low availability of guides. We are currently working to resolve all current orders, and will begin filling new orders on November 30th. Please still go ahead and place your desired order, and we will let you know if your order is able to be filled on/after 11/30. Do not come to the office to pick up your order until we confirm it with you. Thank you!
 			</p>
+		    -->
 
 			<!-- <p class="contact">
 				The Fourth Edition of the Emerald City Resource Guide is almost ready! Reserve your copies today by placing an order below.
@@ -49,7 +52,7 @@
 			<p class="contact">Please coordinate with other staff in your office to make sure your agency is only placing one order.
 			</p> -->
 
-
+			<!--
 			<form action="/requestconfirmation" method="POST" class="contact form">
 						<label for="organization">Name of Organization</label>
 						<input type="text" id="form-organization" name="organization" required>
@@ -60,9 +63,9 @@
 						<label for="email">Email Address</label>
 						<input type="email" id="form-email" name="email" required>
 
-					<!-- 	<label for="phone">Phone Number</label>
+					 	<label for="phone">Phone Number</label>
 						<input type="text" id="form-phone" name="phone" required>
- -->
+ 
 						<label for="number">Number of Guides Requested</label>
 						<input type="number" id="form-number" name="number" min="0" max="5000" required>
 
@@ -72,8 +75,11 @@
 					<p style="font-weight: bold; font-size: 2vw; padding: 1em">
 						Note: As of January 2022, we have very low availability of guides. It is possible that we may not be able to fill your order, but please submit your request anyway and we will do our best to fill it. Thank you! 
 					</p>
+				-->
+				
+		<!--
 		</div>
-		<!-- <div id="feedback">
+		 <div id="feedback">
 			<p class="contact">If you have feedback, questions, or stories you'd like to share about the Emerald City Resource
 				Guide, please fill out the form below.</p>
 			<form action="/feedbackconfirmation" method="POST" class="contact form" id="feedback-form">
@@ -94,6 +100,24 @@
 
 			</form>
 		</div> -->
+
+		
+		<div id="mailinglist">
+			<p class="contact">Currently we have very low availability of the current version of the guide. If you would like to be notified when the 5th Edition of The Emerald City Resource Guide is available, please provide your email below.</p>
+			<form action="/mailinglistconfirmation" method="POST" class="contact form" id="mailing-list-form">
+				
+				<label for="organization">Name of Organization</label>
+				<input type="text" id="form-organization" name="organization_name" required>
+
+				<label for="name">Your Name</label>
+				<input type="text" id="form-name" name="contact_name" required>
+				<label for="email">Email Address:</label>
+				<input type="email" id="form-email" name="email" required>
+
+				<button type="submit" class="request-button" disabled>Submit</button>
+
+			</form>
+		</div> 
 	</main>
 	</div>
 	<%- include('../layout/footer') %>
