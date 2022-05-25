@@ -35,7 +35,7 @@
     "firebase-admin": "^7.3.0",
     "firebase-app": "0.0.1",
     "firebase-auth": "^0.1.2",
-    "grunt": "^1.1.0",
+    "grunt": "^1.5.3",
     "knex": "^0.21.0",
     "lodash": "^4.17.20",
     "lodash.merge": "^4.6.2",
