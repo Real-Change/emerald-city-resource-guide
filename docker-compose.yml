@@ -1,0 +1,24 @@
+services:
+  node:
+    image: node:11.4.0
+    user: node
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: "postgres://emerald-city-resource-guide:password@postgres:5432/emerald-city-resource-guide"
+      PGSSLMODE: disable
+      GOOGLE_APPLICATION_CREDENTIALS: "/code/local-google-credentials-heroku.json"
+      FIREBASE_CONFIG:
+      GOOGLE_CONFIG:
+    working_dir: /code
+    volumes:
+      - .:/code
+    depends_on:
+      - postgres
+    command: npm start
+
+  postgres:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: emerald-city-resource-guide
+      POSTGRES_PASSWORD: password
