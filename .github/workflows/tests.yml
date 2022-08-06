@@ -1,0 +1,11 @@
+name: Docker Compose Actions Workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: docker-compose run --rm node npm install
+      - name: Test
+        run: docker-compose run --rm node npm run test
