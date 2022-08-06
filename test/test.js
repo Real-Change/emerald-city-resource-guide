@@ -1,11 +1,15 @@
 'use strict';
 
 // load native chai functions
-let expect = require('chai').expect;
+const expect = require('chai').expect;
+const {
+  makeCategoryQuery,
+  makeGenderQuery,
+  makeSQL,
+} = require('../server.js');
 
 describe('SERVER METHODS', function() {
   describe('makeCategoryQuery', function() {
-    let makeCategoryQuery = require('../server.js').makeCategoryQuery;
     let category = [2, 3, 26];
     let expectedQuery = 'organization_x_category.category_id=2 OR organization_x_category.category_id=3 OR organization_x_category.category_id=26';
     let actual = makeCategoryQuery(category);
@@ -21,7 +25,6 @@ describe('SERVER METHODS', function() {
   });
 
   describe('makeGenderQuery', function() {
-    let makeGenderQuery = require('../server.js').makeGenderQuery;
     let actual;
     let expectedQuery;
     let gender;
@@ -43,45 +46,47 @@ describe('SERVER METHODS', function() {
     it('should populate a query showing selection of no restrictions if anything other than male or female is selected', function() {
       gender = 'rather not say';
       actual = makeGenderQuery(gender);
-      expectedQuery = 'gender=\'no restrictions\'';
+      expectedQuery = "(gender='no restrictions' OR gender='men only' OR gender='women only')";
       expect(actual).to.equal(expectedQuery);
     });
 
   });
 
   describe('makeSQL', function() {
-    let makeSQL = require('../server.js').makeSQL;
     let requestType;
     let category;
     let gender;
     let actual;
     let expectedQuery;
 
-    it('should create a string if the user requests to see the full guide', function() {
+    it('should create a query if the user requests to see the full guide', function() {
       requestType = 'all';
       actual = makeSQL(requestType);
-      expect(actual).to.be.a('string');
+      expectedQuery = "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names FROM organization o INNER JOIN ( SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names FROM organization_x_category oxc1 INNER JOIN ( SELECT c.category_id, c.category_name FROM category c ) join2 ON (oxc1.category_id=join2.category_id) GROUP BY oxc1.organization_id, oxc1.active ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) WHERE o.active='t' ORDER BY o.organization_name; ";
+      expect(actual)
+        .to.be.a('string')
+        .and.to.equal(expectedQuery);
     });
 
-    it('should populate a query to retrieve all records from the organization table if the user requests to see the full guide', function() {
-      requestType = 'all';
+    it('should create a query if the user requests to see organizations by keyword', function() {
+      requestType = 'keyword';
       actual = makeSQL(requestType);
-      expectedQuery = 'SELECT DISTINCT organization.*, array_agg(category.category_name) FROM organization INNER JOIN organization_x_category ON organization.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id GROUP BY organization.organization_id, organization.organization_name, organization.website, organization.phone_number, organization.org_address, organization.org_description, organization.schedule, organization.gender, organization.kids ORDER by organization.organization_name;';
-      expect(actual).to.equal(expectedQuery);
+      expectedQuery = "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names FROM organization o INNER JOIN ( SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names FROM organization_x_category oxc1 INNER JOIN ( SELECT c.category_id, c.category_name FROM category c ) join2 ON (oxc1.category_id=join2.category_id) GROUP BY oxc1.organization_id, oxc1.active ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) ORDER BY o.organization_name; ";
+      expect(actual)
+        .to.be.a('string')
+        .and.to.equal(expectedQuery);
     });
 
-    requestType = 'search';
-    category = [13, 25, 9];
-    gender = 'female';
-    expectedQuery = 'SELECT DISTINCT orgs.*, array_agg(category.category_name) FROM organization AS orgs INNER JOIN organization_x_category ON orgs.organization_id=organization_x_category.organization_id INNER JOIN category ON organization_x_category.category_id=category.category_id WHERE (gender=\'women only\' OR gender=\'no restrictions\') AND (organization_x_category.category_id=13 OR organization_x_category.category_id=25 OR organization_x_category.category_id=9) GROUP BY orgs.organization_id, orgs.organization_name, orgs.website, orgs.phone_number, orgs.org_address, orgs.org_description, orgs.schedule, orgs.gender, orgs.kids ORDER by orgs.organization_name;';
-
-    it('should create a string if the user performs a search', function() {
-      expect(actual).to.be.a('string');
+    it('should create a query if the user requests to search', function() {
+      requestType = 'search';
+      category = [13, 25, 9];
+      gender = 'female';
+      actual = makeSQL(requestType, category, gender);
+      expectedQuery = "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names FROM organization o INNER JOIN organization_x_category ON organization_x_category.organization_id = o.organization_id AND (organization_x_category.category_id=13 OR organization_x_category.category_id=25 OR organization_x_category.category_id=9) INNER JOIN ( SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names FROM organization_x_category oxc1 INNER JOIN ( SELECT c.category_id, c.category_name FROM category c ) join2 ON (oxc1.category_id=join2.category_id) GROUP BY oxc1.organization_id, oxc1.active ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) WHERE (gender='women only' OR gender=\'no restrictions\') ORDER BY o.organization_name; ";
+      expect(actual)
+        .to.be.a('string')
+        .and.to.equal(expectedQuery);
     });
-
-    it('should create a SQL query matching the user selections', function() {
-      expect(actual).to.equal(expectedQuery);
-    })
   });
 })
 
