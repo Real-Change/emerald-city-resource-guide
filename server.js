@@ -152,7 +152,7 @@ function submitToMailingList(req, res) {
 }
 
 // catches
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+var server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 // method to identify selected categories
 function makeCategoryQuery(category) {
@@ -300,6 +300,8 @@ module.exports = {
   makeCategoryQuery: makeCategoryQuery,
   makeGenderQuery: makeGenderQuery,
   makeSQL: makeSQL,
+  server: server,
+  client: client,
 };
 
 // Function to call in every admin page to verify permissions
