@@ -12,7 +12,7 @@ require("firebase-app");
 require("firebase-auth");
 const admin = require("firebase-admin");
 
-const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const serviceAccount = JSON.parse(process.env.GOOGLE_CONFIG || '{}');
 
 // initialize Firebase
 firebase.initializeApp(process.env.FIREBASE_CONFIG);
@@ -46,9 +46,10 @@ app.use(function (req, res, next) {
 });
 
 pg.defaults.ssl = true;
-const client = new pg.Client(process.env.DATABASE_URL);
-client.connect().catch((e) => console.error("connection error", e.stack));
-client.on("error", (err) => console.log(err));
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+pool.on('error', (err, client) => {
+  console.error('Unexpected error', err);
+});
 
 app.use(
   methodOverride((request) => {
@@ -108,8 +109,7 @@ function submitFeedback(req, res) {
   let SQL =
     "INSERT INTO feedback (org_name, contact_name, contact_email, message, date) VALUES ($1, $2, $3, $4, NOW());";
 
-  return client
-    .query(SQL, values)
+  return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))
     .catch(handleError);
 }
@@ -128,8 +128,7 @@ function submitRequest(req, res) {
   let SQL =
     "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up, date) VALUES ($1, $2, $3, $4, $5, 'f', CURRENT_TIMESTAMP);";
 
-  return client
-    .query(SQL, values)
+  return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))
     .catch(handleError);
 }
@@ -145,8 +144,7 @@ function submitToMailingList(req, res) {
   ];
   let SQL = "INSERT INTO mailing_list (organization_name, contact_name, email, date) VALUES ($1, $2, $3, CURRENT_TIMESTAMP);";
 
-  return client
-    .query(SQL, values)
+  return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))
     .catch(handleError);
 }
@@ -256,6 +254,15 @@ function makeSQL(requestType, category, gender) {
   return SQL;
 }
 
+function doQuery(SQL, values) {
+  return pool
+    .connect()
+    .then(client => client
+      .query(SQL, values)
+      .finally(() => client.release())
+    );
+}
+
 // method to render results
 function getOrgs(request, response) {
   let requestType = request.body.submitbutton;
@@ -279,8 +286,7 @@ function getOrgs(request, response) {
   let SQL = makeSQL(requestType, category, gender, request);
 
   // pass SQL query and values from request to render results
-  return client
-    .query(SQL, values)
+  return doQuery(SQL, values)
     .then((results) =>
       response.render("./pages/results.ejs", {
         results: results.rows,
@@ -301,15 +307,13 @@ module.exports = {
   makeGenderQuery: makeGenderQuery,
   makeSQL: makeSQL,
   server: server,
-  client: client,
 };
 
 // Function to call in every admin page to verify permissions
 function isAuthenticated(req, res, next) {
   let userEmail = req.cookies.user || "";
   let SQL = "SELECT * FROM users WHERE email='" + userEmail + "';";
-  return client
-    .query(SQL)
+  return doQuery(SQL)
     .then((results) => {
       if (results.rowCount > 0) {
         next();
@@ -337,7 +341,8 @@ app.post("/sessionLogin", (req, res) => {
       let userEmail = decodedIdToken.email;
       let SQL = "SELECT * FROM users WHERE email = '" + userEmail + "';";
 
-      return client.query(SQL).then((results) => {
+      return doQuery(SQL)
+        .then((results) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.
 
@@ -523,8 +528,7 @@ function returnAdminResults(req, res) {
         " ORDER BY organization_name;";
     }
   }
-  return client
-    .query(SQL)
+  return doQuery(SQL)
     .then((result) =>
       res.render("./pages/auth/search-admin-results", { results: result.rows })
     )
@@ -550,8 +554,7 @@ function editOrg(req, res) {
     ") join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t') " +
     "WHERE (o.organization_id=" + orgId + ");";
 
-  client
-    .query(SQL)
+  doQuery(SQL)
     .then((result) => {
       if (result.rows[0].print_locations === null) {
         result.rows[0].print_locations = [-1];  //default case
@@ -818,8 +821,7 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + catRemoveSQL + catAddSQL;
-  client
-    .query(completeSQL)
+  doQuery(completeSQL)
     .then(res.render("./pages/auth/edit-confirmation"))
     .catch(function (error) {
       console.log(error);
@@ -905,8 +907,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 
   // Submit update/insert to database and render confirmation page
   let completeSQL = mainSQL + allCatsSQL;
-  client
-    .query(completeSQL)
+  doQuery(completeSQL)
     .then(res.render("./pages/auth/add-confirmation"))
     .catch(function (error) {
       console.log(error);
@@ -919,10 +920,10 @@ app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   let copyRequests = "SELECT SUM(number) FROM requests WHERE deleted='f';"
   let pendingRequests;
 
-  return client.query(SQL)
+  return doQuery(SQL)
   .then(function(results) {
     pendingRequests = results;
-    return client.query(copyRequests).then(function(results) {
+    return doQuery(copyRequests).then(function(results) {
       res.render("./pages/auth/copy-requests.ejs", {
         requests: pendingRequests.rows,
         total: results.rows[0].sum
@@ -938,8 +939,7 @@ app.get(
     let values = [req.params.requestId];
     let SQL = "SELECT * from requests WHERE request_id=$1";
 
-    client
-      .query(SQL, values)
+    doQuery(SQL, values)
       .then((result) => {
         res.render("./pages/auth/copy-request-edit", {
           request: result.rows[0],
@@ -967,21 +967,24 @@ app.put("/admin/copyrequest/update", isAuthenticated, function (req, res) {
     id +
     ";";
 
-  return client.query(SQL).then(res.redirect("/admin/copyrequests"));
+  return doQuery(SQL)
+    .then(res.redirect("/admin/copyrequests"));
 });
 
 app.post("/admin/request/pickup", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET picked_up='t' WHERE request_id=$1;";
 
-  return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
+  return doQuery(SQL, values)
+    .then(res.redirect("/admin/copyrequests"));
 });
 
 app.post("/admin/request/delete", isAuthenticated, function (req, res) {
   let values = [req.body.request_id];
   let SQL = "UPDATE requests SET deleted='t' WHERE request_id=$1;";
 
-  return client.query(SQL, values).then(res.redirect("/admin/copyrequests"));
+  return doQuery(SQL, values)
+    .then(res.redirect("/admin/copyrequests"));
 });
 
 app.get("/admin/request/download-requests", 
@@ -989,8 +992,7 @@ app.get("/admin/request/download-requests",
   function (req, res) {
     let SQL = 'SELECT * FROM requests ORDER BY request_id ASC';
  
-    client
-      .query(SQL)
+    doQuery(SQL)
       .then(function(dbQueryResult) {
         res.json(dbQueryResult.rows);
       })
