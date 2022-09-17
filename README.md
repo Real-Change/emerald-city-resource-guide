@@ -22,7 +22,10 @@ Local testing is conducted using mocha and chai. Run the tests using `docker-com
 The test file within this repo is intended to cover the server methods that transform the user inputs in the search form into a SQL query and then retrieves the corresponding records from the database.
 
 ## Production
-To access the production database hosted by Heroku, run `heroku pg:psql -—app emerald-city-guide` from within CLI and follow login prompts as directed (this is assuming that you have been added as a collaborator to the site on Heroku).
+ECRG is hosted on Fly.io ([dashboard link](https://fly.io/dashboard/emerald-city-resource-guide/)). Steps to to access the production database:
+1. [Install flyctl](https://fly.io/docs/hands-on/install-flyctl/)
+2. Run `flyctl auth login`
+3. Run `fly postgres connect -a emerald-city-resource-guide-db` 
 
 ## Upcoming Features
 - Embedded Google Maps and location filtering
