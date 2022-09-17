@@ -9,7 +9,6 @@
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch ./test ./",
-    "preinstall": "node preinstall.js",
     "start": "node server.js",
     "db:init": "npx knex migrate:latest && npx knex seed:run"
   },

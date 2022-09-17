@@ -7,12 +7,10 @@ const {
   makeGenderQuery,
   makeSQL,
   server,
-  client,
 } = require('../server.js');
 
 after(function() {
   server.close();
-  client.end();
 });
 
 describe('SERVER METHODS', function() {

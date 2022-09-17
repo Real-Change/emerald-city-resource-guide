@@ -7,7 +7,6 @@ services:
     environment:
       DATABASE_URL: "postgres://emerald-city-resource-guide:password@postgres:5432/emerald-city-resource-guide"
       PGSSLMODE: disable
-      GOOGLE_APPLICATION_CREDENTIALS: "/code/local-google-credentials-heroku.json"
       FIREBASE_CONFIG:
       GOOGLE_CONFIG:
     working_dir: /code
