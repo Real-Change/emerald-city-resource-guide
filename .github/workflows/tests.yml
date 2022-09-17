@@ -6,11 +6,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        env:
-          # Minimal config for tests to pass, with random private key
-          GOOGLE_CONFIG: '{ "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBOAIBAAJAUMHtcAaKWSMtA9J277hqUIorqsZwzuvqYpcYOEREjB+UQ1wJZeHO\ndn/jVT4GaWzpHmvJ3OFu9ljkhpLCE4O7BwIDAQABAkBQtZ/xJ/g4obkparxHVI2c\nNJrzsCOqCYlUQyGHimLfjsfd1mv0Qo9Ux4ChIB9KExOv4EIePP9jXW0i3riq8lbx\nAiEAmoywUMCksZ5Y8ovF6ZxAmgA3sfPZwqU7musBxiFOSoMCIQCFxNeJW4monY9o\n4qsZ9I3J03cN2wp7G3KBwZrF3IM2LQIgUFip5SFxvaF7zoSZ3IxODYHlco86e3XZ\nWf2pC28PO68CIH/qPCVIGDnZ+QHWBsG6Hj/J7AWe2MXh+DxmMydTd1E9AiAYZun6\n5mveYGmKt7wmgk9lYjhQXTm0Cadx8EGxfwA99g==\n-----END RSA PRIVATE KEY-----", "client_email": "test@google.com" }'
         # Must use root per docs:
         # https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions#user
         run: docker-compose run -u root --rm node npm install --unsafe-perm
       - name: Test
+        env:
+          # Minimal config for tests to pass, with random private key
+          GOOGLE_CONFIG: '{ "private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIBOAIBAAJAUMHtcAaKWSMtA9J277hqUIorqsZwzuvqYpcYOEREjB+UQ1wJZeHO\ndn/jVT4GaWzpHmvJ3OFu9ljkhpLCE4O7BwIDAQABAkBQtZ/xJ/g4obkparxHVI2c\nNJrzsCOqCYlUQyGHimLfjsfd1mv0Qo9Ux4ChIB9KExOv4EIePP9jXW0i3riq8lbx\nAiEAmoywUMCksZ5Y8ovF6ZxAmgA3sfPZwqU7musBxiFOSoMCIQCFxNeJW4monY9o\n4qsZ9I3J03cN2wp7G3KBwZrF3IM2LQIgUFip5SFxvaF7zoSZ3IxODYHlco86e3XZ\nWf2pC28PO68CIH/qPCVIGDnZ+QHWBsG6Hj/J7AWe2MXh+DxmMydTd1E9AiAYZun6\n5mveYGmKt7wmgk9lYjhQXTm0Cadx8EGxfwA99g==\n-----END RSA PRIVATE KEY-----", "client_email": "test@google.com" }'
         run: docker-compose run --rm node npm run test
