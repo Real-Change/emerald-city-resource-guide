@@ -160,7 +160,7 @@ button, input[type="button"] {
 	position: relative;
 	bottom: 0;
 	width: 100vw;
-	background-image: url('../images/skyline.jpg');
+	background-image: url('../images/skyline.svg');
 	height: 20vw;
 	background-repeat: repeat-x;
 	background-color: white;
