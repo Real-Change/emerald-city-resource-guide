@@ -240,8 +240,6 @@ select::-ms-expand {
 }
 
 #sponsors {
-	display: flex;
-	flex-wrap: wrap;
 	margin-bottom: 30vw;
 }
 
@@ -249,8 +247,25 @@ select::-ms-expand {
 	height: 0;
 }
 
+#visionary,
+#changemaker,
+#catalyst,
+#grassroots {
+    width: 80vw;
+    font-size: 1.5vw;
+    margin: 0 auto;
+}
+
+#changemaker img,
+#visionary img,
+#catalyst img,
+#grassroots img {
+    height: 200px;
+    object-fit: contain;
+    width: 100%;
+}
+
 #presenting img, #sponsors h2, #sponsors h3{
-	width: 100vw;
 	text-align: center;
 	padding-bottom: 3vw;
 	margin:0;
@@ -260,21 +275,6 @@ select::-ms-expand {
 	height: 25vw;
 	width: auto;
 	margin: 2vw 12vw;
-}
-
-#visionary ul, #changemaker ul, #catalyst ul, #grassroots ul {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-}
-
-#visionary img, #catalyst img {
-	width: 46vw;
-	margin: 0 1vw;
-}
-
-#grassroots img {
-	width: 32vw;
 }
 
 #evergreen, #jfs {

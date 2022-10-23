@@ -47,8 +47,6 @@
   }
 
   #index-container {
-    display: flex;
-    flex-wrap: wrap;
     margin-bottom: 15vw;
   }
 
@@ -219,22 +217,6 @@
     padding-top: 1vw;
   }
 
-  #visionary,
-  #changemaker {
-    width: 100vw;
-  }
-
-  #catalyst,
-  #catalyst h3 {
-    width: 100vw;
-    font-size: 1.5vw;
-  }
-
-  #catalyst ul {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
   #presenting img,
   #changemaker h3,
   #visionary h3 {
@@ -248,25 +230,13 @@
     padding-left: 1.5vw;
   }
 
-  #changemaker img {
-    margin: 0.1vw;
-    height: 10vw;
-  }
-
-  #visionary img,
-  #catalyst img {
-    width: 16vw;
-    margin: 0.5vw;
+  .glider-slide {
+    margin: 0 25px;
   }
 
   #evergreen,
   #jfs {
     padding-top: 0.5vw;
-  }
-
-  #grassroots img {
-    width: 10vw;
-    margin: 1vw;
   }
 
   #sponsorheader {
