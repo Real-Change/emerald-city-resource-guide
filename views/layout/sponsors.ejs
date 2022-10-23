@@ -4,59 +4,85 @@
     <p id="sponsorask">Want to become a sponsor? <br> Get started <a
         href="https://51573.thankyou4caring.org/emerald-city-resource-guide">here</a>.</p>
   </div>
-  <!--<section id="changemaker">
-    <h3>Changemaker Sponsor</h3>
-  </section>-->
   <section id="visionary">
     <h3 id="visionary">Visionary Sponsors</h3>
-    <ul>
-      <li><img src="images/disability-empowerment-center.png"
-        alt="Disability Empowerment Center"></li>
-      <li><img src="images/swedish-logo.svg"
-      alt="Swedish"></li>
+    <div class="glider-contain">
+      <div class="glider">
+        <div><img src="images/disability-empowerment-center.png" alt="Disability Empowerment Center"></div>
+        <div><img src="images/swedish-logo.svg" alt="Swedish"></div>
+      </div>
+
+      <button aria-label="Previous" class="glider-prev">«</button>
+      <button aria-label="Next" class="glider-next">»</button>
+      <div role="tablist" class="dots"></div>
     </ul>
   </section>
   <section id="catalyst">
     <h3 id="catalyst">Catalyst Sponsors</h3>
-    <ul>
-      <li><img src="images/compass-housing-alliance.svg" alt="Compass Housing Alliance"></li>
-      <li><img src="images/neighborcare-health.png"
-        alt="Neighborcare Health"></li>
-      <li><img src="images/peer-seattle.svg"
-        alt="Peer Seattle"></li>
-      <li><img src="images/recovery-cafe.svg"
-      alt="Recovery Cafe"></li>
-      <li><img src="images/nova-sunwave.png"
-      alt="NOVA"></li>
-      <li><img src="images/hep.png"
-      alt="HEP"></li>
-      <li><img src="images/kcdpd.png"
-      alt="KCDPD"></li>
-      <li><img src="images/west-seattle-food-bank.png"
-        alt="West Seattle Food Bank"></li>
-      <li><img src="images/ballard-food-bank.svg"
-          alt="Ballard Food Bank"></li>
-      <li><img src="images/ICHS-Logo-Color.png"
-          alt="Ballard Food Bank"></li>
-    </ul>
+
+    <div class="glider-contain">
+      <div class="glider">
+        <div><img src="images/compass-housing-alliance.svg" alt="Compass Housing Alliance"></div>
+        <div><img src="images/neighborcare-health.png" alt="Neighborcare Health"></div>
+        <div><img src="images/peer-seattle.svg" alt="Peer Seattle"></div>
+        <div><img src="images/recovery-cafe.svg" alt="Recovery Cafe"></div>
+        <div><img src="images/nova-sunwave.png" alt="NOVA"></div>
+        <div><img src="images/hep.png" alt="HEP"></div>
+        <div><img src="images/kcdpd.png" alt="KCDPD"></div>
+        <div><img src="images/west-seattle-food-bank.png" alt="West Seattle Food Bank"></div>
+        <div><img src="images/ballard-food-bank.svg" alt="Ballard Food Bank"></div>
+        <div><img src="images/ICHS-Logo-Color.png" alt="International Community Health Services"></div>
+      </div>
+
+      <button aria-label="Previous" class="glider-prev">«</button>
+      <button aria-label="Next" class="glider-next">»</button>
+      <div role="tablist" class="dots"></div>
+    </div>    
   </section>
   <section id="grassroots">
-    <ul>
-      <h3 id="grassroots">Grassroots Sponsors</h3>
-      <li><img src="images/aurora-commons.png"
-        alt="Aurora Commons"></li>
-      <li><img src="images/marys-place.png"
-            alt="Mary's Place"></li>
-      <li><img src="images/valley-cities.png"
-      alt="Valley Cities"></li>
-      <li><img src="images/uplift-northwest.png"
-      alt="Uplift Northwest"></li>
-      <li><img src="images/north-helpline.png"
-      alt="North Helpline"></li>
-      <li><img src="images/NightWATCH.jpg"
-      alt="Operation Nightwatch"></li>
-      <li><img src="images/pike_market_senior_center.svg"
-      alt="Pike Market Senior Center"></li>
-    </ul>
+    <h3 id="grassroots">Grassroots Sponsors</h3>
+
+    <div class="glider-contain">
+      <div class="glider">
+        <div><img src="images/aurora-commons.png" alt="Aurora Commons"></div>
+        <div><img src="images/marys-place.png" alt="Mary's Place"></div>
+        <div><img src="images/valley-cities.png" alt="Valley Cities"></div>
+        <div><img src="images/uplift-northwest.png" alt="Uplift Northwest"></div>
+        <div><img src="images/north-helpline.png" alt="North Helpline"></div>
+        <div><img src="images/NightWATCH.jpg" alt="Operation Nightwatch"></div>
+        <div><img src="images/pike_market_senior_center.svg" alt="Pike Market Senior Center"></div>
+      </div>
+
+      <button aria-label="Previous" class="glider-prev">«</button>
+      <button aria-label="Next" class="glider-next">»</button>
+      <div role="tablist" class="dots"></div>
+    </div>
   </section>
 </div>
+
+<script>
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.glider').forEach(glider => {
+      const numImages = glider.querySelectorAll('img').length;
+      const dots = glider.parentNode.querySelector('.dots');
+      const prev = glider.parentNode.querySelector('.glider-prev');
+      const next = glider.parentNode.querySelector('.glider-next');
+      new Glider(glider, {
+        slidesToShow: '1',
+        draggable: true,
+        dots,
+        arrows: { prev, next },
+        responsive: [
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: numImages <= 2 ? 2 : 'auto',
+              itemWidth: 400,
+              dots: numImages <= 2 ? null : dots,
+            },
+          },
+        ],
+      });
+    });
+  });
+</script>
