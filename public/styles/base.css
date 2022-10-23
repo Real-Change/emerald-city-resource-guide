@@ -252,7 +252,6 @@ select::-ms-expand {
 #catalyst,
 #grassroots {
     width: 80vw;
-    font-size: 1.5vw;
     margin: 0 auto;
 }
 
@@ -268,6 +267,7 @@ select::-ms-expand {
 #presenting img, #sponsors h2, #sponsors h3{
 	text-align: center;
 	padding-bottom: 3vw;
+    padding-top: 1vw;
 	margin:0;
 }
 
