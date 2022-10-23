@@ -42,7 +42,7 @@ $(document).ready(function () {
     $("#login").toggleClass("hidden");
     $("#login-desktop").toggleClass("hidden");
     $("#desktop-nav a").addClass("admin-nav");
-    $("#rclogoimg").attr("src", "/../images/RC_Logo_HigherRes.jpg");
+    $("#rclogoimg").attr("src", "/../images/RC_Logo_HigherRes.png");
   }
 
   if (window.location.href.indexOf("login") > -1) {
