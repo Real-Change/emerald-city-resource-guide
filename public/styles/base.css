@@ -590,3 +590,11 @@ footer nav {
 #login-desktop:hover {
 	text-decoration: underline;
 }
+
+#form-number-donate-warning {
+	display: none;
+}
+
+#form-number-donate-warning svg {
+	vertical-align: text-bottom;
+}

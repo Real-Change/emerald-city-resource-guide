@@ -141,6 +141,9 @@ $(document).ready(function () {
        
   });
 
+  $('#form-number').change(function() {
+    $('#form-number-donate-warning').toggle(parseInt(this.value, 10) >= 300);
+  });
 });
 
 
