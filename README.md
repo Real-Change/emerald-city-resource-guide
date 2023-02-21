@@ -16,6 +16,8 @@ Follow these steps to set up a local development environment:
 3. Install dependencies and set up the DB with `docker-compose run --rm node sh -c "npm install && npm run db:init"`
 4. Launch the server with `docker-compose up` and visit http://localhost:8080/
 
+Use the `./db/db_connect.sh` and `./db/db_restore.sh` scripts to open a psql shell inside the Docker DB or restore from a backup, respectively.
+
 ## Testing
 Local testing is conducted using mocha and chai. Run the tests using `docker-compose run --rm node npm run test`
 
@@ -26,6 +28,8 @@ ECRG is hosted on Fly.io ([dashboard link](https://fly.io/dashboard/emerald-city
 1. [Install flyctl](https://fly.io/docs/hands-on/install-flyctl/)
 2. Run `flyctl auth login`
 3. Run `fly postgres connect -a emerald-city-resource-guide-db` 
+
+To get a dump of the DB, run `./db/fly_db_dump.sh`.
 
 ## Upcoming Features
 - Embedded Google Maps and location filtering
