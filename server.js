@@ -915,18 +915,23 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 });
 
 app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
-  let SQL =
+  const SQL =
     "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
-  let copyRequests = "SELECT SUM(number) FROM requests WHERE deleted='f';"
-  let pendingRequests;
+  const copyRequests = `
+    SELECT
+      SUM(number) AS total_requests,
+      SUM(CASE WHEN picked_up = 't' THEN number ELSE 0 END) AS total_picked_up
+    FROM requests
+    WHERE deleted='f'
+  `;
 
   return doQuery(SQL)
   .then(function(results) {
-    pendingRequests = results;
+    const pendingRequests = results;
     return doQuery(copyRequests).then(function(results) {
       res.render("./pages/auth/copy-requests.ejs", {
         requests: pendingRequests.rows,
-        total: results.rows[0].sum
+        ...results.rows[0],
      });
     });
   });
