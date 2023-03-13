@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../layout/head') %>
+
+<body>
+  <%- include('../../layout/header') %>
+  <div>
+    <%- include('../auth/sidebar.ejs') %>
+    <h2 id="total-requests"><%- total %> total entries in mailing list</h2>
+    <form action="/admin/mailinglist/csv">
+      <button type="submit" class="download-requests-button" >Download as CSV</button>
+    </form>
+  </div>
+  <%- include('../../layout/footer') %>
+</body>
+
+</html>

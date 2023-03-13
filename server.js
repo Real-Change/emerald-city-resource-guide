@@ -1005,3 +1005,34 @@ app.get("/admin/request/download-requests",
       .catch(handleError);
   }
 );
+
+app.get("/admin/mailinglist", isAuthenticated, function (req, res) {
+  const SQL = "SELECT COUNT(*) AS total FROM mailing_list;";
+
+  return doQuery(SQL)
+  .then(function(results) {
+    res.render("./pages/auth/mailing-list.ejs", {
+      ...results.rows[0],
+    });
+  });
+});
+
+app.get("/admin/mailinglist/csv", isAuthenticated, function (req, res) {
+  const SQL = "SELECT * FROM mailing_list ORDER BY date DESC";
+
+  return doQuery(SQL)
+  .then(function(results) {
+    let csv = "organization_name,contact_name,email,phone,date\n";
+    csv += results.rows.map(row => [
+        row.organization_name,
+        row.contact_name,
+        row.email,
+        row.phone,
+        row.date,
+    ]).join("\n");
+    res.header('Content-Type', 'text/csv');
+    res.attachment('mailing-list.csv');
+    return res.send(csv);
+  });
+});
+
