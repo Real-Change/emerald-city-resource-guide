@@ -141,8 +141,9 @@ function submitToMailingList(req, res) {
     req.body.organization_name,
     req.body.contact_name,
     req.body.email,
+    req.body.phone,
   ];
-  let SQL = "INSERT INTO mailing_list (organization_name, contact_name, email, date) VALUES ($1, $2, $3, CURRENT_TIMESTAMP);";
+  let SQL = "INSERT INTO mailing_list (organization_name, contact_name, email, phone, date) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP);";
 
   return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))

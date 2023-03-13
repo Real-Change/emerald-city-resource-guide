@@ -40,6 +40,7 @@
 			</p>
 		    -->
 
+			<!--
 			<p class="contact">
 				Thank you for your interest in our Emerald City Resource Guide! We are currently accepting orders for the 5th edition.
 			</p>
@@ -75,6 +76,7 @@
 						<button type="submit" class="request-button" disabled>Submit</button>
 
 					</form>
+		-->
 					<!--
 					<p style="font-weight: bold; font-size: 2vw; padding: 1em">
 						Note: As of January 2022, we have very low availability of guides. It is possible that we may not be able to fill your order, but please submit your request anyway and we will do our best to fill it. Thank you! 
@@ -104,9 +106,13 @@
 			</form>
 		</div> -->
 
-		<!--
 		<div id="mailinglist">
-			<p class="contact">Currently we have very low availability of the current version of the guide. If you would like to be notified when the 5th Edition of The Emerald City Resource Guide is available, please provide your email below.</p>
+			<p class="contact">
+				Thank you for your interest in our Emerald City Resource Guide!
+				We are currently not accepting orders. Please fill out the sign
+				up sheet below to be added to our contact list for the 6th
+				edition. We plan to have copies available by August 2023.
+			</p>
 			<form action="/mailinglistconfirmation" method="POST" class="contact form" id="mailing-list-form">
 				
 				<label for="organization">Name of Organization</label>
@@ -114,14 +120,17 @@
 
 				<label for="name">Your Name</label>
 				<input type="text" id="form-name" name="contact_name" required>
+
 				<label for="email">Email Address:</label>
 				<input type="email" id="form-email" name="email" required>
+
+				<label for="phone">Phone Number</label>
+				<input type="text" id="form-phone" name="phone">
 
 				<button type="submit" class="request-button" disabled>Submit</button>
 
 			</form>
 		</div> 
-		-->
 	</main>
 	</div>
 	<%- include('../layout/footer') %>
