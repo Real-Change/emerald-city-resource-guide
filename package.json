@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch ./test ./",
-    "start": "node server.js",
+    "start": "node --inspect=0.0.0.0:9229 server.js",
     "db:init": "npx knex migrate:latest && npx knex seed:run"
   },
   "repository": {
