@@ -35,12 +35,8 @@
     "firebase-admin": "^7.3.0",
     "firebase-app": "0.0.1",
     "firebase-auth": "^0.1.2",
-    "grunt": "^1.1.0",
     "knex": "^0.21.0",
-    "lodash": "^4.17.20",
-    "lodash.merge": "^4.6.2",
     "method-override": "^3.0.0",
-    "nodemon": "^1.18.10",
     "pg": "^7.18.2"
   },
   "devDependencies": {
