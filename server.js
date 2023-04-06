@@ -210,7 +210,7 @@ function makeSQL(requestType, category, gender) {
       ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) 
       WHERE o.active='t'
       ORDER BY o.organization_name;`;
-}
+  }
 
   // Return orgs based on keyword search
   else if (requestType === "keyword") {
@@ -227,7 +227,13 @@ function makeSQL(requestType, category, gender) {
         ) join2 ON (oxc1.category_id=join2.category_id)
         GROUP BY oxc1.organization_id, oxc1.active
       ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t'))
-      WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1))
+      WHERE to_tsvector('english',
+        organization_name || ' '
+        || org_description || ' '
+        || website || ' '
+        || phone_number || ' '
+        || org_address
+      ) @@ websearch_to_tsquery('english', $1)
       ORDER BY o.organization_name;`;
   }
 
@@ -254,7 +260,6 @@ function makeSQL(requestType, category, gender) {
       WHERE ${genderQuery}
       ORDER BY o.organization_name; `;
   }
-  console.log("SQL", SQL);
   return SQL;
 }
 
@@ -273,18 +278,7 @@ function getOrgs(request, response) {
   let { gender, category } = request.body;
   let values = [];
   if (request.body.searchbar) {
-    let formattedSearch = "(";
-
-    let searchTermArray = request.body.searchbar
-      .trim()
-      .toUpperCase()
-      .split(" ");
-    for (let i = 0; i < searchTermArray.length; i++) {
-      formattedSearch += "%" + searchTermArray[i] + "%";
-    }
-
-    values.push(formattedSearch + ")");
-    console.log(values);
+    values.push(request.body.searchbar.trim());
   }
 
   let SQL = makeSQL(requestType, category, gender, request);
