@@ -916,6 +916,29 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
     });
 });
 
+app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
+  const SQL = `
+    SELECT o.*, join2.print_locations
+    FROM organization o
+    LEFT OUTER JOIN (
+      SELECT  oxc2.organization_id, oxc2.active, oxc2.print_location, array_agg(category_id) AS print_locations
+      FROM organization_x_category oxc2
+      GROUP BY oxc2.organization_id, oxc2.active, oxc2.print_location
+    ) join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t')
+  `;
+
+  return doQuery(SQL)
+  .then(function(results) {
+    let csvString = csv.stringify(results.rows, {
+      header: true,
+    });
+    res.header('Content-Type', 'text/csv');
+    res.attachment('organizations.csv');
+    return res.send(csvString);
+  });
+});
+
+
 app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   const SQL =
     "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
