@@ -7,6 +7,7 @@ const pg = require("pg");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const csv = require("csv/dist/cjs/sync.cjs")
 var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
@@ -1018,21 +1019,21 @@ app.get("/admin/mailinglist", isAuthenticated, function (req, res) {
 });
 
 app.get("/admin/mailinglist/csv", isAuthenticated, function (req, res) {
-  const SQL = "SELECT * FROM mailing_list ORDER BY date DESC";
+  const SQL = `
+    SELECT organization_name, contact_name, email, date
+    FROM mailing_list
+    WHERE organization_name != ''
+    ORDER BY date DESC
+  `;
 
   return doQuery(SQL)
   .then(function(results) {
-    let csv = "organization_name,contact_name,email,phone,date\n";
-    csv += results.rows.map(row => [
-        row.organization_name,
-        row.contact_name,
-        row.email,
-        row.phone,
-        row.date,
-    ]).join("\n");
+    let csvString = csv.stringify(results.rows, {
+      header: true,
+    });
     res.header('Content-Type', 'text/csv');
     res.attachment('mailing-list.csv');
-    return res.send(csv);
+    return res.send(csvString);
   });
 });
 

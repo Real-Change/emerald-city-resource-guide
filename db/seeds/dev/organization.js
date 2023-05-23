@@ -1,12 +1,8 @@
-const csv = require('csvjson');
+const parser = require("csv/dist/cjs/sync.cjs");
 const fs = require('fs');
 
 const file = fs.readFileSync('db/seeds/data/organization.csv', 'utf8');
-var options = {
-  delimiter: ',',
-  quote: '"'
-};
-const data = csv.toObject(file, options);
+const data = parser.parse(file, { columns: true });
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
