@@ -918,13 +918,37 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 
 app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
   const SQL = `
-    SELECT o.*, join2.print_locations
+    SELECT
+      o.organization_id,
+      o.organization_name,
+      o.website,
+      o.phone_number,
+      o.org_address,
+      o.org_description,
+      o.schedule,
+      o.gender,
+      o.kids,
+      o.active::text,
+      o.last_update::text,
+      o.zipcode,
+      o.contact_name,
+      o.contact_email,
+      o.contact_phone,
+      o.contact_title,
+      o.sponsorship::text,
+      o.distribution::text,
+      o.id_req::text,
+      o.sponsorship_email,
+      o.distribution_email,
+      o.org_description_es,
+      o.org_address_es,
+      o.schedule_es,
+      o.tempcovid,
+      ARRAY_AGG(c.category_name) AS categories
     FROM organization o
-    LEFT OUTER JOIN (
-      SELECT  oxc2.organization_id, oxc2.active, oxc2.print_location, array_agg(category_id) AS print_locations
-      FROM organization_x_category oxc2
-      GROUP BY oxc2.organization_id, oxc2.active, oxc2.print_location
-    ) join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t')
+    LEFT JOIN organization_x_category oxc ON (oxc.organization_id = o.organization_id)
+    LEFT JOIN category c ON (oxc.category_id = c.category_id)
+    GROUP BY o.organization_id
   `;
 
   return doQuery(SQL)
