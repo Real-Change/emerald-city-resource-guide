@@ -125,9 +125,10 @@ function submitRequest(req, res) {
     req.body.email,
     req.body.phone,
     req.body.number,
+    req.body.is_branch === 't' ? 't' : 'f',
   ];
   let SQL =
-    "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up, date) VALUES ($1, $2, $3, $4, $5, 'f', CURRENT_TIMESTAMP);";
+    "INSERT INTO requests (organization_name, contact_name, email, phone, number, is_branch, picked_up, date) VALUES ($1, $2, $3, $4, $5, $6, 'f', CURRENT_TIMESTAMP);";
 
   return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))
