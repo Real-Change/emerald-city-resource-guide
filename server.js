@@ -1068,7 +1068,7 @@ app.get("/admin/mailinglist", isAuthenticated, function (req, res) {
 
 app.get("/admin/mailinglist/csv", isAuthenticated, function (req, res) {
   const SQL = `
-    SELECT organization_name, contact_name, email, date
+    SELECT organization_name, contact_name, email, date::text
     FROM mailing_list
     WHERE organization_name != ''
     ORDER BY date DESC
