@@ -92,12 +92,6 @@ $(document).ready(function () {
     }
   });
 
-  // dynamically render the action for the admin search form
-
-  $('#admin-search-button').on('click', () => {
-    let term = $('#searchbar').val();
-    $('#admin-search').attr('action', term)
-  })
 
   // show appropriate confirmation message after contact page
   if(window.location.href.indexOf('feedback') > -1){
