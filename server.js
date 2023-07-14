@@ -538,6 +538,14 @@ function returnAdminResults(req, res) {
     .catch((error) => handleError(error, res));
 }
 
+app.post("/admin/delete/:orgId", isAuthenticated, function(req, res) {
+  const orgId = req.params.orgId;
+  const SQL = 'DELETE FROM organization WHERE organization_id = $1;';
+  return doQuery(SQL, [orgId])
+    .then(() => res.sendStatus(200))
+    .catch(handleError);
+});
+
 app.post("/admin/update/:orgId", isAuthenticated, editOrg);
 
 function editOrg(req, res) {
