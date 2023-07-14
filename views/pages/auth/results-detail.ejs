@@ -1,7 +1,8 @@
 <div id="organization-container">
   <ul>
     <% organizations.forEach(organization => { %>
-    <form class="request-item admin" data-id="<%= organization.organization_id %>" method="POST"
+    <li>
+    <form class="organization-item admin" data-id="<%= organization.organization_id %>" method="POST"
       action='/admin/update/<%= organization.organization_id %>'>
       <div class="hidden id">
         <%= organization.organization_id %>
@@ -33,6 +34,7 @@
       <button type="submit" class="edit" data-id="<%= organization.organization_id %>">Edit</button>
       <button class="delete_button" data-id="<%= organization.organization_id %>">Delete</button>
     </form>
+    </li>
     <% })%>
   </ul>
 </div>
