@@ -438,12 +438,12 @@ app.get("/admin/account", isAuthenticated, (req, res) => {
   res.render("./pages/auth/account.ejs");
 });
 
-app.post("/admin/:searchTerm", isAuthenticated, returnAdminResults);
+app.get("/admin/:searchTerm", isAuthenticated, returnAdminResults);
 
 function returnAdminResults(req, res) {
-  let searchTerm = req.body.searchbar.trim().split(" ");
-  let radioChoice = req.body.adminradio;
-  let updateDate = req.body.updatedate;
+  let searchTerm = req.query.searchbar.trim().split(" ");
+  let radioChoice = req.query.adminradio;
+  let updateDate = req.query.updatedate;
   let searchInput;
   let SQL;
   let nameInput;
@@ -537,6 +537,14 @@ function returnAdminResults(req, res) {
     )
     .catch((error) => handleError(error, res));
 }
+
+app.post("/admin/delete/:orgId", isAuthenticated, function(req, res) {
+  const orgId = req.params.orgId;
+  const SQL = 'DELETE FROM organization WHERE organization_id = $1;';
+  return doQuery(SQL, [orgId])
+    .then(() => res.sendStatus(200))
+    .catch(handleError);
+});
 
 app.post("/admin/update/:orgId", isAuthenticated, editOrg);
 
