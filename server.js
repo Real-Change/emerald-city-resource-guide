@@ -438,7 +438,7 @@ app.get("/admin/account", isAuthenticated, (req, res) => {
   res.render("./pages/auth/account.ejs");
 });
 
-app.get("/admin/:searchTerm", isAuthenticated, returnAdminResults);
+app.get("/admin/search", isAuthenticated, returnAdminResults);
 
 function returnAdminResults(req, res) {
   let searchTerm = req.query.searchbar.trim().split(" ");
