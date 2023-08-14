@@ -271,12 +271,6 @@ select::-ms-expand {
 	margin:0;
 }
 
-#changemaker img {
-	height: 25vw;
-	width: auto;
-	margin: 2vw 12vw;
-}
-
 #evergreen, #jfs {
 	padding-top: 2vw;
 }
