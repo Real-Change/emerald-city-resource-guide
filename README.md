@@ -13,13 +13,13 @@ Follow these steps to set up a local development environment:
     GOOGLE_CONFIG={ "type":...
     ```
 
-3. Install dependencies and set up the DB with `docker-compose run --rm node sh -c "npm install && npm run db:init"`
-4. Launch the server with `docker-compose up` and visit http://localhost:8080/
+3. Install dependencies and set up the DB with `make setup`
+4. Launch the server with `make start` and visit http://localhost:8080/
 
-Use the `./db/db_connect.sh` and `./db/db_restore.sh` scripts to open a psql shell inside the Docker DB or restore from a backup, respectively.
+Use `make db-connect` to open a `psql shell inside the Docker DB container and `make db-restore` to restore from a backup.
 
 ## Testing
-Local testing is conducted using mocha and chai. Run the tests using `docker-compose run --rm node npm run test`
+Local testing is conducted using mocha and chai. Run the tests using `make test`
 
 The test file within this repo is intended to cover the server methods that transform the user inputs in the search form into a SQL query and then retrieves the corresponding records from the database.
 
