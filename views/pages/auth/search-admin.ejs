@@ -1,4 +1,8 @@
-<form id="admin-search" method='POST' action='/admin/:searchTerm'>
+<form action="/admin/organization/csv">
+  <button type="submit">Download organizations as CSV</button>
+</form>
+
+<form id="admin-search" method='GET' action='/admin/search'>
   <div id="admin-search-radio">
     <span>Find an organization whose name (pick one):<br><br></span>
     <input type="radio" value="starts" id="starts" name="adminradio" required>

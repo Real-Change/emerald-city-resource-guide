@@ -7,6 +7,7 @@ const pg = require("pg");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const csv = require("csv/dist/cjs/sync.cjs")
 var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
@@ -124,9 +125,10 @@ function submitRequest(req, res) {
     req.body.email,
     req.body.phone,
     req.body.number,
+    req.body.is_branch === 't' ? 't' : 'f',
   ];
   let SQL =
-    "INSERT INTO requests (organization_name, contact_name, email, phone, number, picked_up, date) VALUES ($1, $2, $3, $4, $5, 'f', CURRENT_TIMESTAMP);";
+    "INSERT INTO requests (organization_name, contact_name, email, phone, number, is_branch, picked_up, date) VALUES ($1, $2, $3, $4, $5, $6, 'f', CURRENT_TIMESTAMP);";
 
   return doQuery(SQL, values)
     .then(res.render("./pages/confirmation.ejs"))
@@ -408,12 +410,12 @@ app.get("/admin/account", isAuthenticated, (req, res) => {
   res.render("./pages/auth/account.ejs");
 });
 
-app.post("/admin/:searchTerm", isAuthenticated, returnAdminResults);
+app.get("/admin/search", isAuthenticated, returnAdminResults);
 
 function returnAdminResults(req, res) {
-  let searchTerm = req.body.searchbar.trim().split(" ");
-  let radioChoice = req.body.adminradio;
-  let updateDate = req.body.updatedate;
+  let searchTerm = req.query.searchbar.trim().split(" ");
+  let radioChoice = req.query.adminradio;
+  let updateDate = req.query.updatedate;
   let searchInput;
   let SQL;
   let nameInput;
@@ -507,6 +509,14 @@ function returnAdminResults(req, res) {
     )
     .catch((error) => handleError(error, res));
 }
+
+app.post("/admin/delete/:orgId", isAuthenticated, function(req, res) {
+  const orgId = req.params.orgId;
+  const SQL = 'DELETE FROM organization WHERE organization_id = $1;';
+  return doQuery(SQL, [orgId])
+    .then(() => res.sendStatus(200))
+    .catch(handleError);
+});
 
 app.post("/admin/update/:orgId", isAuthenticated, editOrg);
 
@@ -887,6 +897,53 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
     });
 });
 
+app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
+  const SQL = `
+    SELECT
+      o.organization_id,
+      o.organization_name,
+      o.website,
+      o.phone_number,
+      o.org_address,
+      o.org_description,
+      o.schedule,
+      o.gender,
+      o.kids,
+      o.active::text,
+      o.last_update::text,
+      o.zipcode,
+      o.contact_name,
+      o.contact_email,
+      o.contact_phone,
+      o.contact_title,
+      o.sponsorship::text,
+      o.distribution::text,
+      o.id_req::text,
+      o.sponsorship_email,
+      o.distribution_email,
+      o.org_description_es,
+      o.org_address_es,
+      o.schedule_es,
+      o.tempcovid,
+      ARRAY_AGG(c.category_name) AS categories
+    FROM organization o
+    LEFT JOIN organization_x_category oxc ON (oxc.organization_id = o.organization_id)
+    LEFT JOIN category c ON (oxc.category_id = c.category_id)
+    GROUP BY o.organization_id
+  `;
+
+  return doQuery(SQL)
+  .then(function(results) {
+    let csvString = csv.stringify(results.rows, {
+      header: true,
+    });
+    res.header('Content-Type', 'text/csv');
+    res.attachment('organizations.csv');
+    return res.send(csvString);
+  });
+});
+
+
 app.get("/admin/copyrequests", isAuthenticated, function (req, res) {
   const SQL =
     "SELECT * FROM requests WHERE picked_up='f' AND deleted='f' ORDER BY LOWER(organization_name);";
@@ -990,21 +1047,21 @@ app.get("/admin/mailinglist", isAuthenticated, function (req, res) {
 });
 
 app.get("/admin/mailinglist/csv", isAuthenticated, function (req, res) {
-  const SQL = "SELECT * FROM mailing_list ORDER BY date DESC";
+  const SQL = `
+    SELECT organization_name, contact_name, email, date::text
+    FROM mailing_list
+    WHERE organization_name != ''
+    ORDER BY date DESC
+  `;
 
   return doQuery(SQL)
   .then(function(results) {
-    let csv = "organization_name,contact_name,email,phone,date\n";
-    csv += results.rows.map(row => [
-        row.organization_name,
-        row.contact_name,
-        row.email,
-        row.phone,
-        row.date,
-    ]).join("\n");
+    let csvString = csv.stringify(results.rows, {
+      header: true,
+    });
     res.header('Content-Type', 'text/csv');
     res.attachment('mailing-list.csv');
-    return res.send(csv);
+    return res.send(csvString);
   });
 });
 

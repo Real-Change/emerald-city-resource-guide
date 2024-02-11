@@ -92,12 +92,6 @@ $(document).ready(function () {
     }
   });
 
-  // dynamically render the action for the admin search form
-
-  $('#admin-search-button').on('click', () => {
-    let term = $('#searchbar').val();
-    $('#admin-search').attr('action', term)
-  })
 
   // show appropriate confirmation message after contact page
   if(window.location.href.indexOf('feedback') > -1){
@@ -144,8 +138,16 @@ $(document).ready(function () {
   $('#form-number').change(function() {
     $('#form-number-donate-warning').toggle(parseInt(this.value, 10) >= 300);
   });
+
+  $('.delete_button').click(function() {
+    const orgId = $(this).data('id');
+    if (confirm(`Are you sure you want to delete this organization?`)) {
+      $.ajax({
+        type: "POST",
+        url: `/admin/delete/${orgId}`,
+        success: () => window.location.reload(),
+      });
+    }
+    return false;
+  });
 });
-
-
-
-
