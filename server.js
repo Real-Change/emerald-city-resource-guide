@@ -193,42 +193,35 @@ function makeGenderQuery(gender) {
 
 // method to generate SQL query
 function makeSQL(requestType, category, gender) {
-  let SQL;
+  let SQL = `
+    SELECT
+      o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names
+    FROM organization o
+    INNER JOIN (
+        SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names
+        FROM organization_x_category oxc1
+        INNER JOIN (
+          SELECT c.category_id, c.category_name 
+          FROM category c
+        ) join2 ON (oxc1.category_id=join2.category_id)
+        GROUP BY oxc1.organization_id, oxc1.active
+    ) join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) 
+  `;
 
   // Return all orgs
   if (requestType === "all") {
-    SQL =
-      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
-      "FROM organization o " +
-      "INNER JOIN ( " +
-        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
-        "FROM organization_x_category oxc1 " +
-        "INNER JOIN ( " +
-          "SELECT c.category_id, c.category_name " +
-          "FROM category c " + 
-        ") join2 ON (oxc1.category_id=join2.category_id) " +
-        "GROUP BY oxc1.organization_id, oxc1.active " +
-      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
-      "WHERE o.active='t' " +
-      "ORDER BY o.organization_name; ";
-}
+    SQL += ` WHERE o.active='t'`;
+  }
 
   // Return orgs based on keyword search
   else if (requestType === "keyword") {
-    SQL =
-      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
-      "FROM organization o " +
-      "INNER JOIN ( " +
-        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
-        "FROM organization_x_category oxc1 " +
-        "INNER JOIN ( " +
-          "SELECT c.category_id, c.category_name " +
-          "FROM category c " + 
-        ") join2 ON (oxc1.category_id=join2.category_id) " +
-        "GROUP BY oxc1.organization_id, oxc1.active " +
-      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
-      "WHERE ((upper(organization_name) SIMILAR TO $1) OR (upper(website) SIMILAR TO $1) OR (phone_number SIMILAR TO $1) OR (upper(org_address) SIMILAR TO $1) OR (upper(org_description) SIMILAR TO $1)) " +
-      "ORDER BY o.organization_name; ";
+    SQL += `WHERE to_tsvector('english',
+      organization_name || ' '
+      || org_description || ' '
+      || website || ' '
+      || phone_number || ' '
+      || org_address
+    ) @@ websearch_to_tsquery('english', $1)`;
   }
 
   // Return orgs based on form
@@ -237,23 +230,13 @@ function makeSQL(requestType, category, gender) {
     let genderQuery = makeGenderQuery(gender);
     let categoryQuery = makeCategoryQuery(category);
 
-   SQL =
-      "SELECT o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names " +
-      "FROM organization o " +
-      "INNER JOIN organization_x_category ON organization_x_category.organization_id = o.organization_id AND (" + categoryQuery + ") " +
-      "INNER JOIN ( " +
-        "SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names " +
-        "FROM organization_x_category oxc1 " +
-        "INNER JOIN ( " +
-          "SELECT c.category_id, c.category_name " +
-          "FROM category c " + 
-        ") join2 ON (oxc1.category_id=join2.category_id) " +
-        "GROUP BY oxc1.organization_id, oxc1.active " +
-      ") join1 ON ((o.organization_id=join1.organization_id) AND (o.active='t') AND (join1.active='t')) " +
-      "WHERE " + genderQuery + " " +
-      "ORDER BY o.organization_name; ";
+    SQL += `
+      INNER JOIN organization_x_category ON organization_x_category.organization_id = o.organization_id AND (${categoryQuery})
+      WHERE ${genderQuery}
+    `;
   }
-  console.log("SQL", SQL);
+
+  SQL += ` ORDER BY o.organization_name;`;
   return SQL;
 }
 
@@ -272,18 +255,7 @@ function getOrgs(request, response) {
   let { gender, category } = request.body;
   let values = [];
   if (request.body.searchbar) {
-    let formattedSearch = "(";
-
-    let searchTermArray = request.body.searchbar
-      .trim()
-      .toUpperCase()
-      .split(" ");
-    for (let i = 0; i < searchTermArray.length; i++) {
-      formattedSearch += "%" + searchTermArray[i] + "%";
-    }
-
-    values.push(formattedSearch + ")");
-    console.log(values);
+    values.push(request.body.searchbar.trim());
   }
 
   let SQL = makeSQL(requestType, category, gender, request);
