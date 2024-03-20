@@ -10,6 +10,7 @@ package-install: ## Install packages
 	docker-compose run --no-deps --rm node npm install
 
 setup: ## Install packages and initialize DB
+	[ -f .env ] || cp .env.dist .env
 	docker-compose run --no-deps --rm node sh -c "npm install && npm run db:init"
 
 start: ## Start server and DB
