@@ -6,17 +6,10 @@ The Emerald City Resource Guide (ECRG, [http://www.emeraldcityresourceguide.org/
 
 Follow these steps to set up a local development environment:
 1. Install [docker and docker-compose](https://docs.docker.com/get-docker/)
-2. Create a file named `.env` in your clone of this repository with two lines, one setting `FIREBASE_CONFIG` and one setting `GOOGLE_CONFIG`. Copy-and-paste the values from https://dashboard.heroku.com/apps/emerald-city-guide/settings, but make sure to remove newlines.
+2. Install dependencies and set up the DB with `make setup`
+3. Launch the server with `make start` and visit http://localhost:8080/
 
-    ```
-    FIREBASE_CONFIG={ apiKey...
-    GOOGLE_CONFIG={ "type":...
-    ```
-
-3. Install dependencies and set up the DB with `make setup`
-4. Launch the server with `make start` and visit http://localhost:8080/
-
-Use `make db-connect` to open a `psql shell inside the Docker DB container and `make db-restore` to restore from a backup.
+Use `make db-connect` to open a psql shell inside the Docker DB container and `make db-restore` to restore from a backup.
 
 ## Testing
 Local testing is conducted using mocha and chai. Run the tests using `make test`
