@@ -195,7 +195,7 @@ function makeGenderQuery(gender) {
 function makeSQL(requestType, category, gender) {
   let SQL = `
     SELECT
-      o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names
+      o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.id_req, join1.category_names
     FROM organization o
     INNER JOIN (
         SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names
@@ -566,7 +566,6 @@ let organization_id,
   sponsorship_email,
   sponsorship,
   zipcode,
-  tempcovid,
   print_locations;
 
 // Identify which categories should be removed to the org to category mapping and which should be added
@@ -619,7 +618,6 @@ function parseForm(req) {
   phone_number = replaceChar(req.body.phone_number);
   org_address = replaceChar(req.body.org_address);
   org_description = replaceChar(req.body.org_description);
-  tempcovid = replaceChar(req.body.tempcovid);
   schedule = req.body.schedule;
   gender = req.body.gender;
   timestamp = req.body.timestamp;
@@ -699,9 +697,7 @@ app.put("/admin/editconfirmation", isAuthenticated, function (req, res) {
     sponsorship_email +
     "', zipcode=" +
     zipcode +
-    ", tempcovid='" +
-    tempcovid +
-    "' WHERE organization_id=" +
+    " WHERE organization_id=" +
     organization_id +
     " RETURNING organization_name;";
 
@@ -820,7 +816,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
   parseForm(req);
 
   let mainSQL =
-    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, tempcovid, active) VALUES('" +
+    "INSERT INTO organization (organization_name, website, phone_number, org_address, org_description, schedule, gender, last_update, contact_name, contact_title, contact_email, contact_phone, id_req, distribution, distribution_email, sponsorship_email, sponsorship, zipcode, active) VALUES('" +
     organization_name +
     "', '" +
     website +
@@ -856,9 +852,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
     sponsorship +
     "', " +
     zipcode +
-    ", '" +
-    tempcovid +
-    "', 't');";
+    ", 't');";
 
   // Create SQL query for adding categories
   let cats = req.body.category;
@@ -924,7 +918,6 @@ app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
       o.org_description_es,
       o.org_address_es,
       o.schedule_es,
-      o.tempcovid,
       ARRAY_AGG(c.category_name) AS categories
     FROM organization o
     LEFT JOIN organization_x_category oxc ON (oxc.organization_id = o.organization_id)

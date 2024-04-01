@@ -63,7 +63,7 @@ describe('SERVER METHODS', function() {
   describe('makeSQL', function() {
     const baseQuery = `
       SELECT
-        o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.tempcovid, o.id_req, join1.category_names
+        o.organization_id, o.organization_name, o.website, o.phone_number, o.org_address, o.org_description, o.schedule, o.gender, o.kids, o.last_update, o.active, o.zipcode, o.contact_name, o.contact_email, o.contact_phone, o.contact_title, o.sponsorship, o.sponsorship_email, o.distribution, o.distribution_email, o.id_req, join1.category_names
       FROM organization o
       INNER JOIN (
           SELECT oxc1.organization_id, oxc1.active, array_agg(join2.category_name) AS category_names
