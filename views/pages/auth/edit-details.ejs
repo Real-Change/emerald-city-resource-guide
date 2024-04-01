@@ -114,6 +114,15 @@
               <textarea name="org_description" type="text" class="bigger"><%= organization.org_description %></textarea>
             </label>
           </fieldset>
+          <p class="script hidden">Do you need an ID or any specific documents to access services? <br><span
+              class="emphasis">Make a note at the end of the description field above if any specifics about required documents
+              are given.</span></p>
+          <fieldset>
+            <label>
+              <span>ID or specific documents are required to access services</span>
+              <input type="checkbox" value="t" name="id_req" <% if (organization.id_req){ %> checked <% } %>></label>
+            </label>
+          </fieldset>
           <fieldset>
             <label>
               <span>Description (Spanish)</span>
@@ -305,16 +314,8 @@
     </section>
   </div>
 
-  <p class="script hidden">Do you need an ID or any specific documents to access services? <br><span
-      class="emphasis">Make a note at the end of the description field above if any specifics about required documents
-      are given.</span></p>
   <div id="final-checks">
     <h3>Additional Information</h3>
-    <fieldset>
-      <label>
-        <input type="checkbox" value="t" name="id_req" <% if (organization.id_req){ %> checked <% } %>> ID or specific
-        documents are required to access services</label>
-    </fieldset>
     <p class="script hidden">
       Would your agency be interested in supporting the publication of the Resource Guide with a
       Sponsorship? Your logo would be printed on the back of the guidebook in addition to other benefits. We have a
