@@ -89,7 +89,7 @@
                 value=<%= organization.zipcode %>></input>
             </label>
           </fieldset>
-          <p class="script hidden">We understand that your hours have likely changed due to COVID. We will ask about those changes a bit later. For now, we want to confirm your normal hours of operation. What hours are you open for people to walk in during normal times?</p>
+          <p class="script hidden">What hours are you open for people to walk in during normal times?</p>
           <fieldset>
             <label>
               <span>Hours</span>
@@ -105,7 +105,7 @@
           <p class="script hidden">Your agency description should be a brief, simple summary of the services someone can
             access when they come to your agency. Do not list services that are not available for homeless and
             low-income individuals. I will read your agency description, and then you can let me know if anything needs
-            to be updated or changed. We have a separate field for temporary COVID related changes to your services. This primary description should reflect your normal operations.
+            to be updated or changed.
 	    <br><span class="emphasis">Read description and category options below. Please note that this field should not change significantly. If significant changes are made, please note on your spreadsheet.</span><br>
           </p>
           <fieldset>
@@ -119,13 +119,6 @@
               <span>Description (Spanish)</span>
               <textarea name="org_description_es" type="text"
                 class="bigger"><%= organization.org_description_es %></textarea>
-            </label>
-          </fieldset>
-          <fieldset>
-            <label>
-              <span>Temporary COVID-19 Restrictions</span>
-              <textarea name="tempcovid" type="text"
-                class="bigger"><%= organization.tempcovid %></textarea>
             </label>
           </fieldset>
           <fieldset>
