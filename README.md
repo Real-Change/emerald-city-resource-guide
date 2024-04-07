@@ -24,6 +24,13 @@ ECRG is hosted on Fly.io ([dashboard link](https://fly.io/dashboard/emerald-city
 
 To get a dump of the DB, run `./db/fly_db_dump.sh`.
 
+## Onboarding
+
+Here's how to onboard a new developer:
+1. Add their Github account as a collaborator to the repository: https://github.com/Real-Change/emerald-city-resource-guide/settings/access 
+2. Invite them to join the fly.io team: https://fly.io/dashboard/emerald-city-resource-guide/team
+3. Add them as an owner to the Firebase account: https://console.firebase.google.com/u/1/project/emerald-city-resource-guide/settings/iam
+
 ## Upcoming Features
 - Embedded Google Maps and location filtering
 
