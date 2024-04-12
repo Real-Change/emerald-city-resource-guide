@@ -13,7 +13,7 @@
       <input name="_method" class="hidden" value="PUT">
       <input name="id" class="hidden" value=<%= organization.organization_id %>>
       <p class="script hidden">
-        Hello, my name is __________ and I am a volunteer for Real Change. Your services are listed in the Emerald City Resource Guide. We are in the process of printing the sixth edition and need to verify your services.
+        Hello, my name is __________ and I am a volunteer for Real Change. Your services are listed in the Emerald City Resource Guide. We are in the process of printing the latest edition and need to verify your services.
         <br>Do you have a moment to confirm what we have in the guide is still correct or update your listing?
         <br><span class="emphasis">If yes, proceed. If no, ask for a good call back time or contact phone number.</span>
       </p>
@@ -317,9 +317,7 @@
   <div id="final-checks">
     <h3>Additional Information</h3>
     <p class="script hidden">
-      Would your agency be interested in supporting the publication of the Resource Guide with a
-      Sponsorship? Your logo would be printed on the back of the guidebook in addition to other benefits. We have a
-      number of different options and pricing and we could have staff follow up with you directly.
+      Would your agency be interested in supporting the publication of the Resource Guide with a Sponsorship? Your agency would be able to order 300 or more copies of the Guide in addition to other benefits. We have a number of different options and pricing and we could have staff follow up with you directly.
       <br><span class="emphasis">If yes, please make a note of their email address below.</span></p>
     <fieldset>
       <label>
@@ -343,8 +341,7 @@
   <textarea class="hidden" name="prior_cats"> <%= organization.categories %> </textarea>
   <textarea class="hidden" name="prior_prints"> <%= organization.print_locations %></textarea>
   <input class="hidden" name="timestamp" id="timestamp">
-  <p class="script hidden"><span class="emphasis">Even if no updates were made to this organization's information, hit
-      the submit button below so it is noted that this record has been checked.</span></p>
+  <p class="script hidden"><span class="emphasis">Even if no updates were made to this organization's information, hit the submit button below so it is noted that this record has been checked.</span></p>
   <button type="submit" id="submit-button">Submit</button>
   </form>
 </main>
