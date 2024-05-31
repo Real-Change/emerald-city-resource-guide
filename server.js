@@ -918,11 +918,15 @@ app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
       o.org_description_es,
       o.org_address_es,
       o.schedule_es,
-      ARRAY_AGG(c.category_name) AS categories
+      join2.print_locations
+
     FROM organization o
-    LEFT JOIN organization_x_category oxc ON (oxc.organization_id = o.organization_id)
-    LEFT JOIN category c ON (oxc.category_id = c.category_id)
-    GROUP BY o.organization_id
+    LEFT OUTER JOIN (
+      SELECT oxc2.organization_id, oxc2.active, oxc2.print_location, ARRAY_AGG(c.category_name) AS print_locations
+      FROM organization_x_category oxc2
+      LEFT JOIN category c ON (oxc2.category_id = c.category_id)
+      GROUP BY oxc2.organization_id, oxc2.active, oxc2.print_location
+    ) join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t')
   `;
 
   return doQuery(SQL)
