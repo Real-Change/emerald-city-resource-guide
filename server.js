@@ -286,17 +286,21 @@ module.exports = {
 
 // Function to call in every admin page to verify permissions
 function isAuthenticated(req, res, next) {
-  let userEmail = req.cookies.user || "";
-  let SQL = "SELECT * FROM users WHERE email='" + userEmail + "';";
-  return doQuery(SQL)
-    .then((results) => {
-      if (results.rowCount > 0) {
-        next();
-      } else {
-        res.redirect("/login");
-      }
-    })
-    .catch(handleError);
+  const sessionCookie = req.cookies.session || "";
+  return Promise.resolve()
+    .then(() => admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */))
+    .then(
+      (decodedClaims) => doQuery("SELECT * FROM users WHERE email = $1;", [decodedClaims.email])
+        .then((results) => {
+          if (results.rowCount > 0) {
+            next();
+          } else {
+            res.redirect("/login");
+          }
+        })
+        .catch((error) => handleError(error, res)),
+      () => res.redirect("/login")
+    );
 }
 
 app.post("/sessionLogin", (req, res) => {
@@ -314,9 +318,7 @@ app.post("/sessionLogin", (req, res) => {
     .verifyIdToken(idToken)
     .then((decodedIdToken) => {
       let userEmail = decodedIdToken.email;
-      let SQL = "SELECT * FROM users WHERE email = '" + userEmail + "';";
-
-      return doQuery(SQL)
+      return doQuery("SELECT * FROM users WHERE email = $1;", [userEmail])
         .then((results) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.

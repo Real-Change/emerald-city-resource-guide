@@ -11,7 +11,7 @@ package-install: ## Install packages
 
 setup: ## Install packages and initialize DB
 	[ -f .env ] || cp .env.dist .env
-	docker compose run --no-deps --rm node sh -c "npm install && npm run db:init"
+	docker compose run --rm node sh -c "npm install && npm run db:init"
 
 start: ## Start server and DB
 	docker compose up

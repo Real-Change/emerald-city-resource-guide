@@ -14,7 +14,8 @@ services:
     volumes:
       - .:/code
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     command: npm start
 
   postgres:
@@ -22,3 +23,7 @@ services:
     environment:
       POSTGRES_USER: emerald-city-resource-guide
       POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "emerald-city-resource-guide"]
+      interval: 1s
+      retries: 30
