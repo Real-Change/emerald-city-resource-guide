@@ -334,6 +334,8 @@ app.post("/sessionLogin", (req, res) => {
                 maxAge: expiresIn,
                 httpOnly: true,
                 secure: false,
+                // Keeps cross-site form posts from carrying the admin session (CSRF).
+                sameSite: "lax",
               };
               res.cookie("session", sessionCookie, options);
               res.cookie("user", userEmail, options);

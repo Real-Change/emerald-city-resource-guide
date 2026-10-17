@@ -83,3 +83,52 @@ describe('ADMIN AUTHENTICATION', function() {
     expectLoginRedirect(await getAdminPage({ user: "' OR '1'='1" }));
   });
 });
+
+describe('ADMIN LOGIN COOKIES', function() {
+  const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+  const auth = admin.auth();
+  const realVerifyIdToken = auth.verifyIdToken;
+  const realCreateSessionCookie = auth.createSessionCookie;
+
+  before(async function() {
+    await pool.query('DELETE FROM users WHERE email = $1', [ADMIN_EMAIL]);
+    await pool.query(
+      "INSERT INTO users (lastname, firstname, email) VALUES ('Test', 'Admin', $1)",
+      [ADMIN_EMAIL]
+    );
+    auth.verifyIdToken = () => Promise.resolve({ email: ADMIN_EMAIL });
+    auth.createSessionCookie = () => Promise.resolve('new-session-cookie');
+  });
+
+  after(async function() {
+    auth.verifyIdToken = realVerifyIdToken;
+    auth.createSessionCookie = realCreateSessionCookie;
+    await pool.query('DELETE FROM users WHERE email = $1', [ADMIN_EMAIL]);
+    await pool.end();
+  });
+
+  it('sets the session and user cookies with SameSite=Lax', async function() {
+    const body = 'idToken=test-id-token';
+    const res = await new Promise((resolve, reject) => {
+      const req = http.request(
+        {
+          port: process.env.PORT || 8080,
+          path: '/sessionLogin',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) },
+        },
+        (response) => {
+          response.resume();
+          response.on('end', () => resolve(response));
+        }
+      );
+      req.on('error', reject);
+      req.end(body);
+    });
+
+    const cookies = res.headers['set-cookie'] || [];
+    const named = (name) => cookies.find((cookie) => cookie.indexOf(name + '=') === 0);
+    expect(named('session')).to.match(/SameSite=Lax/);
+    expect(named('user')).to.match(/SameSite=Lax/);
+  });
+});
