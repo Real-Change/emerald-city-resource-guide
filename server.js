@@ -8,6 +8,13 @@ const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const csv = require("csv/dist/cjs/sync.cjs")
+const {
+  ORGANIZATION_EXPORT_SQL,
+  StaleImportError,
+  applyImport,
+  loadOrganizationsById,
+  planImport,
+} = require("./lib/organization-import");
 var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
@@ -28,6 +35,9 @@ const PORT = process.env.PORT || 8080;
 
 // application middleware
 app.use(express.static("./public"));
+// A full organization CSV export is several hundred KB before URL encoding.
+// Registered first so only the import routes accept bodies this large.
+app.use("/admin/organization/import", express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(
   express.urlencoded({
     extended: true,
@@ -293,6 +303,7 @@ function isAuthenticated(req, res, next) {
       (decodedClaims) => doQuery("SELECT * FROM users WHERE email = $1;", [decodedClaims.email])
         .then((results) => {
           if (results.rowCount > 0) {
+            res.locals.adminEmail = decodedClaims.email;
             next();
           } else {
             res.redirect("/login");
@@ -894,44 +905,7 @@ app.put("/admin/addconfirmation", isAuthenticated, function (req, res) {
 });
 
 app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
-  const SQL = `
-    SELECT
-      o.organization_id,
-      o.organization_name,
-      o.website,
-      o.phone_number,
-      o.org_address,
-      o.org_description,
-      o.schedule,
-      o.gender,
-      o.kids,
-      o.active::text,
-      o.last_update::text,
-      o.zipcode,
-      o.contact_name,
-      o.contact_email,
-      o.contact_phone,
-      o.contact_title,
-      o.sponsorship::text,
-      o.distribution::text,
-      o.id_req::text,
-      o.sponsorship_email,
-      o.distribution_email,
-      o.org_description_es,
-      o.org_address_es,
-      o.schedule_es,
-      join2.print_locations
-
-    FROM organization o
-    LEFT OUTER JOIN (
-      SELECT oxc2.organization_id, oxc2.active, oxc2.print_location, ARRAY_AGG(c.category_name) AS print_locations
-      FROM organization_x_category oxc2
-      LEFT JOIN category c ON (oxc2.category_id = c.category_id)
-      GROUP BY oxc2.organization_id, oxc2.active, oxc2.print_location
-    ) join2 ON ((o.organization_id = join2.organization_id) AND join2.active='t' AND join2.print_location='t')
-  `;
-
-  return doQuery(SQL)
+  return doQuery(ORGANIZATION_EXPORT_SQL)
   .then(function(results) {
     let csvString = csv.stringify(results.rows, {
       header: true,
@@ -940,6 +914,35 @@ app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
     res.attachment('organizations.csv');
     return res.send(csvString);
   });
+});
+
+app.get("/admin/organization/import", isAuthenticated, function (req, res) {
+  res.render("./pages/auth/organization-import.ejs", { message: null });
+});
+
+app.post("/admin/organization/import/preview", isAuthenticated, function (req, res) {
+  const csvText = req.body.csv || "";
+  return loadOrganizationsById(pool)
+    .then(function (rowsById) {
+      res.render("./pages/auth/organization-import-preview.ejs", {
+        plan: planImport(csvText, rowsById),
+        csv: csvText,
+      });
+    })
+    .catch((error) => handleError(error, res));
+});
+
+app.post("/admin/organization/import/apply", isAuthenticated, function (req, res) {
+  return applyImport(pool, req.body.csv || "", req.body.fingerprint, res.locals.adminEmail)
+    .then(function (result) {
+      res.render("./pages/auth/organization-import-confirmation.ejs", result);
+    })
+    .catch(function (error) {
+      if (error instanceof StaleImportError) {
+        return res.status(409).render("./pages/auth/organization-import.ejs", { message: error.message });
+      }
+      handleError(error, res);
+    });
 });
 
 

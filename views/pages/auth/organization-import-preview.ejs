@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../layout/head') %>
+
+<body>
+  <%- include('../../layout/header') %>
+  <div class="admin-main">
+    <%- include('../auth/sidebar.ejs') %>
+    <div class="org-import">
+      <h2>Preview bulk update</h2>
+      <ul class="org-import-counts">
+        <li>Organizations to update: <%= plan.changes.length %></li>
+        <li>Unchanged: <%= plan.unchangedCount %></li>
+        <li>Errors: <%= plan.errors.length %></li>
+        <li>Warnings: <%= plan.warnings.length %></li>
+      </ul>
+
+      <% if (plan.errors.length > 0) { %>
+        <h3>Errors</h3>
+        <p>Nothing can be saved until these are fixed. Correct the file and upload it again.</p>
+        <ul class="org-import-errors">
+          <% plan.errors.forEach(function (error) { %>
+            <li><% if (error.row) { %>Row <%= error.row %><% if (error.column) { %>, <%= error.column %><% } %>: <% } %><%= error.message %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <% if (plan.warnings.length > 0) { %>
+        <h3>Warnings</h3>
+        <ul class="org-import-warnings">
+          <% plan.warnings.forEach(function (warning) { %>
+            <li>Row <%= warning.row %>, <%= warning.column %>: <%= warning.message %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <p><a href="/admin/organization/import">Upload a different file</a></p>
+
+      <% plan.changes.forEach(function (change) { %>
+        <h3><%= change.organization_name %> (id <%= change.organization_id %>)</h3>
+        <table class="org-import-diff">
+          <thead>
+            <tr><th>Field</th><th>Before</th><th>After</th></tr>
+          </thead>
+          <tbody>
+            <% change.fields.forEach(function (field) { %>
+              <tr>
+                <td><%= field.column %></td>
+                <td><%= field.before === null || field.before === '' ? '(blank)' : field.before %></td>
+                <td><%= field.after === null || field.after === '' ? '(blank)' : field.after %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% }) %>
+
+      <% if (plan.errors.length === 0 && plan.changes.length > 0) { %>
+        <form method="POST" action="/admin/organization/import/apply">
+          <textarea name="csv" hidden><%= csv %></textarea>
+          <input type="hidden" name="fingerprint" value="<%= plan.fingerprint %>">
+          <button type="submit">Apply these changes</button>
+        </form>
+      <% } else if (plan.errors.length === 0) { %>
+        <p>The file matches the guide. There is nothing to update.</p>
+      <% } %>
+    </div>
+  </div>
+  <%- include('../../layout/footer') %>
+</body>
+
+</html>

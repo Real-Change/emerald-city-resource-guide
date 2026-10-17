@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../layout/head') %>
+
+<body>
+  <%- include('../../layout/header') %>
+  <div class="admin-main">
+    <%- include('../auth/sidebar.ejs') %>
+    <div class="org-import">
+      <h2>Bulk update organizations</h2>
+      <% if (message) { %>
+        <p class="org-import-message"><%= message %></p>
+      <% } %>
+      <ol>
+        <li>Download the organizations CSV.</li>
+        <li>Edit it in a spreadsheet. Keep the organization_id column as it is; it says which organization each row updates.</li>
+        <li>Save it as CSV and upload it here. You will see every change before anything is saved.</li>
+      </ol>
+      <p>Print locations and new organizations are not imported. Edit those in the organization form or with Add New Agency.</p>
+
+      <form action="/admin/organization/csv">
+        <button type="submit">Download organizations CSV</button>
+      </form>
+
+      <form id="org-import-form" method="POST" action="/admin/organization/import/preview">
+        <label for="org-import-file">CSV file</label>
+        <input type="file" id="org-import-file" accept=".csv,text/csv">
+        <textarea name="csv" id="org-import-csv" hidden></textarea>
+        <button type="submit" id="org-import-preview" disabled>Preview changes</button>
+      </form>
+    </div>
+  </div>
+  <%- include('../../layout/footer') %>
+  <script>
+    document.getElementById('org-import-file').addEventListener('change', function (event) {
+      var button = document.getElementById('org-import-preview');
+      var file = event.target.files[0];
+      button.disabled = true;
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        document.getElementById('org-import-csv').value = reader.result;
+        button.disabled = false;
+      };
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+
+</html>
