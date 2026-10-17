@@ -22,7 +22,11 @@ ECRG is hosted on Fly.io ([dashboard link](https://fly.io/dashboard/emerald-city
 2. Run `flyctl auth login`
 3. Run `fly postgres connect -a emerald-city-resource-guide-db` 
 
-To get a dump of the DB, run `./db/fly_db_dump.sh`.
+To get a dump of the DB, run `./db/fly_db_dump.sh`. It writes to `~/ecrg-backups/` unless you give it a directory, and checks that the dump is readable.
+
+## Bulk updating organizations
+
+Staff can update many organizations at once on the **Bulk Update (CSV)** admin page: download the organizations CSV, edit it, upload it, review the preview, and apply. Before an import, take a dump with `./db/fly_db_dump.sh`. The [bulk import runbook](docs/bulk-import-runbook.md) covers the production migration, backups, and how to undo an import.
 
 ## Onboarding
 
