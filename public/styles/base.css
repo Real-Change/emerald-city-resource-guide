@@ -592,3 +592,63 @@ footer nav {
 #form-number-donate-warning svg {
 	vertical-align: text-bottom;
 }
+
+.org-import {
+	max-width: 60rem;
+	margin: 2rem auto;
+	padding: 0 1rem;
+}
+
+/* The site sizes text in vw per element; pin this page to one readable size. */
+.org-import p,
+.org-import li,
+.org-import a,
+.org-import label,
+.org-import input,
+.org-import button,
+.org-import th,
+.org-import td {
+	font-size: 1rem;
+}
+
+.org-import h2 {
+	font-size: 1.5rem;
+	margin: 1.5rem 0 0.5rem;
+}
+
+.org-import h3 {
+	font-size: 1.2rem;
+	margin: 1.5rem 0 0.5rem;
+}
+
+.org-import p,
+.org-import ol,
+.org-import ul,
+.org-import form {
+	margin: 0.75rem 0;
+}
+
+.org-import ol {
+	list-style: decimal;
+	padding-left: 1.5rem;
+}
+
+.org-import-message,
+.org-import-errors li {
+	color: #a12622;
+}
+
+.org-import-diff {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.org-import-diff th,
+.org-import-diff td {
+	border: 1px solid #ccc;
+	padding: 0.4rem;
+	text-align: left;
+	vertical-align: top;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}

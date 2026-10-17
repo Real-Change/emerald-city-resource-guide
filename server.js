@@ -8,7 +8,13 @@ const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const csv = require("csv/dist/cjs/sync.cjs")
-const { ORGANIZATION_EXPORT_SQL } = require("./lib/organization-import");
+const {
+  ORGANIZATION_EXPORT_SQL,
+  StaleImportError,
+  applyImport,
+  loadOrganizationsById,
+  planImport,
+} = require("./lib/organization-import");
 var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
@@ -29,6 +35,9 @@ const PORT = process.env.PORT || 8080;
 
 // application middleware
 app.use(express.static("./public"));
+// A full organization CSV export is several hundred KB before URL encoding.
+// Registered first so only the import routes accept bodies this large.
+app.use("/admin/organization/import", express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(
   express.urlencoded({
     extended: true,
@@ -294,6 +303,7 @@ function isAuthenticated(req, res, next) {
       (decodedClaims) => doQuery("SELECT * FROM users WHERE email = $1;", [decodedClaims.email])
         .then((results) => {
           if (results.rowCount > 0) {
+            res.locals.adminEmail = decodedClaims.email;
             next();
           } else {
             res.redirect("/login");
@@ -904,6 +914,35 @@ app.get("/admin/organization/csv", isAuthenticated, function (req, res) {
     res.attachment('organizations.csv');
     return res.send(csvString);
   });
+});
+
+app.get("/admin/organization/import", isAuthenticated, function (req, res) {
+  res.render("./pages/auth/organization-import.ejs", { message: null });
+});
+
+app.post("/admin/organization/import/preview", isAuthenticated, function (req, res) {
+  const csvText = req.body.csv || "";
+  return loadOrganizationsById(pool)
+    .then(function (rowsById) {
+      res.render("./pages/auth/organization-import-preview.ejs", {
+        plan: planImport(csvText, rowsById),
+        csv: csvText,
+      });
+    })
+    .catch((error) => handleError(error, res));
+});
+
+app.post("/admin/organization/import/apply", isAuthenticated, function (req, res) {
+  return applyImport(pool, req.body.csv || "", req.body.fingerprint, res.locals.adminEmail)
+    .then(function (result) {
+      res.render("./pages/auth/organization-import-confirmation.ejs", result);
+    })
+    .catch(function (error) {
+      if (error instanceof StaleImportError) {
+        return res.status(409).render("./pages/auth/organization-import.ejs", { message: error.message });
+      }
+      handleError(error, res);
+    });
 });
 
 
