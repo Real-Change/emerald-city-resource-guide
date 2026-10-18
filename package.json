@@ -10,7 +10,8 @@
     "pretest": "knex migrate:latest",
     "test": "mocha",
     "test:watch": "mocha --watch ./test ./",
-    "start": "node --inspect=0.0.0.0:9229 server.js",
+    "start": "node server.js",
+    "dev": "node --inspect=0.0.0.0:9229 server.js",
     "db:init": "npx knex migrate:latest && npx knex seed:run"
   },
   "repository": {

@@ -15,7 +15,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: npm start
+    command: npm run dev
 
   postgres:
     image: postgres:14.2
