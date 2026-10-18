@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../layout/head') %>
+
+<body>
+  <%- include('../../layout/header') %>
+  <div class="admin-main">
+    <%- include('../auth/sidebar.ejs') %>
+    <div class="org-import">
+      <h2>Bulk update saved</h2>
+      <p>Organizations updated: <%= updatedCount %></p>
+      <p>Import ID: <code class="org-import-id"><%= importId %></code></p>
+      <p>To undo, give this ID to a developer.</p>
+    </div>
+  </div>
+  <%- include('../../layout/footer') %>
+</body>
+
+</html>
