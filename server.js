@@ -16,15 +16,11 @@ const {
   planImport,
 } = require("./lib/organization-import");
 const contactLinks = require("./lib/contact-links");
-var firebase = require("firebase");
-require("firebase-app");
-require("firebase-auth");
 const admin = require("firebase-admin");
 
 const serviceAccount = JSON.parse(process.env.GOOGLE_CONFIG || '{}');
 
 // initialize Firebase
-firebase.initializeApp(process.env.FIREBASE_CONFIG);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://emerald-city-resource-guide.firebaseio.com",
