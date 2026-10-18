@@ -1,7 +1,7 @@
 'use strict';
 
 const { expect } = require('chai');
-const csv = require('csv/dist/cjs/sync.cjs');
+const csv = require('csv/sync');
 const { planImport, indexById } = require('../lib/organization-import');
 
 function exportRow(overrides) {
