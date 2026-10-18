@@ -119,12 +119,21 @@ h4 {
 }
 
 #services label, #population label {
+	display: inline-flex;
+	align-items: center;
 	border-radius: 5px;
 	width: 90vw;
 	margin: 0vw 0vw 0vw 5vw;
 	line-height: 6vw;
 	font-size: 5vw;
 	background-color:lightgrey;
+}
+
+#services input[type="checkbox"], #population input[type="checkbox"] {
+	font-size: inherit;
+	width: 1.1em;
+	height: 1.1em;
+	margin: 0 0.3em;
 }
 
 .form {
@@ -377,6 +386,7 @@ button.signout:hover {
 }
 
 input#searchbar {
+	box-sizing: border-box;
 	width: 80vw;
 	height: 10vw;
 	margin: 1vw 10vw;

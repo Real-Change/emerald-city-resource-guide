@@ -18,13 +18,14 @@
 			<% if(organization.phone_number != ""){ %>
 			<div class="label">Phone |</div>
 			<div class="content">
-				<%= organization.phone_number %>
+				<% contactLinks.phoneSegments(organization.phone_number).forEach(segment => { %><% if (segment.href) { %><a href="<%= segment.href %>"><%= segment.text %></a><% } else { %><%= segment.text %><% } %><% }) %>
 			</div>
 			<% } %>
 			<% if(organization.org_address != ""){ %>
 			<div class="label">Address |</div>
 			<div class="content">
-				<%= organization.org_address %>
+				<% const mapHref = contactLinks.mapHref(organization.org_address); %>
+				<% if (mapHref) { %><a target="_blank" href="<%= mapHref %>"><%= organization.org_address %></a><% } else { %><%= organization.org_address %><% } %>
 			</div>
 			<% } %>
 			<div class="label">Hours |</div>
