@@ -15,6 +15,7 @@ const {
   loadOrganizationsById,
   planImport,
 } = require("./lib/organization-import");
+const contactLinks = require("./lib/contact-links");
 var firebase = require("firebase");
 require("firebase-app");
 require("firebase-auth");
@@ -78,6 +79,7 @@ app.use(
 
 // set the view engine for server-side templating
 app.set("view engine", "ejs");
+app.locals.contactLinks = contactLinks;
 app.post("/results", getOrgs);
 
 // GET method route to render form page
