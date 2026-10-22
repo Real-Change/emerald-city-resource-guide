@@ -3,7 +3,7 @@
 const http = require('http');
 const querystring = require('querystring');
 const pg = require('pg');
-const admin = require('firebase-admin');
+const { getAuth } = require('firebase-admin/auth');
 const { expect } = require('chai');
 require('../server.js');
 
@@ -38,7 +38,7 @@ function post(path, form, cookies) {
 
 describe('organization import routes', function() {
   const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-  const auth = admin.auth();
+  const auth = getAuth();
   const realVerifySessionCookie = auth.verifySessionCookie;
   const session = 'session=import-admin-session; user=' + ADMIN_EMAIL;
   const csvText = `organization_id,schedule\n${FIXTURE_ID},<script>alert(1)</script>\n`;

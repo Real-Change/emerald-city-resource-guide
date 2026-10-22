@@ -7,7 +7,7 @@ const pg = require("pg");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
-const csv = require("csv/dist/cjs/sync.cjs")
+const csv = require("csv/sync");
 const {
   ORGANIZATION_EXPORT_SQL,
   StaleImportError,
@@ -16,17 +16,14 @@ const {
   planImport,
 } = require("./lib/organization-import");
 const contactLinks = require("./lib/contact-links");
-var firebase = require("firebase");
-require("firebase-app");
-require("firebase-auth");
-const admin = require("firebase-admin");
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
 
 const serviceAccount = JSON.parse(process.env.GOOGLE_CONFIG || '{}');
 
 // initialize Firebase
-firebase.initializeApp(process.env.FIREBASE_CONFIG);
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+initializeApp({
+  credential: cert(serviceAccount),
   databaseURL: "https://emerald-city-resource-guide.firebaseio.com",
 });
 
@@ -96,8 +93,7 @@ app.get("/contact", function (req, res) {
 app.get("/login", function (req, res) {
   const sessionCookie = req.cookies.session || "";
   // Verify the session cookie and redirect to admin if already logged in
-  admin
-    .auth()
+  getAuth()
     .verifySessionCookie(sessionCookie, true /** checkRevoked */)
     .then(() => {
       res.redirect("/admin/account");
@@ -300,7 +296,7 @@ module.exports = {
 function isAuthenticated(req, res, next) {
   const sessionCookie = req.cookies.session || "";
   return Promise.resolve()
-    .then(() => admin.auth().verifySessionCookie(sessionCookie, true /** checkRevoked */))
+    .then(() => getAuth().verifySessionCookie(sessionCookie, true /** checkRevoked */))
     .then(
       (decodedClaims) => doQuery("SELECT * FROM users WHERE email = $1;", [decodedClaims.email])
         .then((results) => {
@@ -326,8 +322,7 @@ app.post("/sessionLogin", (req, res) => {
   // The session cookie will have the same claims as the ID token.
   // To only allow session cookie setting on recent sign-in, auth_time in ID token
   // can be checked to ensure user was recently signed in before creating a session cookie.
-  admin
-    .auth()
+  getAuth()
     .verifyIdToken(idToken)
     .then((decodedIdToken) => {
       let userEmail = decodedIdToken.email;
@@ -336,8 +331,7 @@ app.post("/sessionLogin", (req, res) => {
         if (results.rowCount > 0) {
           // Create session cookie and set it.
 
-          admin
-            .auth()
+          getAuth()
             .createSessionCookie(idToken, {
               expiresIn,
             })
@@ -377,8 +371,7 @@ app.get("/sessionConfirmation", (req, res) => {
   const sessionCookie = req.cookies.session || "";
   // Verify the session cookie. In this case an additional check is added to detect
   // if the user's Firebase session was revoked, user deleted/disabled, etc.
-  admin
-    .auth()
+  getAuth()
     .verifySessionCookie(sessionCookie, true /** checkRevoked */)
     .then(() => {
       res.redirect("/admin/account");
@@ -406,11 +399,10 @@ app.post("/sessionLogout", (req, res) => {
   const sessionCookie = req.cookies.session || "";
   res.clearCookie("user");
   res.clearCookie("session");
-  admin
-    .auth()
+  getAuth()
     .verifySessionCookie(sessionCookie)
     .then((decodedClaims) => {
-      return admin.auth().revokeRefreshTokens(decodedClaims.sub);
+      return getAuth().revokeRefreshTokens(decodedClaims.sub);
     })
     .then(() => {
       res.redirect("/login");

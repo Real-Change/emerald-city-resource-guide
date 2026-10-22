@@ -3,7 +3,7 @@
 # See docker-compose.yml for the dev environment
 
 # This should match the version in docker-compose.yml
-ARG NODE_VERSION=11.4.0
+ARG NODE_VERSION=24.22.0
 FROM node:${NODE_VERSION} AS build
 
 # Node.js app lives here
@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . .
 
 # Install node modules
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 FROM node:${NODE_VERSION}-slim
 

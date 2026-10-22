@@ -1,7 +1,7 @@
 'use strict';
 
 const pg = require('pg');
-const csv = require('csv/dist/cjs/sync.cjs');
+const csv = require('csv/sync');
 const { expect } = require('chai');
 const {
   applyImport,

@@ -2,7 +2,7 @@
 
 const http = require('http');
 const pg = require('pg');
-const admin = require('firebase-admin');
+const { getAuth } = require('firebase-admin/auth');
 const { expect } = require('chai');
 require('../server.js');
 
@@ -35,7 +35,7 @@ function expectLoginRedirect(res) {
 
 describe('ADMIN AUTHENTICATION', function() {
   const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-  const auth = admin.auth();
+  const auth = getAuth();
   const realVerifySessionCookie = auth.verifySessionCookie;
 
   before(async function() {
@@ -86,7 +86,7 @@ describe('ADMIN AUTHENTICATION', function() {
 
 describe('ADMIN LOGIN COOKIES', function() {
   const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-  const auth = admin.auth();
+  const auth = getAuth();
   const realVerifyIdToken = auth.verifyIdToken;
   const realCreateSessionCookie = auth.createSessionCookie;
 
